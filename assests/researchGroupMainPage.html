@@ -32,16 +32,29 @@
     <div class="wrap-contact100">
         <form class="contact100-form validate-form" >
             <span class="contact100-form-title">
-                Research Group: ...<!-- need to add the name of the group -->
+                Research Group Main:<!-- need to add the name of the group -->
             </span>
 
             <div class="container-contact100-form-btn">
                 <div class="wrap-contact100-form-btn">
                     <div class="contact100-form-bgbtn"></div>
-                    <button type="button" id ='createUser' class="contact100-form-btn" onclick="location.href='/newResearch'">
-                        <span>
-                            Create research
-                        </span>
+                    <button id='createResearch' type='button' class="contact100-form-btn" onclick="location.href='/newResearch'">
+                                <span>
+                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
+                                    Create New Research
+                                </span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button id='editResearch' type='button' class="contact100-form-btn" onclick="location.href='/editResearch'">
+                                <span>
+                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
+                                    Edit Research
+                                </span>
                     </button>
                 </div>
             </div>
@@ -49,8 +62,8 @@
                 <div class="wrap-contact100-form-btn">
                     <div class="contact100-form-bgbtn"></div>
                     <button id='researchList' type='button' class="contact100-form-btn" onclick="location.href='/researchList'">
-                        <i class="fa fa-list-ol fa-lg" aria-hidden="true"></i>
                             <span>
+                                <i class="fa fa-list-ol fa-lg" aria-hidden="true" style="padding-right: 10px"></i>
                                 List of research
                             </span>
                     </button>
