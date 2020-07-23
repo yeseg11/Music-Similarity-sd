@@ -451,9 +451,9 @@ app.get('/allresearchers', function (req, res, next) {    //call to getUserData.
 app.get('/allresearches/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
 
-    Research.find({researchId: req.params.id}).exec(function (err, docs) {
+    Research.find({researchGroupId: req.params.id}).exec(function (err, docs) {
         if (err) return next(err);
-        console.log("docs",docs);
+        // console.log("docs",docs);
         res.status(200).json({err: false, items: [].concat(docs)});
     })
 });
@@ -750,6 +750,7 @@ app.post('/insertResearch', function (req, res, next) {
         researchName: req.body.researchName,
         researchId: req.body.researchId,
         researchersIds: req.body['researchersIds[]'],
+        researchGroupId : req.body.researchGroupId,
         patientsIds: req.body['patientsIds[]'],
         nursingHome: req.body.nursingHome,
         department: req.body.department,
@@ -763,6 +764,9 @@ app.post('/insertResearch', function (req, res, next) {
         researchId: researchData.researchId                 //update the id , if have - update else its build new document
     }).upsert().updateOne(researchData);
     bulk.execute();
+
+
+
 });
 
 

@@ -24,6 +24,10 @@
                 console.log(err);
                 return err;
             });
+            var ResearchGroupId = localStorage["ResearchGroupId"];
+            console.log("ResearchGroupId",ResearchGroupId);
+            $('#researchGroupId').val(ResearchGroupId.toString())
+
         }
 
         function getUsers() {
@@ -34,6 +38,7 @@
                     usersList = data.items
                     resolve(usersList);
                 });
+
             });
         }
 
@@ -61,9 +66,12 @@
                     return $('#error').text(element,"is Empty, Please enter data.");
                 }
             }
+
+
             var researchName = $('#researchName'),
                 researchId = $('#researchId'),
                 researchersIds = $('#researchersIds'),
+                researchGroupId = $('#researchGroupId'),
                 patientsIds = $('#patientsIds'),
                 nursingHome = $('#nursingHome'),
                 department = $('#department'),
@@ -140,6 +148,7 @@
                         researchName: researchName.val(),
                         researchId: researchId.val(),
                         researchersIds: researchersIds.val(),
+                        researchGroupId : researchGroupId.val(),
                         patientsIds: patientsIds.val(),
                         nursingHome: nursingHome.val(),
                         department: department.val(),
