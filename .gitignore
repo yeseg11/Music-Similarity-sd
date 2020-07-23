@@ -2,5 +2,9 @@
 /node_modules/*
 /dump/*
 /mb-raw/*
-/outsource/new-mb-raw
+/outsource/new-mb-raw/
 node_modules
+/node_modules
+/outsource/new-mb-raw/*
+**/new-mb-raw
+**/node_modules
