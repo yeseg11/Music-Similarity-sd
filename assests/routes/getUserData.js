@@ -11,7 +11,7 @@
         template += '<span id="::videoId:::" class="label-input100"></span>';
         template += '<div id="demo"></div>';
         template += '<span class="focus-input100">::name::</span>';
-        template += '<iframe width="560" height="315" src="http://www.youtube.com/embed/::link::"></iframe>';
+        template += '<iframe width="1024" height="600" src="http://www.youtube.com/embed/::link::"></iframe>';
         template += '<div id = "buttons">';
         template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like"><img src="../images/btn/1.png" name="like"/></button>';
         template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/2.png" name="like"/></button>';
@@ -24,11 +24,11 @@
 
 
 
-        var experienceShow  = '<div class="wrap-input100 input100-select">';
+        var experienceShow  = '<div class="wrap-input100 input100-select" >';
         experienceShow += '<span id="::videoId:::" class="label-input100"></span>';
-        experienceShow += '<div id="demo"></div>';
+        experienceShow += '<div id="demo" style="width: 600px"></div>';
         experienceShow += '<span class="focus-input100">::name::</span>';
-        experienceShow += '<iframe width="560" height="315" src="http://www.youtube.com/embed/::link::"></iframe>';
+        experienceShow += '<iframe width="1000" height="1000" src="http://www.youtube.com/embed/::link::"></iframe>';
         experienceShow += '<div id = "buttons">';
         experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like"><img src="../images/btn/1.png" name="like"/></button>';
         experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/2.png" name="like"/></button>';
@@ -96,7 +96,7 @@
                                 }
                             }
                         }
-                        //console.log("playarr ",playarr);
+                        console.log("playarr ",playarr);
                         for (i = 0; i < playarr.length; i++) {  //show the playlist songs .
                             var place = playarr[i];
                             var item = rec[place];

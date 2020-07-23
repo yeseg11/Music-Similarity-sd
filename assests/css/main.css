@@ -186,6 +186,14 @@ iframe {
   padding: 42px 55px 45px 55px;
 }
 
+.wrap-contact1100 {
+    width: 1100px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 42px 55px 45px 55px;
+}
+
 .container-section-space {
   display: -webkit-box;
   display: -webkit-flex;

@@ -610,7 +610,7 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
         }
         var topUser = [];
         var notEar = [];
-        // console.log("docs[0]: ",docs[0]);
+        console.log("docs[0]: ",docs[0]);
         docs[0].records.forEach(function callback(currentValue, index, rec) {
             var index = index;
             var o = currentValue.votes.filter(x => x.userId == id);
