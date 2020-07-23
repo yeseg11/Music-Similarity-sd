@@ -7,7 +7,7 @@
     "start": "./bin/nodemon app.js"
   },
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "async": "^2.6.3",
@@ -23,9 +23,9 @@
     "google-auth-library": "^1.6.1",
     "googleapis": "^47.0.0",
     "install": "^0.10.4",
-    "jquery": "^3.4.1",
-    "mongoose": "^5.9.4",
-    "npm": "^6.14.2",
+    "jquery": "^3.5.1",
+    "mongoose": "^5.9.25",
+    "npm": "^6.14.7",
     "request": "^2.88.2",
     "youtube-node": "^1.3.3"
   }
