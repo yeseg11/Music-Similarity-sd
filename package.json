@@ -1,0 +1,32 @@
+{
+  "name": "MusicBrainScrapt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "./bin/nodemon app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "async": "^2.6.3",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^3.4.1",
+    "compute-cosine-similarity": "^1.0.0",
+    "crypto-js": "^4.0.0",
+    "debug": "^3.2.6",
+    "express": "^4.17.1",
+    "font-awesome": "^4.7.0",
+    "fs-extra": "^5.0.0",
+    "glob": "^7.1.6",
+    "google-auth-library": "^1.6.1",
+    "googleapis": "^47.0.0",
+    "install": "^0.10.4",
+    "jquery": "^3.4.1",
+    "mongoose": "^5.9.4",
+    "npm": "^6.14.2",
+    "request": "^2.88.2",
+    "youtube-node": "^1.3.3"
+  }
+}
