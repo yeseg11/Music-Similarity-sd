@@ -2,7 +2,7 @@
 ## Secound Degree project. 
 
 
-<img src="https://github.com/avicohen89/Music-Similarity/blob/master/pic/music-colour-splash.jpg" height="300" width="400">
+<img src="https://github.com/yeseg11/Music-Similarity-sd/blob/master/pic/music-colour-splash.jpg" height="300" width="400">
 
 
 ## Disclaimer
@@ -39,19 +39,19 @@ Sagi Marciano
 | Project Management Board| [![here](https://img.shields.io/badge/Project%20Management%20Board-On%20demand-lightgrey.svg)](https://github.com/yeseg11/Music-Similarity-sd/projects) |
 | Documnetation | [![Inline docs](http://inch-ci.org/github/avicohen89/Music-Similarity.svg?branch=master)](https://github.com/yeseg11/Music-Similarity-sd/wiki/Documents) |
 | Diary |  [![link](https://img.shields.io/badge/Diary-On%20demand-blue.svg)](https://calendar.google.com/calendar/embed?src=pnu92pav3s91nku9u35gks3m0c%40group.calendar.google.com&ctz=Asia%2FJerusalem) |
-| Releases | [![GitHub (pre-)release](https://img.shields.io/badge/release-v2.0.1-blue.svg)](https://github.com/avicohen89/Music-Similarity/releases/tag/2.0.1)|
+| Releases | [![GitHub (pre-)release](https://img.shields.io/badge/release-v2.0.1-blue.svg)](https://github.com/yeseg11/Music-Similarity-sd/releases/tag/2.0.1)|
 
 
 ## Software Design
-* [Architecture](https://github.com/avicohen89/Music-Similarity/blob/master/docs/Architectur.png)
-* [State charts](https://github.com/avicohen89/Music-Similarity/blob/master/docs/state%20chart.png) 
-* [Sequence diagram](https://github.com/avicohen89/Music-Similarity/blob/master/docs/sequance%20diagram.png)
-* [Use cases](https://github.com/avicohen89/Music-Similarity/blob/master/docs/use%20cases.png)
+* [Architecture](https://github.com/yeseg11/Music-Similarity-sd/blob/master/docs/Architectur.png)
+* [State charts](https://github.com/yeseg11/Music-Similarity-sd/blob/master/docs/state%20chart.png) 
+* [Sequence diagram](https://github.com/yeseg11/Music-Similarity-sd/blob/master/docs/sequance%20diagram.png)
+* [Use cases](https://github.com/yeseg11/Music-Similarity-sd/blob/master/docs/use%20cases.png)
 
 ## Iterations
 
-* [Iteration 0 ZFR](https://github.com/avicohen89/Music-Similarity/wiki/Iteration-0-ZFR)
-* [Iteration 1 MVP](https://github.com/avicohen89/Music-Similarity/wiki/Iteration-1-MVP)
-* [Iteration 2 alpa](https://github.com/avicohen89/Music-Similarity/wiki/Iteration-2-alpha)
-* [Iteration 3 beta](https://github.com/avicohen89/Music-Similarity/wiki/Iteration-3-beta)
-* [Iteration 4 final](https://github.com/avicohen89/Music-Similarity/wiki/Iteration-4-final)
+* [Iteration 0 ZFR](https://github.com/yeseg11/Music-Similarity-sd/Music-Similarity/wiki/Iteration-0-ZFR)
+* [Iteration 1 MVP](https://github.com/yeseg11/Music-Similarity-sd/Music-Similarity/wiki/Iteration-1-MVP)
+* [Iteration 2 alpa](https://github.com/yeseg11/Music-Similarity-sd/Music-Similarity/wiki/Iteration-2-alpha)
+* [Iteration 3 beta](https://github.com/yeseg11/Music-Similarity-sd/wiki/Iteration-3-beta)
+* [Iteration 4 final](https://github.com/yeseg11/Music-Similarity-sd/wiki/Iteration-4-final)
