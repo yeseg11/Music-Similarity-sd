@@ -400,10 +400,10 @@ app.get('/user/:id/:encryptedPass', function (req, res, next) {    //call to get
 
 app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
-    console.log(req.params.id);
+    // console.log(req.params.id);
     PublicUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
         if (err) return next(err);
-        console.log(docs);
+        // console.log(docs);
         res.status(200).json({err: false, items: [].concat(docs)});
     });
 });
@@ -610,7 +610,7 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
         }
         var topUser = [];
         var notEar = [];
-        console.log("docs[0]: ",docs[0]);
+        // console.log("docs[0]: ",docs[0]);
         docs[0].records.forEach(function callback(currentValue, index, rec) {
             var index = index;
             var o = currentValue.votes.filter(x => x.userId == id);
@@ -817,7 +817,7 @@ app.get('/insertResearcher/:id/:encryptedPass', function (req, res, next) {
 
     Researchers.find({researcherId:id}).exec(function (err, docs) {
         if (err) return next(err);
-        console.log("docs: ",docs);
+        // console.log("docs: ",docs);
         var bytes2  = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
         if (decrypted2 === decrypted1 && docs[0].isAdmin){
@@ -845,9 +845,9 @@ app.get('/insertResearchGroup/:id/:encryptedPass', function (req, res, next) {
     var bytes  = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
     var decrypted1 = bytes.toString(CryptoJS.enc.Utf8);
     var id = req.params.id.toString()
-    console.log("Log-IN")
+    // console.log("Log-IN")
     ResearchGroup.find({researchGroupId:id}).exec(function (err, docs) {
-        console.log("Log-IN",docs)
+        // console.log("Log-IN",docs)
         if (err) return next(err);
         var bytes2  = CryptoJS.AES.decrypt(docs[0].researchGroupPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
