@@ -23,7 +23,7 @@
     "google-auth-library": "^1.6.1",
     "googleapis": "^47.0.0",
     "install": "^0.10.4",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mongoose": "^5.9.4",
     "npm": "^6.14.6",
     "request": "^2.88.2",
