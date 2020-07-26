@@ -167,7 +167,7 @@
                     //     records: JSON.stringify(recList)
                     // };
                     // console.log(publicId);
-                    alert("user add");
+                    alert("The Playlist added to database");
                 });
             });
         })

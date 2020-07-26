@@ -169,7 +169,7 @@
                 postingInsertResearch.done(function (data) {
 
                 });
-                alert("Research Created");
+                alert("Research Created '\n' The research Id is: " + researchId.val());
             });
         })
     });

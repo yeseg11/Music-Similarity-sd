@@ -62,7 +62,7 @@
                 });
                 postingPrivate.done(function (data) {
                 });
-
+                alert("The record added to database");
             });
         })
     });

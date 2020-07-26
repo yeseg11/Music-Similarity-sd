@@ -92,7 +92,7 @@
                     });
                 })
 
-                alert("User Created");
+                alert("The User Created '\n' The User Id is:" + publicId.toString());
             });
         })
     });
