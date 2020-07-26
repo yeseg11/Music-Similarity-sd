@@ -25,8 +25,9 @@
                 return err;
             });
             var ResearchGroupId = localStorage["ResearchGroupId"];
-            console.log("ResearchGroupId",ResearchGroupId);
             $('#researchGroupId').val(ResearchGroupId.toString())
+
+
 
         }
 
@@ -53,17 +54,22 @@
             });
         }
 
+
+
         init();
 
         $('#send').on("click", function (e) {
             // console.log("here")
             var arr = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#department", "#numberOfWeeks", "#meetingPerWeek", "#lengthOfSession", "#alguritem"];
             var mustInput = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#numberOfWeeks", "#meetingPerWeek", "#alguritem"];
-            for (const element of mustInput){
-                if (!$(element).length){
-                    console.log('Error');
-                    alert(element,"is Empty, Please enter data.");
-                    return $('#error').text(element,"is Empty, Please enter data.");
+
+            for (const element of mustInput) {
+                console.log("element", element)
+                console.log("element length", $(element).val().length)
+                if ($(element).val().length <= 1) {
+                    var element2 = element.substr(1);
+                    alert("Please fill the missing details in " + element2);
+                    return $('#error').text("insert all the details");
                 }
             }
 

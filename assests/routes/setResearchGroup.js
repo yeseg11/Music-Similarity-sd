@@ -14,6 +14,19 @@
                 console.log(err);
                 return err;
             });
+
+            getResearcheGroupsSize().then(function (result1) {
+                var selectElem1 = $('#researchGroupId');
+                selectElem1.val(result1);
+            }).catch(function (err) {
+                console.log(err);
+                return err;
+            });
+
+
+
+
+
         }
 
         function getResearchers() {
@@ -27,16 +40,29 @@
             });
         }
 
+        function getResearcheGroupsSize() {
+            return new Promise(function (resolve, reject) {
+                var researcheGroups = [];
+                $.get('/getResearcheGroupsSize', function (data) {
+                    if (!data || !data.items ) return reject(Error("ERROR IN FIND LIST"));
+                    researcheGroups = data.items;
+                    resolve(researcheGroups);
+                })
+            });
+        }
+
         init();
 
         $('#send').on("click", function (e) {
             // console.log("here")
             var mustInput = ["#researchGroupName", "#researchGroupId", "#researchGroupPassword", "#researchersIds"];
-            for (const element of mustInput){
-                if (!$(element).length){
-                    console.log('Error');
-                    alert(element,"is Empty, Please enter data.");
-                    return $('#error').text(element,"is Empty, Please enter data.");
+            for (const element of mustInput) {
+                console.log("element", element)
+                console.log("element length", $(element).val().length)
+                if ($(element).val().length < 1) {
+                    var element2 = element.substr(1);
+                    alert("Please fill the missing details in " + element2);
+                    return $('#error').text("insert all the details");
                 }
             }
 
@@ -62,7 +88,7 @@
                 postingInsertResearch.done(function (data) {
 
                 });
-                alert("Research Group Created");
+                alert("Research Group Created '\n' The id is:" + researchGroupId.val());
             });
         })
     });

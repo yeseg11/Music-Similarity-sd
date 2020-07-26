@@ -441,6 +441,36 @@ app.get('/allresearchers', function (req, res, next) {    //call to getUserData.
     })
 });
 
+/** ----------------------------------------------------------------------------------
+ * Return all the researchs Data from DB
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.get('/allresearches', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    Research.find({}).exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    })
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return all the researcheGroups Data from DB
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.get('/getResearcheGroupsSize', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    ResearchGroup.find({}).exec(function (err, docs) {
+        if (err) return next(err);
+        res.status(200).json({err: false, items: docs.length});
+    })
+});
+
 
 /** ----------------------------------------------------------------------------------
  * Return all the researches for specific  id Data from DB
