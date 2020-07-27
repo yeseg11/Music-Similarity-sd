@@ -2,23 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0b264ee-6ed7-4331-bbba-6b83f10c488f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/adminLoginPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/adminLoginPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/adminMainPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/adminMainPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/createResearchGroup.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/createResearchGroup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/createResearcher.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/createResearcher.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/createUsers.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/createUsers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/mainPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/mainPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/newPlaylist.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/newPlaylist.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/newResearch.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/newResearch.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/newSong.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/newSong.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/researchGroupLoginPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/researchGroupLoginPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/researchGroupMainPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/researchGroupMainPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/userLoginPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/userLoginPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assests/userScreen.html" beforeDir="false" afterPath="$PROJECT_DIR$/assests/userScreen.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/setUserData.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/editUserData.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/editUserData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/editUserList.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/editUserList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/setPlaylistData.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/setPlaylistData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/setRecordToDB.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/setRecordToDB.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/setResearchData.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/setResearchData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/setResearchGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/setResearchGroup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/setResearcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/setResearcher.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assests/routes/setUserData.js" beforeDir="false" afterPath="$PROJECT_DIR$/assests/routes/setUserData.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +60,7 @@
       <workItem from="1595494333123" duration="567000" />
       <workItem from="1595495089700" duration="8206000" />
       <workItem from="1595760253494" duration="218000" />
-      <workItem from="1595761132837" duration="9091000" />
+      <workItem from="1595761132837" duration="9705000" />
     </task>
     <servers />
   </component>
@@ -80,28 +72,28 @@
       <screen x="-1920" y="23" width="1920" height="1057" />
     </state>
     <state x="-1496" y="182" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.830/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1595495005517" />
-    <state width="1899" height="376" key="GridCell.Tab.0.bottom" timestamp="1595842301711">
+    <state width="1899" height="376" key="GridCell.Tab.0.bottom" timestamp="1595842843003">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842301711" />
+    <state width="1899" height="376" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842843003" />
     <state width="1899" height="376" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.23.1920.1057@0.0.1440.900" timestamp="1595753696196" />
     <state width="1899" height="269" key="GridCell.Tab.0.bottom/0.23.1440.830/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1595495011300" />
-    <state width="1899" height="376" key="GridCell.Tab.0.center" timestamp="1595842301710">
+    <state width="1899" height="376" key="GridCell.Tab.0.center" timestamp="1595842843002">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.center/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842301710" />
+    <state width="1899" height="376" key="GridCell.Tab.0.center/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842843002" />
     <state width="1899" height="376" key="GridCell.Tab.0.center/0.0.1440.900/-1920.23.1920.1057@0.0.1440.900" timestamp="1595753696195" />
     <state width="1899" height="269" key="GridCell.Tab.0.center/0.23.1440.830/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1595495011299" />
-    <state width="1899" height="376" key="GridCell.Tab.0.left" timestamp="1595842301709">
+    <state width="1899" height="376" key="GridCell.Tab.0.left" timestamp="1595842843001">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.left/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842301709" />
+    <state width="1899" height="376" key="GridCell.Tab.0.left/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842843001" />
     <state width="1899" height="376" key="GridCell.Tab.0.left/0.0.1440.900/-1920.23.1920.1057@0.0.1440.900" timestamp="1595753696194" />
     <state width="1899" height="269" key="GridCell.Tab.0.left/0.23.1440.830/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1595495011299" />
-    <state width="1899" height="376" key="GridCell.Tab.0.right" timestamp="1595842301711">
+    <state width="1899" height="376" key="GridCell.Tab.0.right" timestamp="1595842843003">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.right/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842301711" />
+    <state width="1899" height="376" key="GridCell.Tab.0.right/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1595842843003" />
     <state width="1899" height="376" key="GridCell.Tab.0.right/0.0.1440.900/-1920.23.1920.1057@0.0.1440.900" timestamp="1595753696195" />
     <state width="1899" height="269" key="GridCell.Tab.0.right/0.23.1440.830/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1595495011300" />
     <state width="1899" height="376" key="GridCell.Tab.1.bottom" timestamp="1595753696198">

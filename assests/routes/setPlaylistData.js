@@ -168,6 +168,8 @@
                     // };
                     // console.log(publicId);
                     alert("The Playlist added to database");
+                    var pathname = "/adminMainPage"
+                    window.location.replace(pathname);
                 });
             });
         })

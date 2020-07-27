@@ -170,6 +170,8 @@
 
                 });
                 alert("Research Created '\n' The research Id is: " + researchId.val());
+                var pathname = "/researchGroupMainPage"
+                window.location.replace(pathname);
             });
         })
     });

@@ -46,6 +46,11 @@
             var pathname = "/editUserPage"
             window.location.replace(pathname);
         })
+
+        $('#main').on("click", function (e) {
+            localStorage["UserId"] = null;
+        })
+
     });
 })(jQuery);
 

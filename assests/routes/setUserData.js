@@ -2,6 +2,7 @@
     $(document).ready(function () {
         // console.log("here");
         $('#send').on("click", function (e) {
+
             let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#languageAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
             let inputsArr = ['#birthYear', '#name', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
 
@@ -90,9 +91,10 @@
                     postingPublic.done(function (data) {
                         // console.log("public User data:",data);
                     });
+                    alert("The User Created \n The User Id is:" + publicId.toString());
+                    var pathname = "/adminMainPage"
+                    window.location.replace(pathname);
                 })
-
-                alert("The User Created '\n' The User Id is:" + publicId.toString());
             });
         })
     });

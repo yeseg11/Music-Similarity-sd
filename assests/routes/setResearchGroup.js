@@ -89,6 +89,8 @@
 
                 });
                 alert("Research Group Created '\n' The id is:" + researchGroupId.val());
+                var pathname = "/adminMainPage"
+                window.location.replace(pathname);
             });
         })
     });

@@ -137,7 +137,13 @@
 
 
                 alert("The User data changed '\n' The User Id is:" + publicId.toString());
+                var pathname = "/adminMainPage"
+                window.location.replace(pathname);
+                localStorage["UserId"] = null;
             });
+        })
+        $('#main').on("click", function (e) {
+            localStorage["UserId"] = null;
         })
     });
 })(jQuery);
