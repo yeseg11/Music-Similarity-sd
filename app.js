@@ -62,7 +62,8 @@ app.get('/researchList', (req, res) => res.sendFile(path.join(__dirname, 'assest
  * *Admin Page
  */
 app.get('/createUsers', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createUsers.html'), {}, () => res.end()));
-app.get('/editUsers', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editUsers.html'), {}, () => res.end()));
+app.get('/editUsers', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editUserList.html'), {}, () => res.end()));
+app.get('/editUserPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editUser.html'), {}, () => res.end()));
 app.get('/createResearchGroup', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createResearchGroup.html'), {}, () => res.end()));
 app.get('/createResearcher', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createResearcher.html'), {}, () => res.end()));
 app.get('/newPlaylist', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/newPlaylist.html'), {}, () => res.end()));
@@ -277,6 +278,39 @@ app.post('/insertPrivateUsers', function (req, res, next) {
         bulk.execute();
     }
 });
+
+/** ----------------------------------------------------------------------------------
+ * Update the given users playlist , and add user to Data base
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} name: Given user name
+ * @PARAM {String} country: Given user name
+ * @PARAM {Number} entrance:The user entrance
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {playList , userData}
+ ----------------------------------------------------------------------------------*/
+
+app.post('/updatePrivateUsers', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+
+    if (req.body.tamaringaId && req.body.name && req.body.nursingHome) {
+        var userData = {
+            name: req.body.name,
+            tamaringaId: req.body.tamaringaId,
+            nursingHome: req.body.nursingHome
+        };
+
+        var bulk = PrivateUsers.collection.initializeOrderedBulkOp();
+        bulk.find({
+            tamaringaId: userData.tamaringaId                 //update the id , if have - update else its build new document
+        }).upsert().updateOne(userData);
+        bulk.execute();
+    }
+});
+
+
+
 
 
 /** ----------------------------------------------------------------------------------

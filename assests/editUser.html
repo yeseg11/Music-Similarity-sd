@@ -46,10 +46,10 @@
                     </div>
                     <div class="wrap-input100 validate-input" data-validate="ID is required">
                         <span class="label-input100">ID*</span>
-                        <input id='id' class="input100" type="text" name="id" placeholder="Enter ID" required>
+                        <input id='id' class="input100" type="text" name="id"  value="Can't Change Id Number!" readonly>
                         <span class="focus-input100"></span>
                     </div>
-                    <div class="wrap-input100 validate-input" data-validate="ID is required">
+                    <div class="wrap-input100 validate-input" data-validate="Password is required">
                         <span class="label-input100">Password*</span>
                         <input id='password' class="input100" type="text" name="password" placeholder="Enter Password" required>
                         <span class="focus-input100"></span>
@@ -59,10 +59,10 @@
 
             <div class="container-section-space">
                 <div class="container-section">
-                    <div class="wrap-input100 validate-input" data-validate="Nursing Home is required" required>
+                    <div class="wrap-input100 validate-input" data-validate="Nursing Home is required" >
                         <span class="label-input100">Nursing Home*</span>
                         <input id='nursingHome' class="input100" type="text" name='nursingHome'
-                               placeholder="Enter Nursing Home">
+                               placeholder="Enter Nursing Home" required>
                         <span class="focus-input100"></span>
                     </div>
                     <div class="wrap-input100 validate-input" data-validate="Department is required">
@@ -78,12 +78,12 @@
                     </div>
                 </div>
             </div>
-<!--            <div class="wrap-input100 validate-input" data-validate="Name is required">-->
-<!--                <span class="label-input100">Age</span>-->
-<!--                <input id='age' class="input100" type="number" name="age" placeholder="Enter Age">-->
-<!--                <span class="focus-input100"></span>-->
-<!--            </div>-->
-<!--            /************************************************/-->
+            <!--            <div class="wrap-input100 validate-input" data-validate="Name is required">-->
+            <!--                <span class="label-input100">Age</span>-->
+            <!--                <input id='age' class="input100" type="number" name="age" placeholder="Enter Age">-->
+            <!--                <span class="focus-input100"></span>-->
+            <!--            </div>-->
+            <!--            /************************************************/-->
 
             <div class="container-section-space">
                 <div class="container-section">
@@ -91,7 +91,7 @@
                         <span class="label-input100">Year of birth</span>
                         <div>
 
-                            <select id="birthYear" class="selection-2" name="birthYear">
+                            <select id="birthYear" class="selection-2" name="birthYear" >
                                 <option>Select Year</option>
                                 <option value="2020">2020</option>
                                 <option value="2019">2019</option>
@@ -573,7 +573,7 @@
                     <div class="contact100-form-bgbtn"></div>
                     <button type="button" id='send' class="contact100-form-btn">
 							<span>
-								Create
+								Update
 								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
 							</span>
                     </button>
