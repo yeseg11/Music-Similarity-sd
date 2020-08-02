@@ -24,24 +24,38 @@
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--===============================================================================================-->
-    <script src="/lib/jquery/jquery.min.js"></script> <!-- 2.1.3-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script src="routes/index.js" ></script>
 </head>
 <body>
 <div class="container-contact100">
-    <div class="wrap-contact100">
+    <div class="wrap-contact1100">
         <form class="contact100-form validate-form" >
             <span class="contact100-form-title">
-                Research Group: ...<!-- need to add the name of the group -->
+                Research Group Main:<!-- need to add the name of the group -->
             </span>
 
             <div class="container-contact100-form-btn">
                 <div class="wrap-contact100-form-btn">
                     <div class="contact100-form-bgbtn"></div>
-                    <button type="button" id ='createUser' class="contact100-form-btn" onclick="location.href='/newResearch'">
-                        <span>
-                            Create research
-                        </span>
+                    <button id='createResearch' type='button' class="contact100-form-btn" onclick="location.href='/newResearch'">
+                                <span>
+                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
+                                    Create New Research
+                                </span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button id='editResearch' type='button' class="contact100-form-btn" onclick="location.href='/editResearch'">
+                                <span>
+                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
+                                    Edit Research
+                                </span>
                     </button>
                 </div>
             </div>
@@ -49,9 +63,9 @@
                 <div class="wrap-contact100-form-btn">
                     <div class="contact100-form-bgbtn"></div>
                     <button id='researchList' type='button' class="contact100-form-btn" onclick="location.href='/researchList'">
-                        <i class="fa fa-list-ol fa-lg" aria-hidden="true"></i>
                             <span>
-                                List of research
+                                <i class="fa fa-list-ol fa-lg" aria-hidden="true" style="padding-right: 10px"></i>
+                                List of research’s
                             </span>
                     </button>
                 </div>

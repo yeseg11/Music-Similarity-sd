@@ -24,12 +24,13 @@
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--===============================================================================================-->
-    <script src="/lib/jquery/jquery.min.js"></script> <!-- 2.1.3-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script src="routes/index.js" ></script>
 </head>
 <body>
 <div class="container-contact100">
-    <div class="wrap-contact100">
+    <div class="wrap-contact1100">
         <form class="contact100-form validate-form" >
 				<span class="contact100-form-title">
 					Admin Screen
@@ -41,8 +42,8 @@
                         <div class="wrap-contact100-form-btn">
                             <div class="contact100-form-bgbtn"></div>
                             <button type="button" id ='createUser' class="contact100-form-btn" onclick="location.href='/createUsers'">
-                                <i class="fa fa-blind fa-2x" aria-hidden="true"></i>
                                 <span>
+                                    <i class="fa fa-blind fa-2x" aria-hidden="true" style="padding-right: 10px"></i>
                                     Create User
                                 </span>
                             </button>
@@ -52,7 +53,7 @@
                         <div class="wrap-contact100-form-btn">
                             <div class="contact100-form-bgbtn"></div>
                             <button id='editUser' type='button' class="contact100-form-btn" onclick="location.href='/editUsers'">
-                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+                                <i class="fa fa-pencil fa-lg" aria-hidden="true" style="padding-right: 10px"></i>
                                     <span>
                                         Edit User
                                     </span>
@@ -72,7 +73,7 @@
                             <div class="contact100-form-bgbtn"></div>
                             <button id='createResearcher' type='button' class="contact100-form-btn" onclick="location.href='/createResearcher'">
                                 <span>
-                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
+                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
                                     Create Researcher
                                 </span>
                             </button>
@@ -85,33 +86,8 @@
                             <div class="contact100-form-bgbtn"></div>
                             <button id='createResearchGroup' type='button' class="contact100-form-btn" onclick="location.href='/createResearchGroup'">
                                 <span>
-                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
+                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
                                     Create Research Group
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <div class="container-contact100-form-btn">
-                        <div class="wrap-contact100-form-btn">
-                            <div class="contact100-form-bgbtn"></div>
-                            <button id='createResearch' type='button' class="contact100-form-btn" onclick="location.href='/newResearch'">
-                                <span>
-                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
-                                    Create New Research
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="container-contact100-form-btn">
-                        <div class="wrap-contact100-form-btn">
-                            <div class="contact100-form-bgbtn"></div>
-                            <button id='editResearch' type='button' class="contact100-form-btn" onclick="location.href='/editResearch'">
-                                <span>
-                                    <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
-                                    Edit Research
                                 </span>
                             </button>
                         </div>
@@ -121,7 +97,6 @@
             </div>
 
 
-
             <div class="container-section-space">
                 <div class="container-section">
                     <div class="container-contact100-form-btn">
@@ -129,7 +104,7 @@
                             <div class="contact100-form-bgbtn"></div>
                             <button type="button" id ='createPlaylist' class="contact100-form-btn" onclick="location.href='/newPlaylist'">
                                     <span>
-                                        <i class="fa fa-list-ol fa-lg fa-fw" aria-hidden="true"></i>
+                                        <i class="fa fa-list-ol fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
                                         Create Playlist
                                     </span>
                             </button>
@@ -140,7 +115,7 @@
                             <div class="contact100-form-bgbtn"></div>
                             <button type="button" id ='addMedia' class="contact100-form-btn" onclick="location.href='/newSong'">
                                     <span>
-                                        <i class="fa fa-music fa-lg fa-fw" aria-hidden="true"></i>
+                                        <i class="fa fa-music fa-lg fa-fw" aria-hidden="true" style="padding-right: 10px"></i>
                                         Add Media
                                     </span>
                             </button>

@@ -6,23 +6,44 @@
         function init() {
 
             getResearchers().then(function (result1) {
-                console.log("result1: ",result1);
+                console.log("result1: ",result1[0].researchersIds);
+                var templateSahow  = '';
                 for (var i = 0; i < result1.length; i++) {
+                    if (result1[i].researchersIds.length > 1){
+                        // for (var j = 0; j < result1[i].researchersIds.length; j++) {
+                        //     templateSahow += '<tr>';
+                        //     templateSahow += '<th >'+result1[i].researchName+'</th>';
+                        //     templateSahow += '<th >'+result1[i].researchId+'</th>'; //'<th>::ResearchId:::</th>';
+                        //     templateSahow += '<th >'+result1[i].nursingHome+'</th>'; //'<th>::NursingHome:::</th>';
+                        //     templateSahow += '<th >'+result1[i].department+'</th>'; //'<th>::Department:::</th>';
+                        //     templateSahow += '<th >'+result1[i].numberOfWeeks+'</th>'; //'<th>::NumberOfWeeks:::</th>';
+                        //     templateSahow += '<th >'+result1[i].meetingPerWeek+'</th>'; //'<th>::MeetingPerWeek:::</th>';
+                        //     templateSahow += '<th >'+result1[i].lengthOfSession+'</th>'; //'<th>::Length of session:::</th>';
+                        //     templateSahow += '<th >'+result1[i].alguritem+'</th>'; //'<th>::Algoritem:::</th>';
+                        //     templateSahow += /*'<th >'+result1[0].researchName+'</th>';*/ '<th><button style="color: blue"><b> Press Here </b></button></th>';
+                        //     templateSahow += '</tr>';
+                        // }
+                    }
+                    else {
+                        templateSahow += '<tr>';
+                        templateSahow += '<th >'+result1[i].researchName+'</th>';
+                        templateSahow += '<th >'+result1[i].researchId+'</th>'; //'<th>::ResearchId:::</th>';
+                        templateSahow += '<th >'+result1[i].nursingHome+'</th>'; //'<th>::NursingHome:::</th>';
+                        templateSahow += '<th >'+result1[i].department+'</th>'; //'<th>::Department:::</th>';
+                        templateSahow += '<th >'+result1[i].numberOfWeeks+'</th>'; //'<th>::NumberOfWeeks:::</th>';
+                        templateSahow += '<th >'+result1[i].meetingPerWeek+'</th>'; //'<th>::MeetingPerWeek:::</th>';
+                        templateSahow += '<th >'+result1[i].lengthOfSession+'</th>'; //'<th>::Length of session:::</th>';
+                        templateSahow += '<th >'+result1[i].alguritem+'</th>'; //'<th>::Algoritem:::</th>';
+                        templateSahow += /*'<th >'+result1[0].researchName+'</th>';*/ '<th><button style="color: blue"><b> Press Here </b></button></th>';
+                        templateSahow += '</tr>';
+                    }
+
                     // templateSahow+=("<option value='" + result1[i].researcherId + "'>" + result1[i].researcherName + "</option>");
 
-                    var templateSahow  = '<tr>';
-                    templateSahow += '<th>::ResearchName:::</th>';
-                    templateSahow += '<th>::ResearchId:::</th>';
-                    templateSahow += '<th>::NursingHome:::</th>';
-                    templateSahow += '<th>::Department:::</th>';
-                    templateSahow += '<th>::NumberOfWeeks:::</th>';
-                    templateSahow += '<th>::MeetingPerWeek:::</th>';
-                    templateSahow += '<th>::Length of session:::</th>';
-                    templateSahow += '<th>::Algoritem:::</th>';
-                    templateSahow += '<th><button style="color: blue"><b> Press Here </b></button></th>';
-                    templateSahow += '</tr>';
 
                 }
+                html += templateSahow
+                tableWrapper.html(html);
             }).catch(function (err) {
                 console.log(err);
                 return err;
@@ -33,12 +54,12 @@
             return new Promise(function (resolve, reject) {
                 var researchersList = [];
                 var ResearchGroupId = localStorage["ResearchGroupId"];
-                console.log("ResearchGroupId",ResearchGroupId);
+                // console.log("ResearchGroupId",ResearchGroupId);
                 $.get('/allresearches/'+ResearchGroupId.toString(), function (data) {
                     if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
-
-                    // researchersList = data.items
-                    // resolve(researchersList);
+                    console.log("data",data);
+                    researchersList = data.items
+                    resolve(researchersList);
                 })
             });
         }

@@ -1,8 +1,5 @@
-# Secound Degree project. 
-## New Pailot 
-
 # Music-Similarity
-
+## Secound Degree project. 
 
 
 <img src="https://github.com/yeseg11/Music-Similarity-sd/blob/master/pic/music-colour-splash.jpg" height="300" width="400">

@@ -24,6 +24,11 @@
                 console.log(err);
                 return err;
             });
+            var ResearchGroupId = localStorage["ResearchGroupId"];
+            $('#researchGroupId').val(ResearchGroupId.toString())
+
+
+
         }
 
         function getUsers() {
@@ -34,6 +39,7 @@
                     usersList = data.items
                     resolve(usersList);
                 });
+
             });
         }
 
@@ -48,22 +54,30 @@
             });
         }
 
+
+
         init();
 
         $('#send').on("click", function (e) {
             // console.log("here")
             var arr = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#department", "#numberOfWeeks", "#meetingPerWeek", "#lengthOfSession", "#alguritem"];
             var mustInput = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#numberOfWeeks", "#meetingPerWeek", "#alguritem"];
-            for (const element of mustInput){
-                if (!$(element).length){
-                    console.log('Error');
-                    alert(element,"is Empty, Please enter data.");
-                    return $('#error').text(element,"is Empty, Please enter data.");
+
+            for (const element of mustInput) {
+                console.log("element", element)
+                console.log("element length", $(element).val().length)
+                if ($(element).val().length <= 1) {
+                    var element2 = element.substr(1);
+                    alert("Please fill the missing details in " + element2);
+                    return $('#error').text("insert all the details");
                 }
             }
+
+
             var researchName = $('#researchName'),
                 researchId = $('#researchId'),
                 researchersIds = $('#researchersIds'),
+                researchGroupId = $('#researchGroupId'),
                 patientsIds = $('#patientsIds'),
                 nursingHome = $('#nursingHome'),
                 department = $('#department'),
@@ -140,6 +154,7 @@
                         researchName: researchName.val(),
                         researchId: researchId.val(),
                         researchersIds: researchersIds.val(),
+                        researchGroupId : researchGroupId.val(),
                         patientsIds: patientsIds.val(),
                         nursingHome: nursingHome.val(),
                         department: department.val(),
@@ -154,7 +169,9 @@
                 postingInsertResearch.done(function (data) {
 
                 });
-                alert("Research Created");
+                alert("Research Created '\n' The research Id is: " + researchId.val());
+                var pathname = "/researchGroupMainPage"
+                window.location.replace(pathname);
             });
         })
     });

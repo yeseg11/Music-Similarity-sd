@@ -39,7 +39,9 @@
                 postingInsertResearch.done(function (data) {
 
                 });
-                alert("Research Group Created");
+                alert("The Researcher Created '\n' The Researcher Id is:" + researcherId.val());
+                var pathname = "/adminMainPage"
+                window.location.replace(pathname);
             });
         })
     });

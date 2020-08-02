@@ -8,6 +8,7 @@ var Schema = mongoose.Schema;
 var researchSchema = new Schema({
     researchName: String,
     researchId: Number,
+    researchGroupId: String,
     researchersIds: [String],
     patientsIds: [String],
     nursingHome: String,
