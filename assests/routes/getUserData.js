@@ -13,11 +13,11 @@
         template += '<span class="focus-input100">::name::</span>';
         template += '<iframe width="1024" height="600" src="http://www.youtube.com/embed/::link::"></iframe>';
         template += '<div id = "buttons">';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like"><img src="../images/btn/1.png" name="like"/></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/2.png" name="like"/></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="like" id ="like"><img src="../images/btn/3.png" name="like"/></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="like" id ="like"><img src="../images/btn/4.png" name="like"/></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" name="like" id ="like"><img src="../images/btn/5.png" name="like"/></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like" ><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="like" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="like" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" name="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
         template += '';
         template += '</div>';
         template += '</div>';
@@ -54,7 +54,7 @@
                 var encryptedPass = CryptoJS.AES.encrypt(password.val(),'Password');
             }
             $.get('/user/' + id.val().toString()+'/'+encryptedPass, function(data) {
-                console.log("LOG - IN ");
+                // console.log("LOG - IN ", data);
                 if(!data || !data.items || !data.items.length) return musicWrapper.html('<h3>Please rephrase search</h3>');
                 var entrance = data.items[0].entrance;
                 if (entrance === 0) //first time
@@ -65,11 +65,12 @@
                     var country = data.items[0].countryAtTwenty;
                     musicWrapper.html('<h3><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i> Loading</h3>');
                     var playListName = data.items[0].group.toString();
-
-                    console.log(data.items[0]);
                     $.get('/playList/' + playListName, function(data) {
-                        //console.log(data.items[0].records.length);
-                        //return;
+                        // console.log(data.items[0]);
+                        if (data.items[0] === undefined){
+                            alert("No playlist was defined for this user!");
+                            return;
+                        }
                         if(!data || !data.items || !data.items.length || !data.items[0] || data.items[0].records.length < 1 ) return musicWrapper.html('<h3>Please rephrase search</h3>');
                         var rec = data.items[0].records; // build the playlist and check don't have double songs.
                         var html = '';
@@ -250,7 +251,7 @@
                             $('#title').html("Your Music: "+year2 + ',' + country2);
                         }
 
-                        window.scrollBy(0, 500);
+                        window.scrollBy(0, 750);
                         musicWrapper.html(html);
 
                         //console.log("top user: "+topUser);
