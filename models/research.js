@@ -9,6 +9,7 @@ var researchSchema = new Schema({
     researchName: String,
     researchId: Number,
     researchGroupId: String,
+    description: String,
     researchersIds: [String],
     patientsIds: [String],
     nursingHome: String,

@@ -9,6 +9,7 @@ var researchGroup = new Schema({
     researchGroupName: String,
     researchGroupId: String,
     researchGroupPassword: String,
+    description: String,
     researchersIds: [String]
 });
 

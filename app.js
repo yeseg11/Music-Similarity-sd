@@ -804,7 +804,7 @@ app.post('/insertResearcher', function (req, res, next) {
         };
         var bulk = Researchers.collection.initializeOrderedBulkOp();
         bulk.find({
-            id: researcherData.id                 //update the id , if have - update else its build new document
+            researcherId: researcherData.id                 //update the id , if have - update else its build new document
         }).upsert().updateOne(researcherData);
         bulk.execute();
     }
@@ -827,6 +827,7 @@ app.post('/insertResearch', function (req, res, next) {
         researchName: req.body.researchName,
         researchId: req.body.researchId,
         researchersIds: req.body['researchersIds[]'],
+        description : req.body.description,
         researchGroupId : req.body.researchGroupId,
         patientsIds: req.body['patientsIds[]'],
         nursingHome: req.body.nursingHome,
@@ -863,6 +864,7 @@ app.post('/insertResearchGroup', function (req, res, next) {
         researchGroupName: req.body.researchGroupName,
         researchGroupId: req.body.researchGroupId,
         researchGroupPassword: req.body.researchGroupPassword,
+        description : req.body.description,
         researchersIds: req.body['researchersIds[]']
     };
     // console.log("researchGroup: ",researchGroup);
@@ -895,6 +897,9 @@ app.get('/insertResearcher/:id/:encryptedPass', function (req, res, next) {
     Researchers.find({researcherId:id}).exec(function (err, docs) {
         if (err) return next(err);
         // console.log("docs: ",docs);
+        if (docs[0] === undefined || docs[0].researcherPassword === undefined) {
+            return next(err);
+        }
         var bytes2  = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
         if (decrypted2 === decrypted1 && docs[0].isAdmin){

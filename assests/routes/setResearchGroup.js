@@ -69,6 +69,7 @@
             var researchGroupName = $('#researchGroupName'),
                 researchGroupId = $('#researchGroupId'),
                 researchGroupPassword = $('#researchGroupPassword'),
+                description = $('#description'),
                 researchersIds = $('#researchersIds');
 
 
@@ -80,6 +81,7 @@
                     researchGroupName: researchGroupName.val(),
                     researchGroupId: researchGroupId.val(),
                     researchGroupPassword: encryptedPass.toString(),
+                    description : description.val(),
                     researchersIds: researchersIds.val()
                 };
                 console.log(researchGroup);

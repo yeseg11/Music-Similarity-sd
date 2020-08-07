@@ -15,6 +15,7 @@
             }
             var html = '';
             $.get('/insertResearcher/' + id.val().toString()+'/'+encryptedPass, function(data) {
+                if(data.toString().charAt(0) === "<" ) return  alert("Please insert valid password or admin id!");
                 if(!data || !data.items || !data.items.length) return  alert("Please Try again the system uploaded!");
                 var pathname = "/adminMainPage"
                 window.location.replace(pathname);
