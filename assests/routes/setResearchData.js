@@ -80,8 +80,8 @@
 
         $('#send').on("click", function (e) {
             // console.log("here")
-            var arr = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#department", "#numberOfWeeks", "#meetingPerWeek", "#lengthOfSession", "#alguritem"];
-            var mustInput = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#numberOfWeeks", "#meetingPerWeek", "#alguritem"];
+            var arr = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#department", "#numberOfWeeks", "#meetingPerWeek", "#lengthOfSession", "#algorithm"];
+            var mustInput = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#numberOfWeeks", "#meetingPerWeek", "#algorithm"];
 
             for (const element of mustInput) {
                 // console.log("element", element)
@@ -106,7 +106,7 @@
                 numberOfWeeks = $('#numberOfWeeks'),
                 meetingPerWeek = $('#meetingPerWeek'),
                 lengthOfSession = $('#lengthOfSession'),
-                alguritem = $('#alguritem');
+                algorithm = $('#algorithm');
 
 
             var yearAtTwenty = "";
@@ -184,7 +184,8 @@
                         numberOfWeeks: numberOfWeeks.val(),
                         meetingPerWeek: meetingPerWeek.val(),
                         lengthOfSession: lengthOfSession.val(),
-                        alguritem:alguritem.val()
+                        algorithm:algorithm.val(),
+                        // created: false
                 };
 
                 var insertResearchUrl = '/insertResearch';

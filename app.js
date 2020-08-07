@@ -73,8 +73,8 @@ app.get('/newSong', (req, res) => res.sendFile(path.join(__dirname, 'assests', '
  * researchers pages
  */
 app.get('/newResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/newResearch.html'), {}, () => res.end())); // login form
-app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
-
+app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearchList.html'), {}, () => res.end()));
+app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
 
 // /** ----------------------------------------------------------------------------------
 //  * Return the given users playlist , and add user to Data base
@@ -442,6 +442,27 @@ app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , a
     });
 });
 
+/** ----------------------------------------------------------------------------------
+ * Return the Research by id
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+
+
+app.get('/research/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    console.log(req.params.id.toString());
+    Research.find({researchId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+
 
 
 
@@ -476,7 +497,7 @@ app.get('/allresearchers', function (req, res, next) {    //call to getUserData.
 });
 
 /** ----------------------------------------------------------------------------------
- * Return all the researchs Data from DB
+ * Return all the researches Data from DB
  *
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
@@ -835,7 +856,8 @@ app.post('/insertResearch', function (req, res, next) {
         numberOfWeeks: req.body.numberOfWeeks,
         meetingPerWeek: req.body.meetingPerWeek,
         lengthOfSession: req.body.lengthOfSession,
-        alguritem: req.body.alguritem
+        algorithm: req.body.algorithm,
+        // created: req.body.created
     };
     var bulk = Research.collection.initializeOrderedBulkOp();
     bulk.find({

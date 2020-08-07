@@ -33,7 +33,7 @@
                         templateSahow += '<th >'+result1[i].numberOfWeeks+'</th>'; //'<th>::NumberOfWeeks:::</th>';
                         templateSahow += '<th >'+result1[i].meetingPerWeek+'</th>'; //'<th>::MeetingPerWeek:::</th>';
                         templateSahow += '<th >'+result1[i].lengthOfSession+'</th>'; //'<th>::Length of session:::</th>';
-                        templateSahow += '<th >'+result1[i].alguritem+'</th>'; //'<th>::Algoritem:::</th>';
+                        templateSahow += '<th >'+result1[i].algorithm+'</th>'; //'<th>::algorithm:::</th>';
                         templateSahow += /*'<th >'+result1[0].researchName+'</th>';*/ '<th><button style="color: blue"><b> Press Here </b></button></th>';
                         templateSahow += '</tr>';
                     }
