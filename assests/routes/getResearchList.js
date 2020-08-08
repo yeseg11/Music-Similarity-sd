@@ -6,41 +6,23 @@
         function init() {
 
             getResearchers().then(function (result1) {
-                console.log("result1: ",result1[0].researchersIds);
+                console.log("result1: ",result1);
+                console.log(result1.length);
                 var templateSahow  = '';
                 for (var i = 0; i < result1.length; i++) {
-                    if (result1[i].researchersIds.length > 1){
-                        // for (var j = 0; j < result1[i].researchersIds.length; j++) {
-                        //     templateSahow += '<tr>';
-                        //     templateSahow += '<th >'+result1[i].researchName+'</th>';
-                        //     templateSahow += '<th >'+result1[i].researchId+'</th>'; //'<th>::ResearchId:::</th>';
-                        //     templateSahow += '<th >'+result1[i].nursingHome+'</th>'; //'<th>::NursingHome:::</th>';
-                        //     templateSahow += '<th >'+result1[i].department+'</th>'; //'<th>::Department:::</th>';
-                        //     templateSahow += '<th >'+result1[i].numberOfWeeks+'</th>'; //'<th>::NumberOfWeeks:::</th>';
-                        //     templateSahow += '<th >'+result1[i].meetingPerWeek+'</th>'; //'<th>::MeetingPerWeek:::</th>';
-                        //     templateSahow += '<th >'+result1[i].lengthOfSession+'</th>'; //'<th>::Length of session:::</th>';
-                        //     templateSahow += '<th >'+result1[i].alguritem+'</th>'; //'<th>::Algoritem:::</th>';
-                        //     templateSahow += /*'<th >'+result1[0].researchName+'</th>';*/ '<th><button style="color: blue"><b> Press Here </b></button></th>';
-                        //     templateSahow += '</tr>';
-                        // }
-                    }
-                    else {
-                        templateSahow += '<tr>';
-                        templateSahow += '<th >'+result1[i].researchName+'</th>';
-                        templateSahow += '<th >'+result1[i].researchId+'</th>'; //'<th>::ResearchId:::</th>';
-                        templateSahow += '<th >'+result1[i].nursingHome+'</th>'; //'<th>::NursingHome:::</th>';
-                        templateSahow += '<th >'+result1[i].department+'</th>'; //'<th>::Department:::</th>';
-                        templateSahow += '<th >'+result1[i].numberOfWeeks+'</th>'; //'<th>::NumberOfWeeks:::</th>';
-                        templateSahow += '<th >'+result1[i].meetingPerWeek+'</th>'; //'<th>::MeetingPerWeek:::</th>';
-                        templateSahow += '<th >'+result1[i].lengthOfSession+'</th>'; //'<th>::Length of session:::</th>';
-                        templateSahow += '<th >'+result1[i].algorithm+'</th>'; //'<th>::algorithm:::</th>';
-                        templateSahow += /*'<th >'+result1[0].researchName+'</th>';*/ '<th><button style="color: blue"><b> Press Here </b></button></th>';
-                        templateSahow += '</tr>';
-                    }
-
-                    // templateSahow+=("<option value='" + result1[i].researcherId + "'>" + result1[i].researcherName + "</option>");
-
-
+                    templateSahow += '<tr>';
+                    templateSahow += '<td >'+result1[i].researchName+'</td>';
+                    templateSahow += '<td >'+result1[i].researchId+'</td>'; //'<th>::ResearchId:::</th>';
+                    templateSahow += '<td >'+result1[i].nursingHome+'</td>'; //'<th>::NursingHome:::</th>';
+                    templateSahow += '<td >'+result1[i].department+'</td>'; //'<th>::Department:::</th>';
+                    templateSahow += '<td >'+result1[i].numberOfWeeks+'</td>'; //'<th>::NumberOfWeeks:::</th>';
+                    templateSahow += '<td >'+result1[i].meetingPerWeek+'</td>'; //'<th>::MeetingPerWeek:::</th>';
+                    templateSahow += '<td >'+result1[i].lengthOfSession+'</td>'; //'<th>::Length of session:::</th>';
+                    templateSahow += '<td >'+result1[i].algorithm+'</td>'; //'<th>::algorithm:::</th>';
+                    // <button class="buttonDes" type="button" onclick="f2('::userid::','::data::',4)" name="like" id ="like">
+                    templateSahow += '<td>'+ '<button id="showUsers" onclick="saveClickedResearch(\':::researchId:::\')" style="color: blue">' + '<b> Press Here </b></button></td>';
+                    templateSahow += '</tr>';
+                    templateSahow = templateSahow.replace(':::researchId:::', result1[i].researchId);
                 }
                 html += templateSahow
                 tableWrapper.html(html);
@@ -63,6 +45,8 @@
                 })
             });
         }
+
+
 
         init();
 
@@ -105,3 +89,10 @@
 })(jQuery);
 
 
+function saveClickedResearch(Id){
+    console.log(Id);
+    localStorage["ResearchId"] = Id;
+    console.log(localStorage["ResearchId"]);
+    var pathname = "/usersList"
+    window.location.replace(pathname);
+}

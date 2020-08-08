@@ -170,6 +170,8 @@ iframe {
     background-size: 100% 100%;
 }
 
+
+
 .wrap-contact100 {
     width: 1500px;
     background: #fff;
@@ -232,11 +234,21 @@ table {
     width: 100%;
 }
 
-td, th {
+td{
     border: 1px solid #dddddd;
     text-align: left;
     padding: 2px;
 }
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 2px;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: underline;
+    color: cadetblue;
+}
+
 
 
 /*------------------------------------------------------------------

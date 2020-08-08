@@ -58,6 +58,7 @@ app.get('/userScreen', (req, res) => res.sendFile(path.join(__dirname, 'assests'
 app.get('/researchGroupLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/researchGroupLoginPage.html'), {}, () => res.end()));
 app.get('/researchGroupMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', 'researchGroupMainPage.html'), {}, () => res.end()));/*2*/
 app.get('/researchList', (req, res) => res.sendFile(path.join(__dirname, 'assests', 'researchList.html'), {}, () => res.end()));
+app.get('/usersList', (req, res) => res.sendFile(path.join(__dirname, 'assests', 'usersList.html'), {}, () => res.end()));
 /**
  * *Admin Page
  */
@@ -442,6 +443,7 @@ app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , a
     });
 });
 
+
 /** ----------------------------------------------------------------------------------
  * Return the Research by id
  *
@@ -461,6 +463,43 @@ app.get('/research/:id', function (req, res, next) {    //call to getUserData.js
     });
 });
 
+app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    // console.log(req.params.id);
+    let usersIds = [];
+    Research.find({researchId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs[0].patientsIds);
+        usersIds = docs[0].patientsIds
+        PublicUsers.find({tamaringaId:{"$in":usersIds}}).exec(function (err, docs) {
+            if (err) return next(err);
+            // console.log(docs);
+            res.status(200).json({err: false, items: [].concat(docs)});
+        });
+    });
+
+
+
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the private id by tamaringa id
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+
+
+app.get('/privateUser/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    PrivateUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs);
+        res.status(200).json({err: false, items: docs[0].privateId});
+    });
+});
 
 
 
@@ -506,7 +545,7 @@ app.get('/allresearches', function (req, res, next) {    //call to getUserData.j
     if (!req) return res.sendStatus(400);
     Research.find({}).exec(function (err, docs) {
         if (err) return next(err);
-        // console.log(docs);
+        console.log("allresearches",docs);
         res.status(200).json({err: false, items: [].concat(docs)});
     })
 });
