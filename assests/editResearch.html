@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+    <title>Functions</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="./images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./css/util.css">
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <!--===============================================================================================-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="./routes/editResearch.js" ></script>
+</head>
+<body>
+<div class="container-contact100">
+
+    <div class="wrap-contact1100">
+        <form class="contact100-form validate-form">
+				<span class="contact100-form-title">
+					Edit Research
+				</span>
+            <div class="wrap-input100 validate-input" data-validate="Name is required">
+                <span class="label-input100">Research Name</span>
+                <input id ='researchName' class="input100" type="text" name="researchName" placeholder="Enter Research Name">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="ID is required">
+                <span class="label-input100">Research ID</span>
+                <input id ='researchId' class="input100" type="text" name="researchId" readonly>
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="ID is required">
+                <span class="label-input100">Research Group ID</span>
+                <input id ='researchGroupId' class="input100" type="text" name="researchGroupId"  readonly>
+                <span class="focus-input100"></span>
+            </div>
+
+            <!--==============change to drop down===========================-->
+            <div class="wrap-input100 validate-input" data-validate="Name is required">
+                <span class="label-input100">Select the researchers name</span>
+                <select input id ='researchersIds' class="input100" type="text" name='researchersIds' placeholder="Select the researchers name" multiple>
+                    <option value="" disabled selected>Select the researchers</option>
+                </select>
+                <!--                <input id ='researchers' class="input100" type="text" name='researchers' placeholder="Select the researchers name">-->
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Nursing Home is required">
+                <span class="label-input100">Nursing Home</span>
+                <!--                <select input id ='nursingHome' class="input100" type="text" name='nursingHome' placeholder="Enter Nursing Home" multiple>-->
+                <!--                    <option value="" disabled selected>Select the researchers</option>-->
+                <!--                </select>-->
+                <input id ='nursingHome' class="input100" type="text" name='nursingHome' placeholder="Enter Nursing Home">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Department is required">
+                <span class="label-input100">Department</span>
+                <input id ='department' class="input100" type="text" name='department' placeholder="Enter Department">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="description is required">
+                <span class="label-input100">Description</span>
+                <textarea id ='description' class="input100" type="text" name='description' placeholder="Enter description"></textarea>
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Name is required">
+                <span class="label-input100">Choose the patients</span>
+                <select input id ='patientsIds' class="input100" type="text" name='patientsIds' placeholder="Select the patients Name" multiple>
+                    <option value="" disabled selected>Select the patients</option>
+
+                </select>
+                <!--                <input id ='patientsIds' class="input100" type="text" name="patientsIds" placeholder="Enter patients Name">-->
+                <span class="focus-input100"></span>
+            </div>
+            <!-- ======== -->
+
+            <!--==============change to drop down===========================-->
+
+
+
+            <!--==============change to drop down===========================-->
+            <!--==============add users, connect to DB===========================-->
+            <div class="wrap-input100 validate-input" data-validate="Length of study is required">
+                <span class="label-input100">Length of study in weeks</span>
+                <input id ='numberOfWeeks' class="input100" type="number" name="numberOfWeeks" placeholder="Enter Length of study">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Number of sessions is required">
+                <span class="label-input100">Number of sessions per week</span>
+                <input id ='meetingPerWeek' class="input100" type="number" name="meetingPerWeek" placeholder="Enter Number of sessions">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Length of session is required">
+                <span class="label-input100">Length of session in minutes</span>
+                <input id ='lengthOfSession' class="input100" type="number" name="lengthOfSession" placeholder="Enter Length of session">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 input100-select">
+                <span class="label-input100">Algorithm</span>
+                <div>
+                    <select id="algorithm" class="selection-2" name="algorithm">
+                        <option disabled selected>Select Algorithm</option>
+                        <option value="alg1">Algorithm 1</option>
+                        <option value="alg2">Algorithm 2</option>
+                    </select>
+                </div>
+                <span class="focus-input100"></span>
+            </div>
+
+
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button type="button" id ='send' class="contact100-form-btn" >
+							<span>
+								Update
+								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+							</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="container-contact100-back-btn">
+                <div class="wrap-contact100-back-btn">
+                    <div class="contact100-back-bgbtn"></div>
+                    <button id='main' type='button' class="contact100-back-btn" onclick="location.href='/researchGroupMainPage'">
+                        <i class="fa fa-arrow-left m-l-7" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <!--
+                        <div class="container-contact100-form-btn">
+                            <div class="wrap-contact100-form-btn">
+                                <div class="contact100-form-bgbtn"></div>
+                                <button id='btn_tracks' type='button' class="contact100-form-btn">
+                                        <span>
+                                            By Track
+                                            <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+                                        </span>
+                                </button>
+                            </div>
+                        </div>
+            -->
+        </form>
+    </div>
+</div>
+
+<!--===============================================================================================-->
+<!--
+<div class="container-contact100">
+    <div class="wrap-contact800">
+        <form class="contact100-form validate-form">
+				<span id="title" class="contact100-form-title">
+					Your Music
+				</span>
+                <div id="musicWrapper">
+                    <h3 class="text-center">Please search for music</h3>
+                </div>
+
+        </form>
+    </div>
+</div>
+
+-->
+
+<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<script>
+    $(".selection-2").select2({
+        minimumResultsForSearch: 20,
+        dropdownParent: $('#dropDownSelect1')
+    });
+</script>
+<!--===============================================================================================-->
+<script src="vendor/daterangepicker/moment.min.js"></script>
+<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23581568-13');
+</script>
+</body>
+</html>

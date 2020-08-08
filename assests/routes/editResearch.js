@@ -1,11 +1,35 @@
 (function ($) {
     $(document).ready(function () {
+        // console.log("here");
 
-        var PLAYLISTSIZE = 50;
+        var researchId = localStorage["ResearchId"];
+        console.log("researchId: ",researchId);
 
-
-
+        // var oldEntrance = 0;
+        // var oldrecList = [];
         function init() {
+
+
+            getResearchData().then(function (result1) {
+                $('#researchName').val(result1[0].researchName);
+                $('#researchId').val(result1[0].researchId);
+                $('#researchGroupId').val(result1[0].researchGroupId);
+                // $('#researchersIds').val(result1[0].researchersIds);
+                $('#nursingHome').val(result1[0].nursingHome);
+                $('#department').val(result1[0].countryOrigin);
+                $('#description').val(result1[0].description);
+                // $('#patientsIds').val(result1[0].patientsIds);
+                $('#numberOfWeeks').val(result1[0].numberOfWeeks);
+                $('#meetingPerWeek').val(result1[0].meetingPerWeek);
+                $('#lengthOfSession').val(result1[0].lengthOfSession);
+                $('#algorithm').val(result1[0].algorithm);
+
+                alert('Please Choose the researchers, patients and algorithm again ');
+
+            }).catch(function (err) {
+                console.log(err);
+                return err;
+            });
 
             getResearchers().then(function (result1) {
                 var selectElem1 = $('#researchersIds');
@@ -38,6 +62,19 @@
                 return err;
             });
 
+
+
+        }
+
+        function getResearchData() {
+            return new Promise(function (resolve, reject) {
+                $.get('/research/' + researchId, function (data) {
+                    // console.log("data: ",data);
+                    if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
+                    // console.log(data.items)
+                    resolve(data.items);
+                })
+            });
         }
 
         function getResearches() {
@@ -77,6 +114,7 @@
 
 
         init();
+
 
         $('#send').on("click", function (e) {
             // console.log("here")
@@ -173,19 +211,18 @@
                 }
 
                 var researchData = {
-                        researchName: researchName.val(),
-                        researchId: researchId.val(),
-                        researchersIds: researchersIds.val(),
-                        researchGroupId : researchGroupId.val(),
-                        description : description.val(),
-                        patientsIds: patientsIds.val(),
-                        nursingHome: nursingHome.val(),
-                        department: department.val(),
-                        numberOfWeeks: numberOfWeeks.val(),
-                        meetingPerWeek: meetingPerWeek.val(),
-                        lengthOfSession: lengthOfSession.val(),
-                        algorithm:algorithm.val(),
-                        // created: false
+                    researchName: researchName.val(),
+                    researchId: researchId.val(),
+                    researchersIds: researchersIds.val(),
+                    researchGroupId : researchGroupId.val(),
+                    description : description.val(),
+                    patientsIds: patientsIds.val(),
+                    nursingHome: nursingHome.val(),
+                    department: department.val(),
+                    numberOfWeeks: numberOfWeeks.val(),
+                    meetingPerWeek: meetingPerWeek.val(),
+                    lengthOfSession: lengthOfSession.val(),
+                    algorithm:algorithm.val()
                 };
 
                 var insertResearchUrl = '/insertResearch';
@@ -200,5 +237,3 @@
         })
     });
 })(jQuery);
-
-

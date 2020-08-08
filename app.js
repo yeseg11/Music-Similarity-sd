@@ -58,6 +58,7 @@ app.get('/userScreen', (req, res) => res.sendFile(path.join(__dirname, 'assests'
 app.get('/researchGroupLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/researchGroupLoginPage.html'), {}, () => res.end()));
 app.get('/researchGroupMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', 'researchGroupMainPage.html'), {}, () => res.end()));/*2*/
 app.get('/researchList', (req, res) => res.sendFile(path.join(__dirname, 'assests', 'researchList.html'), {}, () => res.end()));
+app.get('/usersList', (req, res) => res.sendFile(path.join(__dirname, 'assests', 'usersList.html'), {}, () => res.end()));
 /**
  * *Admin Page
  */
@@ -73,8 +74,8 @@ app.get('/newSong', (req, res) => res.sendFile(path.join(__dirname, 'assests', '
  * researchers pages
  */
 app.get('/newResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/newResearch.html'), {}, () => res.end())); // login form
-app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
-
+app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearchList.html'), {}, () => res.end()));
+app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
 
 // /** ----------------------------------------------------------------------------------
 //  * Return the given users playlist , and add user to Data base
@@ -443,6 +444,65 @@ app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , a
 });
 
 
+/** ----------------------------------------------------------------------------------
+ * Return the Research by id
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+
+
+app.get('/research/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    console.log(req.params.id.toString());
+    Research.find({researchId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    // console.log(req.params.id);
+    let usersIds = [];
+    Research.find({researchId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs[0].patientsIds);
+        usersIds = docs[0].patientsIds
+        PublicUsers.find({tamaringaId:{"$in":usersIds}}).exec(function (err, docs) {
+            if (err) return next(err);
+            // console.log(docs);
+            res.status(200).json({err: false, items: [].concat(docs)});
+        });
+    });
+
+
+
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the private id by tamaringa id
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+
+
+app.get('/privateUser/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    PrivateUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs);
+        res.status(200).json({err: false, items: docs[0].privateId});
+    });
+});
+
+
+
 
 
 /** ----------------------------------------------------------------------------------
@@ -476,7 +536,7 @@ app.get('/allresearchers', function (req, res, next) {    //call to getUserData.
 });
 
 /** ----------------------------------------------------------------------------------
- * Return all the researchs Data from DB
+ * Return all the researches Data from DB
  *
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
@@ -485,7 +545,7 @@ app.get('/allresearches', function (req, res, next) {    //call to getUserData.j
     if (!req) return res.sendStatus(400);
     Research.find({}).exec(function (err, docs) {
         if (err) return next(err);
-        // console.log(docs);
+        console.log("allresearches",docs);
         res.status(200).json({err: false, items: [].concat(docs)});
     })
 });
@@ -500,6 +560,19 @@ app.get('/allresearches', function (req, res, next) {    //call to getUserData.j
 app.get('/getResearcheGroupsSize', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     ResearchGroup.find({}).exec(function (err, docs) {
+        if (err) return next(err);
+        res.status(200).json({err: false, items: docs.length});
+    })
+});
+/** ----------------------------------------------------------------------------------
+ * Return all the researchs Data from DB
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.get('/getResearchesSize', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    Research.find({}).exec(function (err, docs) {
         if (err) return next(err);
         res.status(200).json({err: false, items: docs.length});
     })
@@ -791,7 +864,7 @@ app.post('/insertResearcher', function (req, res, next) {
         };
         var bulk = Researchers.collection.initializeOrderedBulkOp();
         bulk.find({
-            id: researcherData.id                 //update the id , if have - update else its build new document
+            researcherId: researcherData.id                 //update the id , if have - update else its build new document
         }).upsert().updateOne(researcherData);
         bulk.execute();
     }
@@ -814,6 +887,7 @@ app.post('/insertResearch', function (req, res, next) {
         researchName: req.body.researchName,
         researchId: req.body.researchId,
         researchersIds: req.body['researchersIds[]'],
+        description : req.body.description,
         researchGroupId : req.body.researchGroupId,
         patientsIds: req.body['patientsIds[]'],
         nursingHome: req.body.nursingHome,
@@ -821,7 +895,8 @@ app.post('/insertResearch', function (req, res, next) {
         numberOfWeeks: req.body.numberOfWeeks,
         meetingPerWeek: req.body.meetingPerWeek,
         lengthOfSession: req.body.lengthOfSession,
-        alguritem: req.body.alguritem
+        algorithm: req.body.algorithm,
+        // created: req.body.created
     };
     var bulk = Research.collection.initializeOrderedBulkOp();
     bulk.find({
@@ -850,6 +925,7 @@ app.post('/insertResearchGroup', function (req, res, next) {
         researchGroupName: req.body.researchGroupName,
         researchGroupId: req.body.researchGroupId,
         researchGroupPassword: req.body.researchGroupPassword,
+        description : req.body.description,
         researchersIds: req.body['researchersIds[]']
     };
     // console.log("researchGroup: ",researchGroup);
@@ -882,6 +958,9 @@ app.get('/insertResearcher/:id/:encryptedPass', function (req, res, next) {
     Researchers.find({researcherId:id}).exec(function (err, docs) {
         if (err) return next(err);
         // console.log("docs: ",docs);
+        if (docs[0] === undefined || docs[0].researcherPassword === undefined) {
+            return next(err);
+        }
         var bytes2  = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
         if (decrypted2 === decrypted1 && docs[0].isAdmin){

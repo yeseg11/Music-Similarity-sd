@@ -43,7 +43,7 @@
             </div>
             <div class="wrap-input100 validate-input" data-validate="ID is required">
                 <span class="label-input100">Research ID</span>
-                <input id ='researchId' class="input100" type="text" name="researchId" placeholder="Enter Research ID">
+                <input id ='researchId' class="input100" type="text" name="researchId" readonly>
                 <span class="focus-input100"></span>
             </div>
 
@@ -75,6 +75,12 @@
             <div class="wrap-input100 validate-input" data-validate="Department is required">
                 <span class="label-input100">Department</span>
                 <input id ='department' class="input100" type="text" name='department' placeholder="Enter Department">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="description is required">
+                <span class="label-input100">Description</span>
+                <textarea id ='description' class="input100" type="text" name='description' placeholder="Enter description"></textarea>
                 <span class="focus-input100"></span>
             </div>
 
@@ -116,7 +122,7 @@
             <div class="wrap-input100 input100-select">
                 <span class="label-input100">Algorithm</span>
                 <div>
-                    <select id="alguritem" class="selection-2" name="alguritem">
+                    <select id="algorithm" class="selection-2" name="algorithm">
                         <option disabled selected>Select Algorithm</option>
                         <option value="alg1">Algorithm 1</option>
                         <option value="alg2">Algorithm 2</option>

@@ -7,8 +7,9 @@ var Schema = mongoose.Schema;
 // create a schema
 var researchSchema = new Schema({
     researchName: String,
-    researchId: Number,
+    researchId: String,
     researchGroupId: String,
+    description: String,
     researchersIds: [String],
     patientsIds: [String],
     nursingHome: String,
@@ -16,7 +17,8 @@ var researchSchema = new Schema({
     numberOfWeeks: Number,
     meetingPerWeek: Number,
     lengthOfSession: Number,
-    alguritem:String
+    // created: Boolean,
+    algorithm:String
 });
 
 // the schema is useless so far
