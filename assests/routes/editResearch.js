@@ -16,7 +16,7 @@
                 $('#researchGroupId').val(result1[0].researchGroupId);
                 // $('#researchersIds').val(result1[0].researchersIds);
                 $('#nursingHome').val(result1[0].nursingHome);
-                $('#department').val(result1[0].countryOrigin);
+                $('#department').val(result1[0].department);
                 $('#description').val(result1[0].description);
                 // $('#patientsIds').val(result1[0].patientsIds);
                 $('#numberOfWeeks').val(result1[0].numberOfWeeks);
@@ -56,7 +56,7 @@
 
             getResearches().then(function (result1) {
                 var researchId = result1;
-                $('#researchId').val(result1 +1);
+                // $('#researchId').val(result1 +1);
             }).catch(function (err) {
                 console.log(err);
                 return err;
@@ -177,7 +177,7 @@
                                 size = data.items.length;
                             }
                             for (i = 0; i < size; i++) {
-                                console.log(data.items[i].artist[0].name);
+                                // console.log(data.items[i].artist[0].name);
                                 recList.push({
                                     mbId: data.items[i].mbId,
                                     title: data.items[i].title,
