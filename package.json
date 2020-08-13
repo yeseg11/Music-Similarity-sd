@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "async": "^2.6.3",
+    "bcr": "^1.0.0",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
     "compute-cosine-similarity": "^1.0.0",

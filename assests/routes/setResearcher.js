@@ -19,7 +19,10 @@
 
             var prom = new Promise(function (resolve, reject) {
 
-                var encryptedPass = CryptoJS.AES.encrypt(researcherPassword.val(),'Password');
+
+
+
+
                 var admin = false;
                 if (isAdmin.val() == "on"){
                     admin = true;
@@ -29,7 +32,7 @@
                 var researcherData = {
                     researcherName: researcherName.val(),
                     researcherId: researcherId.val(),
-                    researcherPassword: encryptedPass.toString(),
+                    researcherPassword: researcherPassword.val().toString(),
                      isAdmin: admin
                 };
                 console.log(isAdmin);
