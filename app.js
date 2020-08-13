@@ -19,6 +19,9 @@ let ResearchGroup = require('./models/researchGroup.js');
 var AES = require("crypto-js/aes");
 
 
+// const insertResearcher = require('bcrypt');
+// const saltRounds = 10;
+var CryptoJS = require("crypto-js");
 
 let similarity = require('compute-cosine-similarity');
 
@@ -161,9 +164,9 @@ app.post('/playList/createPlaylist', function (req, res, next) {
     if (!req.body) return res.sendStatus(400, "Error to add user");
     var playlistData = {
         name: req.body.name,
-        year:req.body.year,
-        country:req.body.country,
-        language:req.body.language,
+        year: req.body.year,
+        country: req.body.country,
+        language: req.body.language,
         records: JSON.parse(req.body.records)
     };
     // console.log(playlistData);
@@ -182,7 +185,6 @@ app.post('/playList/createPlaylist', function (req, res, next) {
         name: playlistData.name                 //update the id , if have - update else its build new document
     }).upsert().updateOne(playlistData);
     bulk.execute();
-
 
 
     // PlayList.findOne({name: playlistData.name}, function (error, result) {
@@ -311,9 +313,6 @@ app.post('/updatePrivateUsers', function (req, res, next) {
 });
 
 
-
-
-
 /** ----------------------------------------------------------------------------------
  * Return and update the entrance time of the user  to Data base
  *
@@ -414,20 +413,19 @@ app.get('/playList/:name', function (req, res, next) {
 app.get('/user/:id/:encryptedPass', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     var CryptoJS = require("crypto-js");
-    var bytes  = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
+    var bytes = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
     var decrypted1 = bytes.toString(CryptoJS.enc.Utf8)
     // console.log(req.params.id);
     PublicUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
         if (err) return next(err);
         // console.log(docs);
         // res.status(200).json({err: false, items: [].concat(docs)});
-        var bytes2  = CryptoJS.AES.decrypt(docs[0].password, 'Password');
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
         // console.log("docs: ",decrypted2);
-        if (decrypted2 === decrypted1){
+        if (decrypted2 === decrypted1) {
             res.status(200).json({err: false, items: [].concat(docs)});
-        }
-        else{
+        } else {
             return next(err)
         }
     });
@@ -452,7 +450,6 @@ app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , a
  ----------------------------------------------------------------------------------*/
 
 
-
 app.get('/research/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     console.log(req.params.id.toString());
@@ -471,16 +468,53 @@ app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserD
         if (err) return next(err);
         // console.log(docs[0].patientsIds);
         usersIds = docs[0].patientsIds
-        PublicUsers.find({tamaringaId:{"$in":usersIds}}).exec(function (err, docs) {
+        PublicUsers.find({tamaringaId: {"$in": usersIds}}).exec(function (err, docs) {
             if (err) return next(err);
             // console.log(docs);
             res.status(200).json({err: false, items: [].concat(docs)});
         });
     });
-
-
-
 });
+
+
+
+app.post('/loginUser', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    if (!req.body) return res.sendStatus(400);
+    if (req.body.userId === undefined || req.body.userPassword === undefined) {
+        return next(err);
+    }
+
+    PublicUsers.find({tamaringaId: req.body.userId.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
+        var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
+        // console.log("docs: ",decrypted2);
+        if (decrypted2 === req.body.userPassword) {
+            res.status(200).json({err: false, items: [].concat(docs)});
+        } else {
+            return next(err)
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /** ----------------------------------------------------------------------------------
@@ -491,7 +525,6 @@ app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserD
  ----------------------------------------------------------------------------------*/
 
 
-
 app.get('/privateUser/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     PrivateUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
@@ -500,9 +533,6 @@ app.get('/privateUser/:id', function (req, res, next) {    //call to getUserData
         res.status(200).json({err: false, items: docs[0].privateId});
     });
 });
-
-
-
 
 
 /** ----------------------------------------------------------------------------------
@@ -545,7 +575,7 @@ app.get('/allresearches', function (req, res, next) {    //call to getUserData.j
     if (!req) return res.sendStatus(400);
     Research.find({}).exec(function (err, docs) {
         if (err) return next(err);
-        console.log("allresearches",docs);
+        console.log("allresearches", docs);
         res.status(200).json({err: false, items: [].concat(docs)});
     })
 });
@@ -597,7 +627,6 @@ app.get('/allresearches/:id', function (req, res, next) {    //call to getUserDa
 
 
 // researchId
-
 
 
 /** ----------------------------------------------------------------------------------
@@ -856,10 +885,12 @@ app.post('/insertResearcher', function (req, res, next) {
     // console.log("Try to post the researcher");
 
     if (req.body.researcherId && req.body.researcherName && req.body.researcherPassword) {
+        var encryptedPass = CryptoJS.AES.encrypt(req.body.researcherPassword, 'Password');
+
         var researcherData = {
             researcherName: req.body.researcherName,
             researcherId: req.body.researcherId,
-            researcherPassword: req.body.researcherPassword,
+            researcherPassword: encryptedPass,
             isAdmin: Boolean(req.body.isAdmin)
         };
         var bulk = Researchers.collection.initializeOrderedBulkOp();
@@ -887,8 +918,8 @@ app.post('/insertResearch', function (req, res, next) {
         researchName: req.body.researchName,
         researchId: req.body.researchId,
         researchersIds: req.body['researchersIds[]'],
-        description : req.body.description,
-        researchGroupId : req.body.researchGroupId,
+        description: req.body.description,
+        researchGroupId: req.body.researchGroupId,
         patientsIds: req.body['patientsIds[]'],
         nursingHome: req.body.nursingHome,
         department: req.body.department,
@@ -903,7 +934,6 @@ app.post('/insertResearch', function (req, res, next) {
         researchId: researchData.researchId                 //update the id , if have - update else its build new document
     }).upsert().updateOne(researchData);
     bulk.execute();
-
 
 
 });
@@ -925,7 +955,7 @@ app.post('/insertResearchGroup', function (req, res, next) {
         researchGroupName: req.body.researchGroupName,
         researchGroupId: req.body.researchGroupId,
         researchGroupPassword: req.body.researchGroupPassword,
-        description : req.body.description,
+        description: req.body.description,
         researchersIds: req.body['researchersIds[]']
     };
     // console.log("researchGroup: ",researchGroup);
@@ -935,7 +965,6 @@ app.post('/insertResearchGroup', function (req, res, next) {
     }).upsert().updateOne(researchGroup);
     bulk.execute();
 });
-
 
 
 /** ----------------------------------------------------------------------------------
@@ -948,29 +977,53 @@ app.post('/insertResearchGroup', function (req, res, next) {
  * @RESPONSE-SAMPLE {researcherData}
  ----------------------------------------------------------------------------------*/
 
-app.get('/insertResearcher/:id/:encryptedPass', function (req, res, next) {
-    if (!req.body) return res.sendStatus(400);
-    var CryptoJS = require("crypto-js");
-    var bytes  = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
-    var decrypted1 = bytes.toString(CryptoJS.enc.Utf8);
-    var id = req.params.id.toString()
+// app.get('/insertResearcher/:id', function (req, res, next) {
+//     if (!req.body) return res.sendStatus(400);
+//     console.log("req.body: ", req.body);
+//
+//     var CryptoJS = require("crypto-js");
+//     var bytes = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
+//     var decrypted1 = bytes.toString(CryptoJS.enc.Utf8);
+//     var id = req.params.id.toString()
+//
+//     Researchers.find({researcherId: id}).exec(function (err, docs) {
+//         if (err) return next(err);
+//         // console.log("docs: ",docs);
+//         if (docs[0] === undefined || docs[0].researcherPassword === undefined) {
+//             return next(err);
+//         }
+//         var bytes2 = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
+//         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
+//         if (decrypted2 === decrypted1 && docs[0].isAdmin) {
+//             res.status(200).json({err: false, items: [].concat(docs)});
+//         } else {
+//             return next(err)
+//         }
+//     });
+// });
 
-    Researchers.find({researcherId:id}).exec(function (err, docs) {
+app.post('/loginResearcher', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400);
+    if (req.body.researcherId === undefined || req.body.researcherPassword === undefined) {
+        return next(err);
+    }
+    Researchers.find({researcherId: req.body.researcherId}).exec(function (err, docs) {
         if (err) return next(err);
-        // console.log("docs: ",docs);
         if (docs[0] === undefined || docs[0].researcherPassword === undefined) {
             return next(err);
         }
-        var bytes2  = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
+        var CryptoJS = require("crypto-js");
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
-        if (decrypted2 === decrypted1 && docs[0].isAdmin){
+        // console.log(decrypted2)
+        if (decrypted2 === req.body.researcherPassword && docs[0].isAdmin) {
             res.status(200).json({err: false, items: [].concat(docs)});
-        }
-        else{
+        } else {
             return next(err)
         }
     });
 });
+
 
 /** ----------------------------------------------------------------------------------
  *  Get  research Data from Data base
@@ -985,28 +1038,43 @@ app.get('/insertResearcher/:id/:encryptedPass', function (req, res, next) {
 app.get('/insertResearchGroup/:id/:encryptedPass', function (req, res, next) {
     if (!req.body) return res.sendStatus(400);
     var CryptoJS = require("crypto-js");
-    var bytes  = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
+    var bytes = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
     var decrypted1 = bytes.toString(CryptoJS.enc.Utf8);
     var id = req.params.id.toString()
     // console.log("Log-IN")
-    ResearchGroup.find({researchGroupId:id}).exec(function (err, docs) {
+    ResearchGroup.find({researchGroupId: id}).exec(function (err, docs) {
         // console.log("Log-IN",docs)
         if (err) return next(err);
-        var bytes2  = CryptoJS.AES.decrypt(docs[0].researchGroupPassword, 'Password');
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].researchGroupPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
-        if (decrypted2 === decrypted1){
+        if (decrypted2 === decrypted1) {
             res.status(200).json({err: false, items: [].concat(docs)});
-        }
-        else{
+        } else {
             return next(err)
         }
     });
 });
 
-
-
-
-
+app.post('/loginResearchGroup', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400);
+    var CryptoJS = require("crypto-js");
+    // console.log("req.body: ",req.body);
+    if (req.body.Id === undefined || req.body.Password === undefined) {
+        return next(err);
+    }
+    var id = req.body.Id
+    ResearchGroup.find({researchGroupId: id}).exec(function (err, docs) {
+        // console.log("docs",docs);
+        if (err) return next(err);
+        var bytes = CryptoJS.AES.decrypt(docs[0].researchGroupPassword, 'Password');
+        var decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        if (decrypted === req.body.Password) {
+            res.status(200).json({err: false, items: [].concat(docs)});
+        } else {
+            return next(err)
+        }
+    });
+});
 
 
 
@@ -1083,9 +1151,6 @@ app.post('/insertRecord', function (req, res, next) {
         bulk.execute();
     }
 });
-
-
-
 
 
 /** ----------------------------------------------------------------------------------

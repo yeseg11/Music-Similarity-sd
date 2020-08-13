@@ -120,7 +120,7 @@
             var prom = new Promise(function (resolve, reject) {
                 for (i = 0; i < patientsIds.length; i++) {
                     $.get('/user/' + patientsIds[i].value, function (data) {
-                        console.log(data.items);
+                        // console.log(data.items);
                         let items = data.items[0];
                         yearAtTwenty = items.yearAtTwenty;
                         countryAtTwenty = items.countryAtTwenty;
@@ -132,14 +132,16 @@
 
                     }).then(function (response) {
                         var recList = [];
+                        // console.log("recList1",recList);
                         $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + languageAtTwenty, function (data) {
                             if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
+                            // console.log("list data",data);
                             var size = PLAYLISTSIZE;
                             if (data.items.length < size) {
                                 size = data.items.length;
                             }
                             for (i = 0; i < size; i++) {
-                                console.log(data.items[i].artist[0].name);
+                                // console.log(data.items[i].artist[0].name);
                                 recList.push({
                                     mbId: data.items[i].mbId,
                                     title: data.items[i].title,
@@ -191,14 +193,20 @@
                 var insertResearchUrl = '/insertResearch';
                 var postingInsertResearch = $.post(insertResearchUrl, researchData);
                 postingInsertResearch.done(function (data) {
-
+                    alert("Research Created '\n' The research Id is: " + researchId.val());
+                    var pathname = "/researchGroupMainPage"
+                    window.location.replace(pathname);
                 });
-                alert("Research Created '\n' The research Id is: " + researchId.val());
-                var pathname = "/researchGroupMainPage"
-                window.location.replace(pathname);
+                alert("Research Created '\n' The research Id is: " + researchId.val() +"\n Please wait a few seconds till the page will go back");
+                setTimeout(myFunction, 1000);
             });
         })
+
     });
 })(jQuery);
 
 
+function myFunction() {
+    var pathname = "/researchGroupMainPage"
+    window.location.replace(pathname);
+}
