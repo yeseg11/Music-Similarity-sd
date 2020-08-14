@@ -361,10 +361,10 @@ textarea.input100 {
     width: 300%;
     height: 100%;
     background: #a64bf4;
-    background: -webkit-linear-gradient(left, #004f75, #878183, #004f75, #878183);
-    background: -o-linear-gradient(left, #004f75, #878183, #004f75, #878183);
-    background: -moz-linear-gradient(left, #004f75, #878183, #004f75, #878183);
-    background: linear-gradient(left, #004f75, #878183, #004f75, #878183);
+    background: -webkit-linear-gradient(left, #000000, #878183, #000000, #878183);
+    background: -o-linear-gradient(left, #000000, #878183, #000000, #878183);
+    background: -moz-linear-gradient(left, #000000, #878183, #000000, #878183);
+    background: linear-gradient(left, #000000, #878183, #000000, #878183);
     top: 0;
     left: -100%;
 
@@ -372,6 +372,30 @@ textarea.input100 {
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
     transition: all 0.4s;
+}
+
+.user.contact100-form-bgbtn{
+
+    background: -webkit-linear-gradient(left, #bc8803, #878183, #bc8803, #878183);
+    background: -o-linear-gradient(left, #bc8803, #878183, #bc8803, #878183);
+    background: -moz-linear-gradient(left, #bc8803, #878183, #bc8803, #878183);
+    background: linear-gradient(left, #bc8803, #878183, #bc8803, #878183);
+}
+
+.admin.contact100-form-bgbtn{
+
+    background: -webkit-linear-gradient(left, #85735f, #878183, #85735f, #878183);
+    background: -o-linear-gradient(left, #85735f, #878183, #85735f, #878183);
+    background: -moz-linear-gradient(left, #85735f, #878183, #85735f, #878183);
+    background: linear-gradient(left, #85735f, #878183, #85735f, #878183);
+}
+
+.research.contact100-form-bgbtn{
+
+    background: -webkit-linear-gradient(left, #712415, #878183, #712415, #878183);
+    background: -o-linear-gradient(left, #712415, #878183, #712415, #878183);
+    background: -moz-linear-gradient(left, #712415, #878183, #712415, #878183);
+    background: linear-gradient(left, #712415, #878183, #712415, #878183);
 }
 
 .contact100-form-btn {
@@ -408,7 +432,7 @@ textarea.input100 {
 }
 
 .wrap-contact100-back-btn {
-    width: 14%;
+    width: 8%;
     display: block;
     position: relative;
     z-index: 1;
@@ -423,10 +447,10 @@ textarea.input100 {
     width: 300%;
     height: 100%;
     background: #a64bf4;
-    background: -webkit-linear-gradient(left, #004f75, #878183, #004f75, #878183);
-    background: -o-linear-gradient(left, #004f75, #878183, #004f75, #878183);
-    background: -moz-linear-gradient(left, #004f75, #878183, #004f75, #878183);
-    background: linear-gradient(left, #004f75, #878183, #004f75, #878183);
+    background: -webkit-linear-gradient(left, #000000, #878183, #000000, #878183);
+    background: -o-linear-gradient(left, #000000, #878183, #000000, #878183);
+    background: -moz-linear-gradient(left, #000000, #878183, #000000, #878183);
+    background: linear-gradient(left, #000000, #878183, #000000, #878183);
     top: 0;
     left: -100%;
 
@@ -442,7 +466,7 @@ textarea.input100 {
     display: -moz-box;
     display: -ms-flexbox;
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
     padding: 20px 20px 20px 15px;
     width: 100%;
@@ -454,6 +478,14 @@ textarea.input100 {
     line-height: 1.2;
 
 }
+
+/*===============*/
+
+
+
+
+
+
 
 /*===============*/
 
