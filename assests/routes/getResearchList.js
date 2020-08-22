@@ -88,16 +88,7 @@
                 if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
                 // console.log(data.items);
                 var myJsonString = JSON.stringify(data.items);
-                // console.log(myJsonString);
                 JSONToCSVConvertor(myJsonString, "Users Data", true);
-
-                // $("<a />", {
-                //     "download": "data.json",
-                //     "href" : "data:application/json," + encodeURIComponent(myJsonString)
-                // }).appendTo("body")
-                //     .click(function() {
-                //         $(this).remove()
-                //     })[0].click()
             });
         });
     });
