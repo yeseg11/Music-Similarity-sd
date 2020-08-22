@@ -10,7 +10,9 @@
                 var templateSahow = '<tbody>';
                 for (var i = 0; i < result1.length; i++) {
                     templateSahow += '<tr>';
-                    templateSahow += '<td >' + result1[i].name + '</td>';
+                    templateSahow += '<td >' + result1[i].userName + '</td>';
+                    templateSahow += '<td >' + result1[i].firstName + '</td>';
+                    templateSahow += '<td >' + result1[i].lastName + '</td>';
                     templateSahow += '<td >' + result1[i].tamaringaId + '</td>'; //'<th>::ResearchId:::</th>';
                     templateSahow += '<td >' + result1[i].nursingHome + '</td>'; //'<th>::NursingHome:::</th>';
                     templateSahow += '<td >' + result1[i].department + '</td>'; //'<th>::Department:::</th>';
@@ -26,7 +28,7 @@
                     templateSahow += '<td >' + result1[i].entrance + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].group + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td>'+ '<button id="showPrivateId" onclick="showPrivateId(\':::userId:::\')" style="color: blue">' + '<b> Press Here </b></button></td>';
-                    templateSahow += '<td>'+ '<button id="showPrivateId" onclick="showPrivateId(\':::userId:::\')" style="color: blue">' + '<b> Delete </b></button></td>';
+                    // templateSahow += '<td>'+ '<button id="showPrivateId" onclick="showPrivateId(\':::userId:::\')" style="color: blue">' + '<b> Delete </b></button></td>';
 
                     templateSahow += '</tr>';
                     templateSahow = templateSahow.replace(':::userId:::', result1[i].tamaringaId);
@@ -62,6 +64,8 @@
 
         var html = '<thead><tr>';
         html += '<th>User name</th>';
+        html += '<th>First name</th>';
+        html += '<th>Last name</th>';
         html += '<th>Tamaringa Id</th>';
         html += '<th>Nursing Home</th>\n';
         html += '<th>Department</th>\n';
@@ -77,7 +81,7 @@
         html += '<th>Entrance</th>\n';
         html += '<th>Group</th>\n';
         html += '<th>Private Id</th>\n';
-        html += '<th>Delete User</th>\n';
+        // html += '<th>Delete User</th>\n';
         html += '\n';
         html += '\n';
         html += '</tr></thead>';

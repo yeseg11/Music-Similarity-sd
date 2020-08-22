@@ -236,6 +236,38 @@ iframe {
 }
 
 
+table {
+    text-align: left;
+    width: 100%;
+    /*table-layout:fixed;*/
+}
+
+td{
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 2px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: underline;
+    color: #B01302;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#dwn-btn{
+    color: #721c24;
+    font-weight: bold;
+    border: 2px solid #721c24;
+    padding: 14px 28px;
+    cursor: pointer;
+}
+
 
 /*------------------------------------------------------------------
 [ Input ]*/

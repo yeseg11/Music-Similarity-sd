@@ -6,7 +6,9 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var privateUsersSchema = new Schema({
-    name: String,
+    firstName: String,
+    lastName: String,
+    userName: String,
     publicId: String,
     privateId:String,
     nursingHome:String

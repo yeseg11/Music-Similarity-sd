@@ -232,21 +232,27 @@ iframe {
 table {
     text-align: left;
     width: 100%;
+    /*table-layout:fixed;*/
 }
 
 td{
     border: 1px solid #dddddd;
     text-align: left;
     padding: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 2px;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: bold;
     text-decoration: underline;
     color: cadetblue;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 
