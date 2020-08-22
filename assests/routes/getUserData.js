@@ -43,19 +43,19 @@
         // onclick="location.href='researches'
         $('#login').on("click", function(e) {
             console.log("LOG - IN Pressed");
-            if( $('#id').val().length === 0 || $('#password').val().length === 0)         // use this if you are using id to check
+            if( $('#userName').val().length === 0 || $('#password').val().length === 0)         // use this if you are using id to check
             {
                 alert("Insert id and password!");
                 return $('#error').text("insert id and password!");
             }
             else{
-                var id = $('#id');
+                var userName = $('#userName');
                 var password = $('#password');
                 var encryptedPass = CryptoJS.AES.encrypt(password.val(),'Password');
             }
 
             var userData = {
-                userId: id.val(),
+                userName: userName.val(),
                 userPassword: password.val(),
             };
 
@@ -66,10 +66,11 @@
                 console.log("Data", data);
                     if(!data || !data.items || !data.items.length) return musicWrapper.html('<h3>Please rephrase search</h3>');
                     var entrance = data.items[0].entrance;
+                    var tamaringaId = data.items[0].tamaringaId;
                     if (entrance === 0) //first time
                     {
                         entrance++;
-                        addEnterens(id.val().toString(),entrance);
+                        addEnterens(tamaringaId.toString(),entrance);
                         var year = data.items[0].yearAtTwenty;
                         var country = data.items[0].countryAtTwenty;
                         musicWrapper.html('<h3><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i> Loading</h3>');
@@ -115,18 +116,18 @@
                                 var videoId = (item && item.youtube && item.youtube.videoId) ? item.youtube.videoId : '';
                                 var title = (item && item.title)? item.title: '';
                                 var artist = (item && item.artistName )? item.artistName : '';
-                                html += template.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::',videoId).replace('::userid::',id.val().toString()).replace('::data::',mbid);
-                                html = html.replace(new RegExp ('::userid::','g'),id.val().toString()).replace(new RegExp('::data::','g'),mbid);
+                                html += template.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::',videoId).replace('::userid::',tamaringaId.toString()).replace('::data::',mbid);
+                                html = html.replace(new RegExp ('::userid::','g'),tamaringaId.toString()).replace(new RegExp('::data::','g'),mbid);
                             }
                             $('#title').html("Your Music: "+ year + ',' + country);
                             window.scrollBy(0, 500);
                             musicWrapper.html(html);
-                            addEnterens(id.val().toString(),1);
+                            addEnterens(tamaringaId.toString(),1);
                         });
                     }
                     else {
                         entrance++;
-                        addEnterens(id.val().toString(),entrance);
+                        addEnterens(tamaringaId.toString(),entrance);
                         console.log("data.items[0]",data.items[0]);
                         var year2 = data.items[0].yearAtTwenty;
                         var country2 = data.items[0].countryAtTwenty;
@@ -134,7 +135,7 @@
                         musicWrapper.html('<h3><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>Loading</h3>');
                         var playListName = data.items[0].group.toString();
                         //var topUser= [];
-                        $.get('/playList/' + playListName+"/"+id.val().toString(), function(data) {
+                        $.get('/playList/' + playListName+"/"+tamaringaId.toString(), function(data) {
 
                             //console.log("top :"+data.items[0].index+" "+data.items[0].vote+" "+data.items[0].mbid);
                             //console.log(data.items[0]);
@@ -250,8 +251,8 @@
                                 //console.log(videoId);
                                 var title = (item && item.title)? item.title: '';
                                 var artist = (item && item.artist && item.artist)? item.artist : '';
-                                html += experienceShow.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::',videoId).replace('::userid::',id.val().toString()).replace('::data::',mbid);
-                                html = html.replace(new RegExp ('::userid::','g'),id.val().toString()).replace(new RegExp('::data::','g'),mbid).replace('::ent::',entrance.toString());
+                                html += experienceShow.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::',videoId).replace('::userid::',tamaringaId.toString()).replace('::data::',mbid);
+                                html = html.replace(new RegExp ('::userid::','g'),tamaringaId.toString()).replace(new RegExp('::data::','g'),mbid).replace('::ent::',entrance.toString());
                                 $('#title').html("Your Music: "+year2 + ',' + country2);
                             }
                             window.scrollBy(0, 750);

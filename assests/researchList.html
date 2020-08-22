@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/table.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--===============================================================================================-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
@@ -30,15 +30,21 @@
 </head>
 <body>
 <div class="container-contact100">
-    <div class="wrap-contact100">
+    <div class="wrap-contact1100">
 <!--        <form class="contact100-form validate-form" >-->
 				<span class="contact100-form-title">
 					List of Researches
 				</span>
+        <div>
             <table style="width:100%" id="tableWrapper">
 
             </table>
-            <div class="container-contact100-back-btn">
+        </div>
+        <div>
+            <br/>
+            <button type="button" id="dwn-btn" value="Download all the Users data file">Download all the Users  public data file</button>
+        </div>
+        <div class="container-contact100-back-btn">
                 <div class="wrap-contact100-back-btn">
                     <div class="contact100-back-bgbtn"></div>
                     <button id='main' type='button' class="contact100-back-btn" onclick="location.href='/researchGroupMainPage'">

@@ -221,9 +221,11 @@ app.post('/insertPublicUsers', function (req, res, next) {
     if (!req.body) return res.sendStatus(400, "Error to add user");
     // console.log("req.body.tamaringaId: ",req.body);
 
-    if (req.body.tamaringaId && req.body.birthYear && req.body.countryAtTwenty && req.body.name) {
+    if (req.body.tamaringaId && req.body.birthYear && req.body.countryAtTwenty && req.body.userName && req.body.firstName && req.body.lastName) {
         var userData = {
-            name: req.body.name,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
             tamaringaId: req.body.tamaringaId.toString(),
             password: req.body.password,
             department: req.body.department,
@@ -266,9 +268,11 @@ app.post('/insertPublicUsers', function (req, res, next) {
 app.post('/insertPrivateUsers', function (req, res, next) {
     if (!req.body) return res.sendStatus(400, "Error to add user");
 
-    if (req.body.tamaringaId && req.body.name && req.body.privateId && req.body.nursingHome) {
+    if (req.body.tamaringaId && req.body.userName && req.body.firstName && req.body.lastName && req.body.privateId && req.body.nursingHome) {
         var userData = {
-            name: req.body.name,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
             tamaringaId: req.body.tamaringaId,
             privateId: req.body.privateId,
             nursingHome: req.body.nursingHome
@@ -299,7 +303,9 @@ app.post('/updatePrivateUsers', function (req, res, next) {
 
     if (req.body.tamaringaId && req.body.name && req.body.nursingHome) {
         var userData = {
-            name: req.body.name,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
             tamaringaId: req.body.tamaringaId,
             nursingHome: req.body.nursingHome
         };
@@ -481,11 +487,11 @@ app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserD
 app.post('/loginUser', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     if (!req.body) return res.sendStatus(400);
-    if (req.body.userId === undefined || req.body.userPassword === undefined) {
+    if (req.body.userName === undefined || req.body.userPassword === undefined) {
         return next(err);
     }
 
-    PublicUsers.find({tamaringaId: req.body.userId.toString()}).exec(function (err, docs) {
+    PublicUsers.find({userName: req.body.userName.toString()}).exec(function (err, docs) {
         if (err) return next(err);
         var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);

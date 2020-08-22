@@ -4,7 +4,7 @@
         $('#send').on("click", function (e) {
 
             let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#languageAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
-            let inputsArr = ['#birthYear', '#name', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
 
             for (const element of inputsArr) {
                 // console.log("element", element)
@@ -16,9 +16,10 @@
                 }
             }
 
-
             //the new user data
-            var name = $('#name'),
+            var userName = $('#userName'),
+                firstName = $('#firstName'),
+                lastName = $('#lastName'),
                 id = $('#id'),
                 password = $('#password'),
                 nursingHome = $('#nursingHome'),
@@ -47,7 +48,9 @@
                 }).then(function (response) {
                     publicId = response.items[0];
                     var privateUser= {
-                        name: name.val(),
+                        firstName: firstName.val(),
+                        lastName: lastName.val(),
+                        userName: userName.val(),
                         tamaringaId: publicId,
                         privateId: id.val().toString(),
                         nursingHome: nursingHome.val(),
@@ -58,7 +61,9 @@
 
 
                     var publicUser = {
-                        name: name.val(),
+                        firstName: firstName.val(),
+                        lastName: lastName.val(),
+                        userName: userName.val(),
                         tamaringaId:publicId.toString(),
                         password : encryptedPass.toString(),
                         department: department.val(),
@@ -89,11 +94,11 @@
                     var publicUrl = '/insertPublicUsers';
                     var postingPublic = $.post(publicUrl, publicUser);
                     postingPublic.done(function (data) {
-                        // console.log("public User data:",data);
+                        console.log("public User data:",data);
                     });
-                    alert("The User Created \n The User Id is:" + publicId.toString());
-                    var pathname = "/adminMainPage"
-                    window.location.replace(pathname);
+                    // alert("The User Created \n The User Id is:" + publicId.toString());
+                    // var pathname = "/adminMainPage"
+                    // window.location.replace(pathname);
                 })
             });
         })

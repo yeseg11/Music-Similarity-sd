@@ -3,7 +3,7 @@
         // console.log("here");
 
         var userId = localStorage["UserId"];
-        console.log("userId: ",userId);
+        // console.log("userId: ",userId);
 
         var oldEntrance = 0;
         var oldrecList = [];
@@ -11,10 +11,12 @@
 
 
             getUserData().then(function (result1) {
-                console.log("result1:",result1);
+                // console.log("result1:",result1);
                 var originalPublicId = result1[0].tamaringaId;
 
-                $('#name').val(result1[0].name);
+                $('#userName').val(result1[0].userName);
+                $('#firstName').val(result1[0].firstName);
+                $('#lastName').val(result1[0].lastName);
                 $('#nursingHome').val(result1[0].nursingHome);
                 $('#department').val(result1[0].department);
                 $('#medicalProfile').val(result1[0].medicalProfile);
@@ -56,7 +58,7 @@
 
 
         $('#send').on("click", function (e) {
-            let inputsArr = ['#birthYear', '#name', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
 
             for (const element of inputsArr) {
                 if ($(element).val().length <= 1) {
@@ -68,7 +70,9 @@
 
 
             //the new user data
-            var name = $('#name'),
+            var userName = $('#userName'),
+                firstName = $('#firstName'),
+                lastName = $('#lastName'),
                 password = $('#password'),
                 nursingHome = $('#nursingHome'),
                 department = $('#department'),
@@ -92,7 +96,9 @@
             var prom = new Promise(function (resolve, reject) {
                 let publicId = userId;
                 var privateUser = {
-                    name: name.val(),
+                    firstName: firstName.val(),
+                    lastName: lastName.val(),
+                    userName: userName.val(),
                     tamaringaId: publicId,
                     nursingHome: nursingHome.val(),
                 };
@@ -101,7 +107,9 @@
 
 
                 var publicUser = {
-                    name: name.val(),
+                    firstName: firstName.val(),
+                    lastName: lastName.val(),
+                    userName: userName.val(),
                     tamaringaId:publicId.toString(),
                     password : encryptedPass.toString(),
                     department: department.val(),

@@ -20,8 +20,9 @@
 
             getUsers().then(function (result) {
                 var selectElem = $('#patientsIds');
+                console.log(result)
                 for (var i = 0; i < result.length; i++) {
-                    selectElem.append("<option value='" + result[i].tamaringaId + "'>" + result[i].name + "</option>");
+                    selectElem.append("<option value='" + result[i].tamaringaId + "'>" + result[i].userName +' - '+ result[i].firstName + ' ' + result[i].lastName + "</option>");
                 }
             }).catch(function (err) {
                 console.log(err);
