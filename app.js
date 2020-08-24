@@ -419,7 +419,7 @@ app.get('/playList/:name', function (req, res, next) {
 app.get('/user/:id/:encryptedPass', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     var CryptoJS = require("crypto-js");
-    var bytes = CryptoJS.AES.decrypt(req.params.encryptedPass, 'Password');
+
     var decrypted1 = bytes.toString(CryptoJS.enc.Utf8)
     // console.log(req.params.id);
     PublicUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
@@ -493,6 +493,9 @@ app.post('/loginUser', function (req, res, next) {    //call to getUserData.js ,
 
     PublicUsers.find({userName: req.body.userName.toString()}).exec(function (err, docs) {
         if (err) return next(err);
+        if (docs == null || docs[0] == null || docs[0].password == null ){
+            return next(err);
+        }
         var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
         // console.log("docs: ",decrypted2);
@@ -1019,6 +1022,7 @@ app.post('/loginResearcher', function (req, res, next) {
             return next(err);
         }
         var CryptoJS = require("crypto-js");
+
         var bytes2 = CryptoJS.AES.decrypt(docs[0].researcherPassword, 'Password');
         var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
         // console.log(decrypted2)
@@ -1072,6 +1076,10 @@ app.post('/loginResearchGroup', function (req, res, next) {
     ResearchGroup.find({researchGroupId: id}).exec(function (err, docs) {
         // console.log("docs",docs);
         if (err) return next(err);
+        if (docs == null || docs[0] == null || docs[0].researchGroupPassword == null){
+            // alert("No playlist was defined for this user!");
+            return next(err);
+        }
         var bytes = CryptoJS.AES.decrypt(docs[0].researchGroupPassword, 'Password');
         var decrypted = bytes.toString(CryptoJS.enc.Utf8);
         if (decrypted === req.body.Password) {
