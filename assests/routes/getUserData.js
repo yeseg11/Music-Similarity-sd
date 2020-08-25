@@ -29,11 +29,11 @@
         experienceShow += '<span class="focus-input100">::name::</span>';
         experienceShow += '<iframe width="1000" height="1000" src="http://www.youtube.com/embed/::link::"></iframe>';
         experienceShow += '<div id = "buttons">';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like"><img src="../images/btn/1.png" name="like"/></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/2.png" name="like"/></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="like" id ="like"><img src="../images/btn/3.png" name="like"/></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="like" id ="like"><img src="../images/btn/4.png" name="like"/></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" name="like" id ="like"><img src="../images/btn/5.png" name="like"/></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like"><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="like" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="like" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" name="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
         experienceShow += '';
         experienceShow += '</div>';
         experienceShow += '</div>';
@@ -244,7 +244,7 @@
                             var videoId = (item && item.videoId) ? item.videoId : '';
                             //console.log(videoId);
                             var title = (item && item.title) ? item.title : '';
-                            var artist = (item && item.artist && item.artist) ? item.artist : '';
+                            var artist = (item && item.artistName) ? item.artistName : '';
                             html += experienceShow.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::', videoId).replace('::userid::', tamaringaId.toString()).replace('::data::', mbid);
                             html = html.replace(new RegExp('::userid::', 'g'), tamaringaId.toString()).replace(new RegExp('::data::', 'g'), mbid).replace('::ent::', entrance.toString());
                             $('#title').html("Your Music: " + year2 + ',' + country2);
