@@ -928,8 +928,8 @@ app.post('/insertResearcher', function (req, res, next) {
             isAdmin: Boolean(req.body.isAdmin)
         };
 
-        const query = {"researcherId": researcherData.researcherId};
-        const options = {"upsert": true};
+        const query = {researcherId: researcherData.id};
+        const options = {"upsert": false};
         Researchers.updateOne(query, researcherData, options)
             .then(result => {
                 const {matchedCount, modifiedCount} = result;
