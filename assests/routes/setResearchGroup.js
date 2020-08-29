@@ -16,8 +16,8 @@
             });
 
             getResearcheGroupsSize().then(function (result1) {
-                var selectElem1 = $('#researchGroupId');
-                selectElem1.val(result1);
+                var researchGroupId = $('#researchGroupId');
+                researchGroupId.val(result1 + 1);
             }).catch(function (err) {
                 console.log(err);
                 return err;
