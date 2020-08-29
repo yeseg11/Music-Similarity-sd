@@ -8,3 +8,4 @@ node_modules
 /outsource/new-mb-raw/*
 **/new-mb-raw
 **/node_modules
+.idea
