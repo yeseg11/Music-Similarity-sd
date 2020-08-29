@@ -180,27 +180,21 @@ app.post('/playList/createPlaylist', function (req, res, next) {
     //     if (error) return;
     // });
 
-    var bulk = PlayList.collection.initializeOrderedBulkOp();
-    bulk.find({
-        name: playlistData.name                 //update the id , if have - update else its build new document
-    }).upsert().updateOne(playlistData);
-    bulk.execute();
+    // var bulk = PlayList.collection.initializeOrderedBulkOp();
+    // bulk.find({
+    //     name: playlistData.name                 //update the id , if have - update else its build new document
+    // }).upsert().updateOne(playlistData);
+    // bulk.execute();
 
+    PlayList.updateOne(query, update, options)
+        .then(result => {
+            const {matchedCount, modifiedCount} = result;
+            if (matchedCount && modifiedCount) {
+                console.log(`Successfully added a private user.`)
+            }
+        })
+        .catch(err => console.error(`Failed to add review: ${err}`))
 
-    // PlayList.findOne({name: playlistData.name}, function (error, result) {
-    //     if (error) return;
-    //     console.log("r1",result);
-    //     if (!result || result == null)
-    //         exiset = false;
-    //     // do something with the document
-    //     console.log(exiset);
-    //     if (!exiset) {
-    //         // console.log(exiset);
-    //         PlayList.findOneAndUpdate(query, update, options, function (error, result) {
-    //             if (error) return;
-    //         });
-    //     }
-    // });
 });
 
 
@@ -341,11 +335,30 @@ app.post('/updatePrivateUsers', function (req, res, next) {
             nursingHome: req.body.nursingHome
         };
 
-        var bulk = PrivateUsers.collection.initializeOrderedBulkOp();
-        bulk.find({
-            tamaringaId: userData.tamaringaId                 //update the id , if have - update else its build new document
-        }).upsert().updateOne(userData);
-        bulk.execute();
+        const query = {"tamaringaId": userData.tamaringaId};
+        const update = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
+            tamaringaId: req.body.tamaringaId,
+            // privateId: req.body.privateId,
+            nursingHome: req.body.nursingHome
+        };
+        const options = {"upsert": true};
+        PrivateUsers.updateOne(query, update, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+
+        // var bulk = PrivateUsers.collection.initializeOrderedBulkOp();
+        // bulk.find({
+        //     tamaringaId: userData.tamaringaId                 //update the id , if have - update else its build new document
+        // }).upsert().updateOne(userData);
+        // bulk.execute();
     }
 });
 
@@ -908,17 +921,30 @@ app.post('/insertResearcher', function (req, res, next) {
     if (req.body.researcherId && req.body.researcherName && req.body.researcherPassword) {
         var encryptedPass = CryptoJS.AES.encrypt(req.body.researcherPassword, 'Password');
 
-        var researcherData = {
+        const researcherData = {
             researcherName: req.body.researcherName,
             researcherId: req.body.researcherId,
             researcherPassword: encryptedPass,
             isAdmin: Boolean(req.body.isAdmin)
         };
-        var bulk = Researchers.collection.initializeOrderedBulkOp();
-        bulk.find({
-            researcherId: researcherData.id                 //update the id , if have - update else its build new document
-        }).upsert().updateOne(researcherData);
-        bulk.execute();
+
+        const query = {"researcherId": researcherData.id};
+        const options = {"upsert": true};
+        Researchers.updateOne(query, researcherData, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+
+
+        // var bulk = Researchers.collection.initializeOrderedBulkOp();
+        // bulk.find({
+        //     researcherId: researcherData.id                 //update the id , if have - update else its build new document
+        // }).upsert().updateOne(researcherData);
+        // bulk.execute();
     }
 });
 
@@ -935,7 +961,7 @@ app.post('/insertResearcher', function (req, res, next) {
 app.post('/insertResearch', function (req, res, next) {
     if (!req.body) return res.sendStatus(400, "Error to add user");
     // console.log("Try to post the research");
-    var researchData = {
+    const researchData = {
         researchName: req.body.researchName,
         researchId: req.body.researchId,
         researchersIds: req.body['researchersIds[]'],
@@ -950,12 +976,22 @@ app.post('/insertResearch', function (req, res, next) {
         algorithm: req.body.algorithm,
         // created: req.body.created
     };
-    var bulk = Research.collection.initializeOrderedBulkOp();
-    bulk.find({
-        researchId: researchData.researchId                 //update the id , if have - update else its build new document
-    }).upsert().updateOne(researchData);
-    bulk.execute();
+    // var bulk = Research.collection.initializeOrderedBulkOp();
+    // bulk.find({
+    //     researchId: researchData.researchId                 //update the id , if have - update else its build new document
+    // }).upsert().updateOne(researchData);
+    // bulk.execute();
 
+    const query = {"researchId": researchData.researchId};
+    const options = {"upsert": true};
+    Research.updateOne(query, researchData, options)
+        .then(result => {
+            const {matchedCount, modifiedCount} = result;
+            if (matchedCount && modifiedCount) {
+                console.log(`Successfully added a private user.`)
+            }
+        })
+        .catch(err => console.error(`Failed to add review: ${err}`))
 
 });
 
@@ -980,11 +1016,25 @@ app.post('/insertResearchGroup', function (req, res, next) {
         researchersIds: req.body['researchersIds[]']
     };
     // console.log("researchGroup: ",researchGroup);
-    var bulk = ResearchGroup.collection.initializeOrderedBulkOp();
-    bulk.find({
-        researchGroupId: researchGroup.researchGroupId                 //update the id , if have - update else its build new document
-    }).upsert().updateOne(researchGroup);
-    bulk.execute();
+    // var bulk = ResearchGroup.collection.initializeOrderedBulkOp();
+    // bulk.find({
+    //     researchGroupId: researchGroup.researchGroupId                 //update the id , if have - update else its build new document
+    // }).upsert().updateOne(researchGroup);
+    // bulk.execute();
+
+
+    const query = {"researchGroupId": researchGroup.researchGroupId};
+    const options = {"upsert": true};
+    ResearchGroup.updateOne(query, researchGroup, options)
+        .then(result => {
+            const {matchedCount, modifiedCount} = result;
+            if (matchedCount && modifiedCount) {
+                console.log(`Successfully added a private user.`)
+            }
+        })
+        .catch(err => console.error(`Failed to add review: ${err}`))
+
+
 });
 
 
@@ -1153,7 +1203,7 @@ app.post('/insertRecord', function (req, res, next) {
     // console.log("Try to post the researcher");
     // console.log(req);
     if (req.body.mbId && req.body.title) {
-        var recordData = {
+        const recordData = {
             mbId: req.body.mbId,
             title: req.body.title,
             year: req.body.year,
@@ -1169,11 +1219,24 @@ app.post('/insertRecord', function (req, res, next) {
             // }
         };
         // console.log("recordData",recordData);
-        var bulk = Records.collection.initializeOrderedBulkOp();
-        bulk.find({
-            id: recordData.mbId                 //update the id , if have - update else its build new document
-        }).upsert().updateOne(recordData);
-        bulk.execute();
+        // var bulk = Records.collection.initializeOrderedBulkOp();
+        // bulk.find({
+        //     id: recordData.mbId                 //update the id , if have - update else its build new document
+        // }).upsert().updateOne(recordData);
+        // bulk.execute();
+
+        const query = {"id": recordData.mbId};
+        const options = {"upsert": true};
+        Records.updateOne(query, recordData, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+
+
     }
 });
 
