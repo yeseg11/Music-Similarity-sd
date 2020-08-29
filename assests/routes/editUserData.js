@@ -58,7 +58,7 @@
 
 
         $('#send').on("click", function (e) {
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
 
             for (const element of inputsArr) {
                 if ($(element).val().length <= 1) {
