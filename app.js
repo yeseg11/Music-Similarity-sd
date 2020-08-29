@@ -222,7 +222,7 @@ app.post('/insertPublicUsers', function (req, res, next) {
     // console.log("req.body.tamaringaId: ",req.body);
 
     if (req.body.tamaringaId && req.body.birthYear && req.body.countryAtTwenty && req.body.userName && req.body.firstName && req.body.lastName) {
-        var userData = {
+        const userData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             userName: req.body.userName,
@@ -244,11 +244,20 @@ app.post('/insertPublicUsers', function (req, res, next) {
             group: req.body.group,
             songs: []
         };
-        var bulk = PublicUsers.collection.initializeOrderedBulkOp();
-        bulk.find({
-            tamaringaId: userData.tamaringaId                 //update the id , if have - update else its build new document
-        }).upsert().updateOne(userData);
-        bulk.execute();
+        // var bulk = PublicUsers.collection.initializeOrderedBulkOp();
+        // bulk.find({
+        //     tamaringaId: userData.tamaringaId                 //update the id , if have - update else its build new document
+        // }).upsert().updateOne(userData);
+        // bulk.execute();
+        const query = {"tamaringaId": userData.tamaringaId};
+        const options = {"upsert": true};
+        PublicUsers.updateOne(query, userData, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a new public user.`)
+                }
+            }).catch(err => console.error(`Failed to add review: ${err}`))
     }
 });
 
@@ -278,12 +287,33 @@ app.post('/insertPrivateUsers', function (req, res, next) {
             nursingHome: req.body.nursingHome
         };
         console.log(userData.privateId);
-        var bulk = PrivateUsers.collection.initializeOrderedBulkOp();
-        bulk.find({
-            privateId: userData.privateId                 //update the id , if have - update else its build new document
-        }).upsert().updateOne(userData);
-        bulk.execute();
-        
+        //var bulk = PrivateUsers.collection.initializeOrderedBulkOps();
+        //var bulk = PrivateUsers.collection.bulkWrite();
+        // bulk.find({
+        //     privateId: userData.privateId                 //update the id , if have - update else its build new document
+        // }).updateOne( 'privateId': 'userData.privateId',userData,);
+        // bulk.execute();
+
+        const query = {"privateId": userData.privateId};
+        const update = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
+            tamaringaId: req.body.tamaringaId,
+            privateId: req.body.privateId,
+            nursingHome: req.body.nursingHome
+        };
+        const options = {"upsert": true};
+        PrivateUsers.updateOne(query, update, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+
+
     }
 });
 
@@ -484,7 +514,6 @@ app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserD
 });
 
 
-
 app.post('/loginUser', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     if (!req.body) return res.sendStatus(400);
@@ -494,7 +523,7 @@ app.post('/loginUser', function (req, res, next) {    //call to getUserData.js ,
 
     PublicUsers.find({userName: req.body.userName.toString()}).exec(function (err, docs) {
         if (err) return next(err);
-        if (docs == null || docs[0] == null || docs[0].password == null ){
+        if (docs == null || docs[0] == null || docs[0].password == null) {
             return next(err);
         }
         var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
@@ -507,24 +536,6 @@ app.post('/loginUser', function (req, res, next) {    //call to getUserData.js ,
         }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /** ----------------------------------------------------------------------------------
@@ -1077,7 +1088,7 @@ app.post('/loginResearchGroup', function (req, res, next) {
     ResearchGroup.find({researchGroupId: id}).exec(function (err, docs) {
         // console.log("docs",docs);
         if (err) return next(err);
-        if (docs == null || docs[0] == null || docs[0].researchGroupPassword == null){
+        if (docs == null || docs[0] == null || docs[0].researchGroupPassword == null) {
             // alert("No playlist was defined for this user!");
             return next(err);
         }
@@ -1090,7 +1101,6 @@ app.post('/loginResearchGroup', function (req, res, next) {
         }
     });
 });
-
 
 
 /** ----------------------------------------------------------------------------------

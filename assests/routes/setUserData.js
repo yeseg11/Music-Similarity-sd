@@ -97,8 +97,8 @@
                         console.log("public User data:",data);
                     });
                     alert("The User Created \n The User Id is:" + publicId.toString());
-                    var pathname = "/adminMainPage"
-                    window.location.replace(pathname);
+                    //var pathname = "/adminMainPage"
+                    //window.location.replace(pathname);
                 })
             });
         })
