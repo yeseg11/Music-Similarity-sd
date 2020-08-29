@@ -245,6 +245,7 @@
                             //console.log(videoId);
                             var title = (item && item.title) ? item.title : '';
                             var artist = (item && item.artistName) ? item.artistName : '';
+                            console.log(item);
                             html += experienceShow.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::', videoId).replace('::userid::', tamaringaId.toString()).replace('::data::', mbid);
                             html = html.replace(new RegExp('::userid::', 'g'), tamaringaId.toString()).replace(new RegExp('::data::', 'g'), mbid).replace('::ent::', entrance.toString());
                             $('#title').html("Your Music: " + year2 + ',' + country2);

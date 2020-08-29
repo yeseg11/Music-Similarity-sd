@@ -277,12 +277,13 @@ app.post('/insertPrivateUsers', function (req, res, next) {
             privateId: req.body.privateId,
             nursingHome: req.body.nursingHome
         };
-
+        console.log(userData.privateId);
         var bulk = PrivateUsers.collection.initializeOrderedBulkOp();
         bulk.find({
             privateId: userData.privateId                 //update the id , if have - update else its build new document
         }).upsert().updateOne(userData);
         bulk.execute();
+        
     }
 });
 
