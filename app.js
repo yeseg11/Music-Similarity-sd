@@ -924,12 +924,14 @@ app.post('/insertResearcher', function (req, res, next) {
         const researcherData = {
             researcherName: req.body.researcherName,
             researcherId: req.body.researcherId,
-            researcherPassword: encryptedPass,
+            researcherPassword: encryptedPass.toString(),
             isAdmin: Boolean(req.body.isAdmin)
         };
 
+        console.log('researcherData: ',researcherData);
+
         const query = {researcherId: researcherData.researcherId};
-        const options = {"upsert": false};
+        const options = {"upsert": true};
         Researchers.updateOne(query, researcherData, options)
             .then(result => {
                 const {matchedCount, modifiedCount} = result;
