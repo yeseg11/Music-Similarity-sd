@@ -51,7 +51,7 @@
                         firstName: firstName.val(),
                         lastName: lastName.val(),
                         userName: userName.val(),
-                        tamaringaId: publicId,
+                        tamaringaId: publicId.toString(),
                         privateId: id.val().toString(),
                         nursingHome: nursingHome.val(),
                     };

@@ -9,7 +9,7 @@ var privateUsersSchema = new Schema({
     firstName: String,
     lastName: String,
     userName: String,
-    publicId: String,
+    tamaringaId: String,
     privateId:String,
     nursingHome:String
 });

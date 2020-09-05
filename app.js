@@ -561,9 +561,10 @@ app.post('/loginUser', function (req, res, next) {    //call to getUserData.js ,
 
 app.get('/privateUser/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
+    console.log(req.params.id);
     PrivateUsers.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
         if (err) return next(err);
-        // console.log(docs);
+
         res.status(200).json({err: false, items: docs[0].privateId});
     });
 });

@@ -22,7 +22,7 @@
             var postingInsertResearch = $.post(loginResearcher, researcherData);
             postingInsertResearch.done(function (data) {
                 console.log("Data", data);
-                if (!data || !data.items || !data.items.length) return alert("Please Try again the system uploaded!");
+                if (!data || !data.items || !data.items.length) return alert("Please Try again wrong Id or password!");
                 var pathname = "/adminMainPage"
                 window.location.replace(pathname);
             });
