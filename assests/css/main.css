@@ -235,6 +235,16 @@ iframe {
   padding-bottom: 44px;
 }
 
+.contact100-form-subTitle {
+    display: block;
+    font-family: Poppins-Bold;
+    font-size: 30px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+    padding-bottom: 44px;
+}
+
 
 table {
     text-align: left;
