@@ -63,7 +63,13 @@
             });
 
 
-        })
+        });
+
+        //showPlaylist
+        $('#showPlaylist').on("click", function (e) {
+            var pathname = "/showPlaylistTable"
+                window.location.replace(pathname);
+        });
     });
 })(jQuery);
 
