@@ -14,6 +14,7 @@
                     templateSahow += '<td >' + result1[i].firstName + '</td>';
                     templateSahow += '<td >' + result1[i].lastName + '</td>';
                     templateSahow += '<td >' + result1[i].tamaringaId + '</td>'; //'<th>::ResearchId:::</th>';
+                    templateSahow += '<td >' + result1[i].password + '</td>'; //'<th>::ResearchId:::</th>';
                     templateSahow += '<td >' + result1[i].nursingHome + '</td>'; //'<th>::NursingHome:::</th>';
                     templateSahow += '<td >' + result1[i].department + '</td>'; //'<th>::Department:::</th>';
                     templateSahow += '<td >' + result1[i].birthYear + '</td>'; //'<th>::NumberOfWeeks:::</th>';
@@ -67,6 +68,7 @@
         html += '<th>First name</th>';
         html += '<th>Last name</th>';
         html += '<th>Tamaringa Id</th>';
+        html += '<th>Password</th>';
         html += '<th>Nursing Home</th>\n';
         html += '<th>Department</th>\n';
         html += '<th>Birth Year</th>\n';

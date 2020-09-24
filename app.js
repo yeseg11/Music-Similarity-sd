@@ -70,6 +70,12 @@ app.get('/editUsers', (req, res) => res.sendFile(path.join(__dirname, 'assests',
 app.get('/editUserPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editUser.html'), {}, () => res.end()));
 app.get('/createResearchGroup', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createResearchGroup.html'), {}, () => res.end()));
 app.get('/createResearcher', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createResearcher.html'), {}, () => res.end()));
+app.get('/firstPlaylistPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/firstPlaylistPage.html'), {}, () => res.end()));
+app.get('/newManualPlaylist', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/newManualPlaylistPage.html'), {}, () => res.end()));
+app.get('/createNewManualPlaylist', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createManualPlaylistPage.html'), {}, () => res.end()));
+app.get('/editPlaylist', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editPlaylistPage.html'), {}, () => res.end()));
+app.get('/showPlaylistTable', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/showPlaylistTable.html'), {}, () => res.end()));
+
 app.get('/newPlaylist', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/newPlaylist.html'), {}, () => res.end()));
 app.get('/newSong', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/newSong.html'), {}, () => res.end()));
 
@@ -175,23 +181,13 @@ app.post('/playList/createPlaylist', function (req, res, next) {
         options = {upsert: true, new: true, setDefaultsOnInsert: true};
 
     var exiset = true;
-    //PlayList.createIndex({name:1});
-    // PlayList.findOneAndUpdate(query, update, options, function (error, result) {
-    //     if (error) return;
-    // });
-
-    // var bulk = PlayList.collection.initializeOrderedBulkOp();
-    // bulk.find({
-    //     name: playlistData.name                 //update the id , if have - update else its build new document
-    // }).upsert().updateOne(playlistData);
-    // bulk.execute();
-
     PlayList.updateOne(query, update, options)
         .then(result => {
             const {matchedCount, modifiedCount} = result;
             if (matchedCount && modifiedCount) {
                 console.log(`Successfully added a private user.`)
             }
+
         })
         .catch(err => console.error(`Failed to add review: ${err}`))
 
@@ -404,7 +400,7 @@ app.post('/users/:id', function (req, res, next) {
 app.get('/mb/track/recording/:yearAtTwenty/:country/:language', function (req, res, next) {
     db().then(() => {
         Records.find({
-            year: {$gt: parseInt(req.params.yearAtTwenty) - 1, $lt: parseInt(req.params.yearAtTwenty) + 1},
+            year: {$gt: parseInt(req.params.yearAtTwenty) - 5, $lt: parseInt(req.params.yearAtTwenty) + 5},
             country: req.params.country,
             language: req.params.language
         }).sort({'youtube.views': -1}).limit(PLAYLISTSIZE).exec(function (err, docs) {
@@ -413,6 +409,351 @@ app.get('/mb/track/recording/:yearAtTwenty/:country/:language', function (req, r
             res.status(200).json({err: false, items: [].concat(docs)});
         })
     }).catch(next);
+});
+
+/** ----------------------------------------------------------------------------------
+ * Return the top records of the given year between 2 year before and 2 years after
+ *
+ * @PARAM {String} year: The user 20's year
+ * @PARAM {String} country: The user country
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/mb/track/recording', function (req, res, next) {
+    db().then(() => {
+        var year = req.body.year.toString(),
+            country = req.body.country,
+            language = req.body.language;
+        let lookup = {}
+        if (year && !isNaN(year) && year !== "") lookup['year'] = {$gt: parseInt(year) - 5, $lt: parseInt(year) + 5};
+        if (country && country !== "") lookup['country'] = country.toString();
+        if (language && language !== "") lookup['language'] = language.toString();
+
+        if (!Object.keys(lookup).length) return next(new Error('Invalid search params'));
+
+        Records.find(lookup).sort({'youtube.views': -1}).limit(PLAYLISTSIZE).exec(function (err, docs) {
+            if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+            var recList = [];
+            var size = PLAYLISTSIZE
+            if (docs.length < size) {
+                size = data.items.length;
+            }
+            for (i = 0; i < size; i++) {
+                console.log('docs[i]: ',docs[i])
+                recList.push({
+                    mbId: docs[i].mbId,
+                    title: docs[i].title,
+                    year: parseInt(docs[i].year),
+                    artist: docs[i].artist,
+                    language: docs[i].language,
+                    artistName: docs[i].artist[0].name,
+                    country: docs[i].country,
+                    lyrics: docs[i].lyrics,
+                    genre: docs[i].genre,
+                    youtube: docs[i].youtube,
+                    mbRaw: docs[i].mbRaw
+                });
+            }
+            if (typeof req.body.createPlayList == 'undefined') {
+                return res.status(200).json({err: true, items: [].concat(recList)});
+            }
+            //create a playlist
+            var playlistData = {
+                name: req.body.playlistName,
+                year: req.body.year,
+                country: req.body.country,
+                language: req.body.language,
+                records: recList
+            };
+            // console.log('playlistData: ', playlistData);
+            var query = {name: playlistData.name},
+                update = playlistData,
+                options = {upsert: true, new: true, setDefaultsOnInsert: true};
+
+            PlayList.updateOne(query, update, options)
+                .then(result => {
+                    const {matchedCount, modifiedCount} = result;
+                    if (matchedCount && modifiedCount) {
+                        console.log(`Successfully added a private user.`)
+                    }
+                })
+                .catch(err => console.error(`Failed to add review: ${err}`))
+
+            res.status(200).json({err: false, items: [].concat(req.body.playlistName)});
+
+        });
+    }).catch(next);
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the top records of the given year between 2 year before and 2 years after
+ *
+ * @PARAM {String} year: The user 20's year
+ * @PARAM {String} country: The user country
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/mb/track', function (req, res, next) {
+    db().then(() => {
+        // console.log("req",req.body);
+        var recordName = req.body.recordName,
+            year = req.body.year.toString(),
+            country = req.body.country,
+            language = req.body.language;
+        let lookup = {}
+        if (recordName && recordName !== "") lookup['title'] = {'$regex': new RegExp(recordName, "i")};
+        if (year && !isNaN(year) && year !== "") lookup['year'] = {$gt: parseInt(year) - 5, $lt: parseInt(year) + 5};
+        if (country && country !== "") lookup['country'] = country.toString();
+        if (language && language !== "") lookup['language'] = language.toString();
+
+        if (!Object.keys(lookup).length) return next(new Error('Invalid search params'));
+
+        Records.find(lookup).limit(PLAYLISTSIZE).exec(function (err, docs) {
+            if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+            // console.log("docs: ",docs);
+            res.status(200).json({err: false, items: [].concat(docs)});
+        })
+
+
+        // year can be same year
+        // string can be found by title: {/^Move over Darling$/i}
+        /*
+        title:{$regex: /^move over darling$/i},
+                year: {$gt: parseInt(1990) - 5, $lt: parseInt(1990) + 5},
+                country: "US",
+                language: "eng"
+        * */
+
+
+    }).catch(next);
+});
+
+/** ----------------------------------------------------------------------------------
+ * create playlist with only playlist name.
+ *
+ * @PARAM {String*} name: the playlist name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.get('/createNewManualPlayList', function (req, res, next) {
+    //console.log(req.params.id);
+    PlayList.find({name: req.params.name}).exec(function (err, docs) {
+        if (err) return next(err);
+        //console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    })
+
+
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    var playlistData = {
+        name: req.body.name,
+        year: req.body.year,
+        country: req.body.country,
+        language: req.body.language,
+        records: JSON.parse(req.body.records)
+    };
+    // console.log(playlistData);
+    var query = {name: playlistData.name},
+        update = playlistData,
+        options = {upsert: true, new: true, setDefaultsOnInsert: true};
+
+
+    PlayList.updateOne(query, update, options)
+        .then(result => {
+            const {matchedCount, modifiedCount} = result;
+            if (matchedCount && modifiedCount) {
+                console.log(`Successfully added a private user.`)
+            }
+        })
+        .catch(err => console.error(`Failed to add review: ${err}`))
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * create playlist with only playlist name.
+ *
+ * @PARAM {String*} name: the playlist name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/createManualPlayList', function (req, res, next) {
+    //console.log(req.params.id);
+    PlayList.find({name: req.params.name}).exec(function (err, docs) {
+        if (err) return next(err);
+        //console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    })
+
+
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    var playlistData = {
+        name: req.body.name,
+        year: req.body.year,
+        country: req.body.country,
+        language: req.body.language,
+        records: JSON.parse(req.body.records)
+    };
+    // console.log(playlistData);
+    var query = {name: playlistData.name},
+        update = playlistData,
+        options = {upsert: true, new: true, setDefaultsOnInsert: true};
+
+
+    PlayList.updateOne(query, update, options)
+        .then(result => {
+            const {matchedCount, modifiedCount} = result;
+            if (matchedCount && modifiedCount) {
+                console.log(`Successfully added a private user.`)
+            }
+        })
+        .catch(err => console.error(`Failed to add review: ${err}`))
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * create playlist with only playlist name.
+ *
+ * @PARAM {String*} name: the playlist name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/ManualPlayListByName', function (req, res, next) {
+
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    var playlistData = {
+        name: req.body.name,
+    };
+    console.log(playlistData);
+    var query = {name: playlistData.name},
+        update = playlistData,
+        options = {upsert: true, new: true, setDefaultsOnInsert: true};
+
+    PlayList.updateOne(query, update, options)
+        .then(result => {
+            const {matchedCount, modifiedCount} = result;
+            if (matchedCount && modifiedCount) {
+                console.log(`Successfully added a playlist.`)
+            }
+            res.status(200).json({err: false, items: [].concat(result)});
+        })
+        .catch(err => console.error(`Failed to add review: ${err}`))
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * create playlist with only playlist name.
+ *
+ * @PARAM {String*} name: the playlist name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/addSongToPlaylist', function (req, res, next) {
+
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    var mbId = req.body.mbId;
+    console.log(mbId);
+    var recordDetails = {};
+    var allRecords = [];
+    // Records.find({mbId: mbId}).limit(1).exec(function (err, docs) {
+    //     if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+    //     // console.log("docs: ", docs[0]);
+    //     recordDetails = docs
+    //     console.log('recordDetails1: ',recordDetails);
+    // });
+
+    return new Promise(function (resolve, reject) {
+        Records.find({mbId: mbId}).limit(1).exec(function (err, docs) {
+            if (err) return reject(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+            // console.log("docs: ", docs[0]);
+            var record = docs[0]
+            resolve(record);
+        });
+    }).then(function (res) {
+        // console.log('recordDetails: ',res);
+        recordDetails = res;
+        // console.log('recordDetails2: ',recordDetails.artist);
+        // console.log('recordDetails2: ',recordDetails.artist);
+
+        return new Promise(function (resolvePl, reject) {
+
+            var playlistName = req.body.playlistName;
+
+            PlayList.find({name: playlistName}).limit(1).exec(function (err, docs) {
+                if (err) return reject(err);
+                //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+                // console.log("docs[0].records: ", docs[0].records);
+                resolvePl(docs[0]);
+            });
+
+        }).then(function (res) {
+            console.log('response', res);
+            allRecords = res.records;
+            // console.log('recordDetails: ',recordDetails);
+
+            var recordData = {
+                mbId: recordDetails.mbId,
+                title: recordDetails.title,
+                year: recordDetails.year,
+                artistName: recordDetails.artist[0].name,
+                artist: recordDetails.artist,
+                language: recordDetails.language,
+                country: recordDetails.country,
+                lyrics: recordDetails.lyrics,
+                genre: recordDetails.genre,
+                youtube: recordDetails.youtube,
+                mbRaw: recordDetails.mbRaw,
+            }
+            allRecords.push(recordData);
+            console.log('allRecords: ', allRecords);
+            var playlistData = {
+                name: req.body.playlistName,
+                records: allRecords
+            };
+            console.log("playlistData: ", playlistData);
+            var query = {name: playlistData.name},
+                update = playlistData,
+                options = {upsert: true, new: true, setDefaultsOnInsert: true};
+
+            PlayList.updateOne(query, update, options)
+                .then(result => {
+                    const {matchedCount, modifiedCount} = result;
+                    if (matchedCount && modifiedCount) {
+                        console.log(`Successfully added a playlist.`)
+                    }
+                    res.status(200).json({err: false, items: [].concat(result)});
+                })
+                .catch(err => console.error(`Failed to add review: ${err}`))
+        });
+    });
+});
+
+/** ----------------------------------------------------------------------------------
+ * return all the records from playlist by playlist name.
+ *
+ * @PARAM {String*} name: the playlist name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.get('/playlistRecords/:playlistName', function (req, res, next) {
+
+    console.log("req", req.params.playlistName);
+
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    var playlistName = req.params.playlistName;
+    PlayList.find({name: playlistName}).limit(1).exec(function (err, docs) {
+        if (err) return reject(err);
+
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+
 });
 
 
@@ -579,6 +920,21 @@ app.get('/privateUser/:id', function (req, res, next) {    //call to getUserData
 app.get('/allusers', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     PublicUsers.find({}).exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    })
+});
+
+/** ----------------------------------------------------------------------------------
+ * Return all the users Data from DB
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/allPlaylists', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    PlayList.find({}).exec(function (err, docs) {
         if (err) return next(err);
         // console.log(docs);
         res.status(200).json({err: false, items: [].concat(docs)});
@@ -929,7 +1285,7 @@ app.post('/insertResearcher', function (req, res, next) {
             isAdmin: Boolean(req.body.isAdmin)
         };
 
-        console.log('researcherData: ',researcherData);
+        console.log('researcherData: ', researcherData);
 
         const query = {researcherId: researcherData.researcherId};
         const options = {"upsert": true};

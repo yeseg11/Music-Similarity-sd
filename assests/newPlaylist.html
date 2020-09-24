@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Functions</title>
+    <title>Create playlist by history</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -32,17 +32,11 @@
     <div class="wrap-contact1100">
         <form class="contact100-form validate-form">
 				<span class="contact100-form-title">
-					Create Playlist
+					Create playlist by history
 				</span>
 
-<!--            <div class="wrap-input100 validate-input" data-validate="Name is required">-->
-<!--                <span class="label-input100">Name</span>-->
-<!--                <input id ='name' class="input100" type="text" name='name' placeholder="Enter Playlist Name">-->
-<!--                <span class="focus-input100"></span>-->
-<!--            </div>-->
-
             <div class="wrap-input100 input100-select">
-                <span class="label-input100">Creation / Release  date</span>
+                <span class="label-input100">Select the year creation - its will take songs from 5 years more and less</span>
                 <div>
                     <select id="year" class="selection-2" name="year">
                         <option>Select Year</option>
@@ -76,7 +70,7 @@
                         <option value="1993">1993</option>
                         <option value="1992">1992</option>
                         <option value="1991">1991</option>
-                        <option value="1990">1990</option>
+                        <option value="1990" selected="selected">1990</option>
                         <option value="1989">1989</option>
                         <option value="1988">1988</option>
                         <option value="1987">1987</option>
@@ -144,9 +138,8 @@
             </div>
 
             <div class="wrap-input100 input100-select">
-                <span class="label-input100">Origin Country</span>
+                <span class="label-input100">Select Country</span>
                 <div>
-
                     <select id="country" class="selection-2" name="country">
                         <option>Select Country</option>
                         <option value="AQ">Antarctica</option>
@@ -242,86 +235,86 @@
                     <select id="language" class="selection-2" name="language">
                         <option>Select Language</option>
                         <option value="ara">Arabic</option>
+                        <option value="ast">Asturian</option>
+                        <option value="hye">Armenian</option>
                         <option value="eus">Basque</option>
+                        <option value="bos">Bosnian</option>
+                        <option value="bre">Breton</option>
                         <option value="bul">Bulgarian</option>
+                        <option value="cat">Catalan; Valencian</option>
                         <option value="zho">Chinese (Mandarin)</option>
                         <option value="hrv">Croatian</option>
                         <option value="ces">Czech</option>
                         <option value="dan">Danish</option>
                         <option value="nld">Dutch</option>
-                        <option value="eng">English</option>
+                        <option value="eng" selected="selected">English</option>
+                        <option value="epo">Esperanto</option>
                         <option value="est">Estonian</option>
+                        <option value="fil">Filipino</option>
                         <option value="fin">Finnish</option>
                         <option value="fra">French</option>
+                        <option value="deu">German</option>
                         <option value="ell">Greek</option>
+                        <option value="haw">Hawaiian</option>
                         <option value="heb">Hebrew</option>
                         <option value="hin">Hindi</option>
                         <option value="hun">Hungarian</option>
-                        <option value="isl">Icelandic</option>
-                        <option value="ind">Indonesian</option>
                         <option value="gle">Irish</option>
+                        <option value="ind">Indonesian</option>
+                        <option value="isl">Icelandic</option>
                         <option value="ita">Italian</option>
                         <option value="jpn">Japanese</option>
                         <option value="kor">Korean</option>
                         <option value="lat">Latin</option>
                         <option value="lav">Latvian</option>
                         <option value="lit">Lithuanian</option>
-                        <option value="msa">Malay</option>
+                        <option value="mdf">Moksha</option>
                         <option value="mkd">Malayalam</option>
+                        <option value="mlg">Malagasy</option>
+                        <option value="msa">Malay</option>
+                        <option value="nap">Neapolitan</option>
                         <option value="nor">Norwegian</option>
+                        <option value="oci">Occitan</option>
                         <option value="fas">Persian</option>
                         <option value="pol">Polish</option>
                         <option value="por">Portuguese</option>
+                        <option value="que">Quechua</option>
+                        <option value="roh">Romansh</option>
                         <option value="ron">Romanian</option>
                         <option value="rus">Russian</option>
-                        <option value="srp">Serbian</option>
                         <option value="slk">Slovak</option>
                         <option value="slv">Slovenian</option>
+                        <option value="sna">Shona</option>
                         <option value="spa">Spanish</option>
+                        <option value="srp">Serbian</option>
                         <option value="swa">Swahili</option>
                         <option value="swe">Swedish </option>
                         <option value="tam">Tamil</option>
                         <option value="tur">Turkish</option>
                         <option value="vie">Vietnamese</option>
                         <option value="cym">Welsh</option>
-                        <option value="cat">Catalan; Valencian</option>
                         <option value="yid">Yiddish</option>
-                        <option value="bre">Breton</option>
-                        <option value="bos">Bosnian</option>
-                        <option value="mdf">Moksha</option>
-                        <option value="ast">Asturian</option>
-                        <option value="haw">Hawaiian</option>
-                        <option value="fil">Filipino</option>
-                        <option value="nap">Neapolitan</option>
-                        <option value="que">Quechua</option>
-                        <option value="hye">Armenian</option>
-                        <option value="sna">Shona</option>
-                        <option value="epo">Esperanto</option>
-                        <option value="roh">Romansh</option>
-                        <option value="oci">Occitan</option>
-                        <option value="mlg">Malagasy</option>
                         <option value="zul">Zulu</option>
-                        <option value="deu">German</option>
                     </select>
                 </div>
                 <span class="focus-input100"></span>
             </div>
 
-            <div class="wrap-input100 input100-select">
-                <span class="label-input100">Genre</span>
-                <div>
+<!--            <div class="wrap-input100 input100-select">-->
+<!--                <span class="label-input100">Genre</span>-->
+<!--                <div>-->
 
-                    <select id="Genre1Select" class="selection-2" name="Genre">
-                        <option>Select Genre</option>
-                        <option value="cla">Classical/Traditional</option>
-                        <option value="yid">Yiddish</option>
-                        <option value="lad">Ladino</option>
-                        <option value="pra">Prayer Songs (Piyutim)</option>
-                        <option value="mid">Middle Eastern music</option>
-                    </select>
-                </div>
-                <span class="focus-input100"></span>
-            </div>
+<!--                    <select id="Genre1Select" class="selection-2" name="Genre">-->
+<!--                        <option>Select Genre</option>-->
+<!--                        <option value="cla">Classical/Traditional</option>-->
+<!--                        <option value="yid">Yiddish</option>-->
+<!--                        <option value="lad">Ladino</option>-->
+<!--                        <option value="pra">Prayer Songs (Piyutim)</option>-->
+<!--                        <option value="mid">Middle Eastern music</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <span class="focus-input100"></span>-->
+<!--            </div>-->
 
             <div class="container-contact100-form-btn">
                 <div class="wrap-contact100-form-btn">

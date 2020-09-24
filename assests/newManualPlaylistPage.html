@@ -1,7 +1,6 @@
-<!doctype html>
 <html>
 <head>
-    <title>Functions</title>
+    <title>Create manual playlist </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -26,33 +25,27 @@
     <!--===============================================================================================-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-    <script src="./routes/setRecordToDB.js" ></script>
+    <script src="routes/addSongsToManualPlaylist.js"></script>
 </head>
 <body>
-
 <div class="container-contact100">
     <div class="wrap-contact1100">
         <form class="contact100-form validate-form">
-				<span class="contact100-form-title">
-					Add Multimedia
+				<span class="contact100-form-title" id = "title">
+					Add media to:
 				</span>
-            <div class="wrap-input100 validate-input" data-validate="Name is required">
-                <span class="label-input100">Title (song name)</span>
-                <input id ='title' class="input100" type="text" name="title" placeholder="Enter Title">
-                <span class="focus-input100"></span>
-            </div>
 
             <div class="wrap-input100 validate-input" data-validate="Name is required">
-                <span class="label-input100">Name of Performers/Artist</span>
-                <input id ='artistName' class="input100" type="text" name='artistName' placeholder="Enter Name of Performers">
+                <span class="label-input100">Record Name</span>
+                <input id='recordName' class="input100" type="text" name='recordName' placeholder="Enter Record Name">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 input100-select">
-                <span class="label-input100">Creation / Release  date</span>
+                <span class="label-input100">Select the year creation - its will take songs from 5 years more and less</span>
                 <div>
                     <select id="year" class="selection-2" name="year">
-                        <option>Select Year</option>
+                        <option value="" >Select Year</option>
                         <option value="2020">2020</option>
                         <option value="2019">2019</option>
                         <option value="2018">2018</option>
@@ -83,7 +76,7 @@
                         <option value="1993">1993</option>
                         <option value="1992">1992</option>
                         <option value="1991">1991</option>
-                        <option value="1990">1990</option>
+                        <option value="1990" >1990</option>
                         <option value="1989">1989</option>
                         <option value="1988">1988</option>
                         <option value="1987">1987</option>
@@ -144,16 +137,17 @@
                         <option value="1932">1932</option>
                         <option value="1931">1931</option>
                         <option value="1930">1930</option>
+
                     </select>
                 </div>
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 input100-select">
-                <span class="label-input100">Origin Country</span>
+                <span class="label-input100">Select Country</span>
                 <div>
                     <select id="country" class="selection-2" name="country">
-                        <option>Select Country</option>
+                        <option value="">Select Country</option>
                         <option value="AQ">Antarctica</option>
                         <option value="AR">Argentina</option>
                         <option value="AU">Australia</option>
@@ -230,7 +224,7 @@
                         <option value="TW">Taiwan</option>
                         <option value="TR">Turkey</option>
                         <option value="GB">United Kingdom</option>
-                        <option value="US" selected="selected">United States</option>
+                        <option value="US" >United States</option>
                         <option value="UM">United States Outlying Islands</option>
                         <option value="UY">Uruguay</option>
                         <option value="VE">Venezuela</option>
@@ -243,6 +237,7 @@
             <div class="wrap-input100 input100-select">
                 <span class="label-input100">Language</span>
                 <div>
+
                     <select id="language" class="selection-2" name="language">
                         <option>Select Language</option>
                         <option value="ara">Arabic</option>
@@ -311,65 +306,94 @@
                 <span class="focus-input100"></span>
             </div>
 
-            <div class="wrap-input100 validate-input" data-validate="Nursing Home is required">
-                <span class="label-input100">lyrics - Text of song</span>
-                <input id ='lyrics' class="input100" type="text" name='lyrics' placeholder="Enter lyrics">
-                <span class="focus-input100"></span>
-            </div>
+            <!--            <div class="wrap-input100 input100-select">-->
+            <!--                <span class="label-input100">Genre</span>-->
+            <!--                <div>-->
 
-            <div class="wrap-input100 input100-select">
-                <span class="label-input100">Genre</span>
-                <div>
-                    <select id="Genre1Select" class="selection-2" name="Genre">
-                        <option>Select Genre</option>
-                        <option value="cla">Classical/Traditional</option>
-                        <option value="yid">Yiddish</option>
-                        <option value="lad">Ladino</option>
-                        <option value="pra">Prayer Songs (Piyutim)</option>
-                        <option value="mid">Middle Eastern music</option>
-                        <option value="mid">Other</option>
-                    </select>
+            <!--                    <select id="Genre1Select" class="selection-2" name="Genre">-->
+            <!--                        <option>Select Genre</option>-->
+            <!--                        <option value="cla">Classical/Traditional</option>-->
+            <!--                        <option value="yid">Yiddish</option>-->
+            <!--                        <option value="lad">Ladino</option>-->
+            <!--                        <option value="pra">Prayer Songs (Piyutim)</option>-->
+            <!--                        <option value="mid">Middle Eastern music</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--                <span class="focus-input100"></span>-->
+            <!--            </div>-->
+
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button type="button" id='search' class="contact100-form-btn">
+							<span>
+								Search a records
+<!--								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>-->
+							</span>
+                    </button>
                 </div>
-                <span class="focus-input100"></span>
             </div>
 
-            <div class="wrap-input100 validate-input" data-validate="Id wikidata is required">
-                <span class="label-input100">Id Musicbrainz</span>
-                <input id ='mbId' class="input100" type="text" name='mbId' placeholder="Enter Id wikidata">
-                <span class="focus-input100"></span>
+            <div>
+                <select input id ='recordList' class="input100" type="text" name='recordList' placeholder="Select the record name" multiple>
+                    <option value="" disabled selected>Select the record</option>
+                </select>
             </div>
-            <div class="wrap-input100 validate-input" data-validate="ID Youtube is required">
-                <span class="label-input100">Youtube video ID</span>
-                <input id ='youtubeId' class="input100" type="text" name='youtubeId' placeholder="Enter Youtube Id">
-                <span class="focus-input100"></span>
-            </div>
-            <div class="wrap-input100 validate-input" data-validate="Views Youtube is required">
-                <span class="label-input100">Youtube Views Number</span>
-                <input id ='youtubeViews' class="input100" type="number" name='youtubeViews' placeholder="Enter Youtube Views">
-                <span class="focus-input100"></span>
-            </div>
+
+
 
             <div class="container-contact100-form-btn">
                 <div class="wrap-contact100-form-btn">
                     <div class="contact100-form-bgbtn"></div>
                     <button type="button" id='send' class="contact100-form-btn">
 							<span>
-								Add Record
+								Add to Playlist
 								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
 							</span>
                     </button>
                 </div>
             </div>
 
-            <div class="container-contact100-back-btn">
-                <div class="wrap-contact100-back-btn">
-                    <div class="contact100-back-bgbtn"></div>
-                    <button id='main' type='button' class="contact100-back-btn" onclick="location.href='/adminMainPage'">
-                        <i class="fa fa-arrow-left m-l-7" aria-hidden="true"></i>
+
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button type="button" id='showPlaylist' class="contact100-form-btn">
+							<span>
+								Show Playlist data
+								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+							</span>
                     </button>
                 </div>
             </div>
 
+
+
+
+
+
+            <div class="container-contact100-back-btn">
+                <div class="wrap-contact100-back-btn">
+                    <div class="contact100-back-bgbtn"></div>
+                    <button id='main' type='button' class="contact100-back-btn"
+                            onclick="location.href='/adminMainPage'">
+                        <i class="fa fa-arrow-left m-l-7" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <!--
+                        <div class="container-contact100-form-btn">
+                            <div class="wrap-contact100-form-btn">
+                                <div class="contact100-form-bgbtn"></div>
+                                <button id='btn_tracks' type='button' class="contact100-form-btn">
+                                        <span>
+                                            By Track
+                                            <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+                                        </span>
+                                </button>
+                            </div>
+                        </div>
+            -->
         </form>
     </div>
 </div>
@@ -385,9 +409,11 @@
                 <div id="musicWrapper">
                     <h3 class="text-center">Please search for music</h3>
                 </div>
+
         </form>
     </div>
 </div>
+
 -->
 
 <div id="dropDownSelect1"></div>
@@ -419,7 +445,11 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
     gtag('js', new Date());
 
     gtag('config', 'UA-23581568-13');

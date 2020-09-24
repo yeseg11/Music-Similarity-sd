@@ -103,7 +103,7 @@
                     nursingHome: nursingHome.val(),
                 };
 
-                var encryptedPass = CryptoJS.AES.encrypt(password.val(),'Password');
+                //var encryptedPass = CryptoJS.AES.encrypt(password.val(),'Password');
 
 
                 var publicUser = {
@@ -111,7 +111,7 @@
                     lastName: lastName.val(),
                     userName: userName.val(),
                     tamaringaId:publicId.toString(),
-                    password : encryptedPass.toString(),
+                    password : password.val().toString(),
                     department: department.val(),
                     medicalProfile : medicalProfile.val(),
                     birthYear : parseInt(birthYear.val()),

@@ -39,7 +39,7 @@
                 // console.log("ResearchGroupId",ResearchGroupId);
                 $.get('/allresearches/'+ResearchGroupId.toString(), function (data) {
                     if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
-                    // console.log("data",data);
+                    console.log("data",data);
                     researchersList = data.items
                     resolve(researchersList);
                 })

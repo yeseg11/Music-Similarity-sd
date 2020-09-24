@@ -1,8 +1,5 @@
 (function ($) {
     $(document).ready(function () {
-
-        var PLAYLISTSIZE = 50;
-
         function init() {
 
 

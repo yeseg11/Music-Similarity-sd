@@ -26,7 +26,7 @@
     <!--===============================================================================================-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-    <script src="./routes/editUserList.js"></script>
+    <script src="./routes/editPlaylistMainPage.js"></script>
 </head>
 <body>
 <div class="container-contact100">
@@ -34,14 +34,14 @@
         <form class="contact100-form validate-form">
 				<span class="contact100-form-title">
                     <i class="fa fa-blind fa-2x" aria-hidden="true" style="padding-right: 10px"></i>
-                    <h1>List of Users </h1>
+                    <h1>Edit Playlist </h1>
 				</span>
 
             <div class="container-section-space">
                 <div class="wrap-input100 validate-input" data-validate="Name is required">
                     <span class="label-input100">Select the User name</span>
-                    <select input id ='patientsIds' class="input100" type="text" name='patientsIds' placeholder="Select the User name" >
-                        <option value="" disabled selected>Select the user</option>
+                    <select input id ='playlistIds' class="input100" type="text" name='playlistIds' placeholder="Select the playlist Name" >
+                        <option value="" disabled selected>Select the playlist</option>
                     </select>
                     <span class="focus-input100"></span>
                 </div>
@@ -51,7 +51,7 @@
                     <div class="contact100-form-bgbtn"></div>
                     <button type="button" id='send' class="contact100-form-btn">
 							<span>
-								Edit User
+								Edit Playlist
 								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
 							</span>
                     </button>
