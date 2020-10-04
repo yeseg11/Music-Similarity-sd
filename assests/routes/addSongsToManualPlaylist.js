@@ -42,13 +42,20 @@
             var recordList = $('#recordList');
             console.log("recordList: ", recordList);
             console.log("recordList.val: ", recordList.val());
+            console.log("recordList.val: ", recordList.val().length);
             if (recordList.val() && recordList.val().length === 0){
                 alert("Please Choose a song before you add it to playlist")
                 return $('#error').text("insert all the details");
             }
+            let mbIdArr = [];
+
+            for (var j = 0; j < recordList.val().length; j++){
+                console.log("recordList.val: ", recordList.val()[j]);
+                mbIdArr.push(recordList.val()[j]);
+            }
 
             var addTrack= {
-                mbId: recordList.val().toString(),
+                mbIdArr: mbIdArr,
                 playlistName: localStorage["PlaylistName"]
             };
 

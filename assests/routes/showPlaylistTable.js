@@ -22,6 +22,7 @@
                     templateSahow += '<td >'+result1[i].mbId+'</td>'; //'<th>::MeetingPerWeek:::</th>';
                     templateSahow += '<td >'+result1[i].youtube.videoId+'</td>'; //'<th>::Length of session:::</th>';
                     templateSahow += '<td >'+result1[i].genre+'</td>'; //'<th>::algorithm:::</th>';
+                    templateSahow += '<td ><iframe width="200" height="100" src="http://www.youtube.com/embed/'+result1[i].youtube.videoId+'"></iframe></td>';
                     // <button class="buttonDes" type="button" onclick="f2('::userid::','::data::',4)" name="like" id ="like">
                     // templateSahow += '<td>'+ '<button id="showUsers" onclick="saveClickedResearch(\':::researchId:::\')" style="color: blue">' + '<b> Press Here </b></button></td>';
                     templateSahow += '</tr>';
@@ -63,6 +64,7 @@
         html +='<th>mbId</th>\n' ;
         html +='<th>Youtube Id</th>\n' ;
         html +='<th>Genre</th>\n' ;
+        html +='<th>Video</th>\n' ;
         html +='\n' ;
         html +='\n' ;
         html +='</tr>' ;

@@ -657,9 +657,9 @@ app.post('/ManualPlayListByName', function (req, res, next) {
 app.post('/addSongToPlaylist', function (req, res, next) {
 
     if (!req.body) return res.sendStatus(400, "Error to add user");
-    var mbId = req.body.mbId;
+    var mbId = req.body['mbIdArr[]']; //req.body['researchersIds[]']
     console.log(mbId);
-    var recordDetails = {};
+    var recordDetails = [];
     var allRecords = [];
     // Records.find({mbId: mbId}).limit(1).exec(function (err, docs) {
     //     if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
@@ -669,14 +669,14 @@ app.post('/addSongToPlaylist', function (req, res, next) {
     // });
 
     return new Promise(function (resolve, reject) {
-        Records.find({mbId: mbId}).limit(1).exec(function (err, docs) {
+        Records.find({mbId:{$in:mbId}}).exec(function (err, docs) {
             if (err) return reject(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
             // console.log("docs: ", docs[0]);
-            var record = docs[0]
+            var record = docs
             resolve(record);
         });
     }).then(function (res) {
-        // console.log('recordDetails: ',res);
+        console.log('recordDetails: ',res);
         recordDetails = res;
         // console.log('recordDetails2: ',recordDetails.artist);
         // console.log('recordDetails2: ',recordDetails.artist);
@@ -693,24 +693,27 @@ app.post('/addSongToPlaylist', function (req, res, next) {
             });
 
         }).then(function (res) {
-            console.log('response', res);
+            // console.log('response', res);
             allRecords = res.records;
             // console.log('recordDetails: ',recordDetails);
-
-            var recordData = {
-                mbId: recordDetails.mbId,
-                title: recordDetails.title,
-                year: recordDetails.year,
-                artistName: recordDetails.artist[0].name,
-                artist: recordDetails.artist,
-                language: recordDetails.language,
-                country: recordDetails.country,
-                lyrics: recordDetails.lyrics,
-                genre: recordDetails.genre,
-                youtube: recordDetails.youtube,
-                mbRaw: recordDetails.mbRaw,
+            var recordsToAdd = [];
+            for (let i = 0 ; i < recordDetails.length; i++){
+                console.log('HHHH: ',recordDetails[i]._doc);
+                var recordData = {
+                    mbId: recordDetails[i]._doc.mbId,
+                    title: recordDetails[i]._doc.title,
+                    year: recordDetails[i]._doc.year,
+                    artistName: recordDetails[i]._doc.artist[0].name,
+                    artist: recordDetails[i]._doc.artist,
+                    language: recordDetails[i]._doc.language,
+                    country: recordDetails[i]._doc.country,
+                    lyrics: recordDetails[i]._doc.lyrics,
+                    genre: recordDetails[i]._doc.genre,
+                    youtube: recordDetails[i]._doc.youtube,
+                    mbRaw: recordDetails[i]._doc.mbRaw,
+                }
+                allRecords.push(recordData);
             }
-            allRecords.push(recordData);
             console.log('allRecords: ', allRecords);
             var playlistData = {
                 name: req.body.playlistName,
@@ -725,9 +728,9 @@ app.post('/addSongToPlaylist', function (req, res, next) {
                 .then(result => {
                     const {matchedCount, modifiedCount} = result;
                     if (matchedCount && modifiedCount) {
-                        console.log(`Successfully added a playlist.`)
+                        console.error(`Successfully added a playlist.`)
                     }
-                    res.status(200).json({err: false, items: [].concat(result)});
+                    //res.status(200).json({err: false, items: [].concat(result)});
                 })
                 .catch(err => console.error(`Failed to add review: ${err}`))
         });
