@@ -64,7 +64,7 @@
                         firstName: firstName.val(),
                         lastName: lastName.val(),
                         userName: userName.val(),
-                        tamaringaId:publicId.toString(),
+                        tamaringaId: publicId.toString(),
                         password : password.val(),
                         department: department.val(),
                         medicalProfile : medicalProfile.val(),
@@ -83,10 +83,38 @@
                         songs: JSON.stringify(recList)
                     };
 
+                    let playlistArr = []
+                    if (Genre1Select.val() != null){
+                        playlistArr.push(Genre1Select.val());
+                    }
+                    if (Genre2Select.val() != null){
+                        playlistArr.push(Genre2Select.val());
+                    }
+
+                    console.log("playlistArr: ",playlistArr);
+
+                    var userData= {
+                        firstName: firstName.val(),
+                        lastName: lastName.val(),
+                        userName: userName.val(),
+                        tamaringaId: publicId.toString(),
+                        playlists: playlistArr,
+                        researchList: []
+                    };
+
+                    //userData
+                    var userDataUrl = '/insertUserData';
+                    var postingUserData = $.post(userDataUrl, userData).then(function (data) {
+                         console.log("userData:",data);
+                    });
+                    postingUserData.done(function (data) {
+                    });
+
+
                     //private users
                     var privateUrl = '/insertPrivateUsers';
                     var postingPrivate = $.post(privateUrl, privateUser).then(function (data) {
-                        // console.log("private user data:",data);
+                        console.log("private user data:",data);
                     });
                     postingPrivate.done(function (data) {
                     });
@@ -97,8 +125,8 @@
                         console.log("public User data:",data);
                     });
                     alert("The User Created \n The User Name is:" + publicUser.userName);
-                    var pathname = "/adminMainPage"
-                    window.location.replace(pathname);
+                    // var pathname = "/adminMainPage"
+                    // window.location.replace(pathname);
                 })
             });
         })

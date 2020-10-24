@@ -25,12 +25,14 @@
                 console.log("track data1:",data.items);
                 var selectElem1 = $('#recordList');
                 for (var i = 0; i < data.items.length; i++) {
+                    console.log("track mbId:",data.items[i].mbId);
+                    console.log("track title:",data.items[i].title);
+                    console.log("track artist:",data.items[i].artist[0].name);
+                    console.log("track country:",data.items[i].country);
+                    console.log("track year:",data.items[i].year);
                     selectElem1.append("<option value='" + data.items[i].mbId + "'>" + data.items[i].title +' - '+ data.items[i].artist[0].name + ' - ' + data.items[i].country + ' - '+ data.items[i].year+ "</option>");
                 }
             });
-
-
-
 
 
         });

@@ -129,6 +129,22 @@
                     songs: JSON.stringify(oldrecList)
                 };
 
+
+                var userData= {
+                    firstName: firstName.val(),
+                    lastName: lastName.val(),
+                    userName: userName.val(),
+                    tamaringaId: publicId.toString(),
+                };
+
+                //userData
+                var userDataUrl = '/updateUserData';
+                var postingUserData = $.post(userDataUrl, userData).then(function (data) {
+                    // console.log("userData:",data);
+                });
+                postingUserData.done(function (data) {
+                });
+
                 //private users
                 var privateUrl = '/updatePrivateUsers';
                 var postingPrivate = $.post(privateUrl, privateUser).then(function (data) {

@@ -17,6 +17,7 @@ let PrivateUsers = require('./models/privateUsers.js');
 let Research = require('./models/research.js');
 let ResearchGroup = require('./models/researchGroup.js');
 var AES = require("crypto-js/aes");
+let UserData = require('./models/userData.js');
 
 
 // const insertResearcher = require('bcrypt');
@@ -86,75 +87,7 @@ app.get('/newResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests
 app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearchList.html'), {}, () => res.end()));
 app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
 
-// /** ----------------------------------------------------------------------------------
-//  * Return the given users playlist , and add user to Data base
-//  *
-//  * @PARAM {String*} id: Given user id
-//  * @PARAM {String} name: Given user name
-//  * @PARAM {String} country: Given user name
-//  * @PARAM {Number} age: The user age
-//  * @PARAM {Number} entrance:The user entrance
-//  *
-//  * @RESPONSE {json}
-//  * @RESPONSE-SAMPLE {playList , userData}
-//  ----------------------------------------------------------------------------------*/
-//
-// app.post('/users/insertUsers',function(req, res, next) {
-//     if (!req.body) return res.sendStatus(400,"Error to add user");
-//     // console.log("here44");
-//     // console.log(req.body.entrance);
-//
-//     if (req.body.id && req.body.birthYear && req.body.country && req.body.name) {
-//         var userData = {
-//             id: req.body.id.toString(),
-//             name: req.body.name,
-//             country: req.body.country,
-//             birthYear: parseInt(req.body.birthYear),
-//             language1: req.body.language1,
-//             language2: req.body.language2,
-//             entrance: req.body.entrance,
-//             yearAtTwenty: parseInt(req.body.yearAtTwenty),
-//             group: req.body.group,
-//             songs: []
-//         };
-//
-//
-//         var bulk = Users.collection.initializeOrderedBulkOp();
-//         bulk.find({
-//             id: userData.id                 //update the id , if have - update else its build new document
-//         }).upsert().updateOne(userData);
-//         bulk.execute();
-//
-//         var playlistData = {
-//             name: req.body.group,
-//             year: parseInt(req.body.yearAtTwenty),
-//             country: req.body.country,
-//             records: JSON.parse(req.body.records)
-//         };
-//
-//         var query = {name: playlistData.name},
-//             update = playlistData,
-//             options = {upsert: true, new: true, setDefaultsOnInsert: true};
-//
-// // Find the document
-//         var exiset = true;
-//         //PlayList.createIndex({name:1});
-//         PlayList.findOne({name: playlistData.name}, function (error, result) {
-//             if (error) return;
-//             //console.log("r1",result);
-//             if (!result || result == null)
-//                 exiset = false;
-//             // do something with the document
-//             //console.log(exiset);
-//             if (!exiset) {
-//                 PlayList.findOneAndUpdate(query, update, options, function (error, result) {
-//                     if (error) return;
-//                 });
-//             }
-//         });
-//
-//     }
-// });
+
 
 
 /** ----------------------------------------------------------------------------------
@@ -192,6 +125,131 @@ app.post('/playList/createPlaylist', function (req, res, next) {
         .catch(err => console.error(`Failed to add review: ${err}`))
 
 });
+
+/** ----------------------------------------------------------------------------------
+ * Create user data record
+ ----------------------------------------------------------------------------------*/
+
+app.post('/insertUserData', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    // console.log("req.body.tamaringaId: ",req.body);
+    // console.log("req.body.playlists: ",req.body['playlists[]']);
+
+    if (req.body.tamaringaId && req.body.userName && req.body.firstName && req.body.lastName) {
+        const userData = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
+            tamaringaId: req.body.tamaringaId.toString(),
+            playlists: req.body['playlists[]'], //need to added
+            researchList: req.body.researchList
+        };
+
+        const query = {"tamaringaId": userData.tamaringaId};
+        const options = {"upsert": true};
+        UserData.updateOne(query, userData, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a new User Data.`)
+                }
+            }).catch(err => console.error(`Failed to add review: ${err}`))
+    }
+});
+
+/** ----------------------------------------------------------------------------------
+ * update user data record
+ ----------------------------------------------------------------------------------*/
+
+app.post('/updateUserData', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400, "Error to add user");
+    // console.log("req.body.tamaringaId: ",req.body);
+
+    if (req.body.tamaringaId && req.body.userName && req.body.firstName && req.body.lastName) {
+        const userData = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName: req.body.userName,
+            tamaringaId: req.body.tamaringaId.toString(),
+        };
+
+        const query = {"tamaringaId": userData.tamaringaId};
+        const options = {"upsert": true};
+        UserData.updateOne(query, userData, options)
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a new User Data.`)
+                }
+            }).catch(err => console.error(`Failed to add review: ${err}`))
+    }
+});
+/** ----------------------------------------------------------------------------------
+ * Get user playlist data
+ ----------------------------------------------------------------------------------*/
+app.post('/updateUserDataCollection', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    if (!req.body) return res.sendStatus(400);
+    if (req.body.tamaringaId === undefined) {
+        return next(err);
+    }
+    let playlist = [];
+    let researchList = [];
+
+    UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log("docs: ",docs[0]);
+        try {
+            if (docs[0].playlists != null){
+                playlist = docs[0].playlists;
+            }
+            if (docs[0].researchList != null){
+                researchList = docs[0].researchList;
+            }
+
+            // let researchListData = {};
+
+            let researchListData = {
+                researchId : req.body.researchId,
+                maxSessionNum: req.body.maxSessionNum,
+                sessionList: null
+            };
+
+            if (req.body.tamaringaId && req.body.playlists) {
+                playlist.push(req.body.playlists)
+                researchList.push(researchListData)
+                const userData = {
+                    tamaringaId: req.body.tamaringaId.toString(),
+                    playlists: playlist,
+                    researchList: researchList,
+                };
+                const query = {"tamaringaId": userData.tamaringaId};
+                const options = {"upsert": true};
+                UserData.updateOne(query, userData, options)
+                    .then(result => {
+                        const {matchedCount, modifiedCount} = result;
+                        if (matchedCount && modifiedCount) {
+                            console.log(`Successfully added a new User Data.`)
+                        }
+                    }).catch(err => console.error(`Failed to add review: ${err}`))
+            }
+            else {
+                return next(e);
+            }
+        } catch (e) {
+            return next(e);
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
 
 
 /** ----------------------------------------------------------------------------------
@@ -1570,6 +1628,7 @@ app.post('/insertRecord', function (req, res, next) {
             title: req.body.title,
             year: req.body.year,
             artistName: req.body.artistName,
+            artist: JSON.parse(req.body.artist),
             language: req.body.language,
             country: req.body.country,
             lyrics: req.body.lyrics,
@@ -1587,7 +1646,7 @@ app.post('/insertRecord', function (req, res, next) {
         // }).upsert().updateOne(recordData);
         // bulk.execute();
 
-        const query = {"id": recordData.mbId};
+        const query = {"mbId": recordData.mbId};
         const options = {"upsert": true};
         Records.updateOne(query, recordData, options)
             .then(result => {

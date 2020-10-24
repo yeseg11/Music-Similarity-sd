@@ -46,6 +46,11 @@
                     title: title.val(),
                     year: year.val(),
                     artistName: artistName.val(), // NEED TO BE JUST THE ARTIST NAME !!
+                    artist: [
+                        {
+                            name: artistName.val()
+                        }
+                    ],
                     language: language.val(),
                     country: country.val(),
                     lyrics: lyrics.val(),
@@ -62,9 +67,9 @@
                 });
                 postingPrivate.done(function (data) {
                 });
-                alert("The record added to database");
-                var pathname = "/adminMainPage"
-                window.location.replace(pathname);
+                // alert("The record added to database");
+                // var pathname = "/adminMainPage"
+                // window.location.replace(pathname);
             });
         })
     });

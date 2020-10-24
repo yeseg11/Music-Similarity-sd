@@ -109,7 +109,7 @@
                 lengthOfSession = $('#lengthOfSession'),
                 algorithm = $('#algorithm');
 
-
+            var tamaringaId = "";
             var yearAtTwenty = "";
             var countryAtTwenty = "";
             var countryOrigin = "";
@@ -118,11 +118,17 @@
             var yearOfImmigration = "";
             var group = "";
 
+            //need to add to UserData the name of the new playlist.
+            // add data to userData as a research: researchId = new researchId,maxSessionNum = new research maxSessionNum and sessionList = []
+
+
+
             var prom = new Promise(function (resolve, reject) {
                 for (i = 0; i < patientsIds.length; i++) {
                     $.get('/user/' + patientsIds[i].value, function (data) {
-                        // console.log(data.items);
-                        let items = data.items[0];
+                         let items = data.items[0];
+                        console.log("data.items[0]: ",data.items[0]);
+                        tamaringaId = items.tamaringaId;
                         yearAtTwenty = items.yearAtTwenty;
                         countryAtTwenty = items.countryAtTwenty;
                         countryOrigin = items.countryOrigin;
@@ -159,8 +165,9 @@
                             }
                         }).then(function (response) {
                             // console.log(response.items);
+                            var playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
                             var playlistData = {
-                                name: countryAtTwenty + languageAtTwenty + yearAtTwenty,
+                                name: playlistName,
                                 year: yearAtTwenty,
                                 country: countryAtTwenty,
                                 language: languageAtTwenty,
@@ -170,10 +177,29 @@
                             var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
                             postingCreatePlaylist.done(function (data) {
                             });
+
+
+                            var userData = {
+                                tamaringaId: tamaringaId,
+                                playlists: playlistName,
+                                researchId: researchId.val(),
+                                maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
+                                sessionList: null
+                            };
+                            console.log("UserData: ", userData);
+                            var getPlaylistLink = '/updateUserDataCollection';
+                            var postingInsertResearch = $.post(getPlaylistLink, userData);
+                            postingInsertResearch.done(function (data) {
+                                console.log("updateUserDataCollection: " ,data);
+                            });
                         });
                     });
 
-                }
+
+                }//for ended
+
+
+
 
                 var researchData = {
                         researchName: researchName.val(),
@@ -195,11 +221,11 @@
                 var postingInsertResearch = $.post(insertResearchUrl, researchData);
                 postingInsertResearch.done(function (data) {
                     alert("Research Created '\n' The research Id is: " + researchId.val());
-                    var pathname = "/researchGroupMainPage"
-                    window.location.replace(pathname);
+                    // var pathname = "/researchGroupMainPage"
+                    // window.location.replace(pathname);
                 });
                 alert("Research Created '\n' The research Id is: " + researchId.val() +"\n Please wait a few seconds till the page will go back");
-                setTimeout(myFunction, 1000);
+                // setTimeout(myFunction, 1000);
             });
         })
 
