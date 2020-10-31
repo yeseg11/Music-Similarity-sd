@@ -20,8 +20,12 @@ var userDataSchema = new Schema({ //create when create a user .
             {
                 sessionNumber: String,
                 sessionDate: String,
-                playlists: [],
-                songs: []
+                songs: [{
+                    playlistName: String,
+                    mbId: String,
+                    score: Number,
+                    guideComment:String,
+                }]
             }]
     }]
 });
