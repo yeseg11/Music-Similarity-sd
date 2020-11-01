@@ -941,11 +941,13 @@ app.post('/loginUser', function (req, res, next) {    //call to getUserData.js ,
         if (docs == null || docs[0] == null || docs[0].password == null) {
             return next(err);
         }
-        // var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
-        // var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
-        // console.log("docs: ",decrypted2);
         if (docs[0].password === req.body.userPassword) {
-            res.status(200).json({err: false, items: [].concat(docs)});
+            UserData.find({tamaringaId: docs[0].tamaringaId.toString()}).exec(function (err, userDataDocs) {
+                console.log("userDataDocs: ",userDataDocs);
+                console.log("researchList: ",userDataDocs[0].researchList);
+            });
+
+            // res.status(200).json({err: false, items: [].concat(docs)});
         } else {
             return next(err)
         }
