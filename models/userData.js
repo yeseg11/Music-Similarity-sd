@@ -19,7 +19,7 @@ var userDataSchema = new Schema({ //create when create a user .
             //every new session add a new object.
             {
                 sessionNumber: String,
-                sessionDate: String,
+                sessionDate: Date,
                 songs: [{
                     playlistName: String,
                     mbId: String,

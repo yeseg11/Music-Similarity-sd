@@ -1,6 +1,7 @@
 //the main app !!
 
 const express = require('express');
+const compression = require('compression');
 const app = express();
 const debug = require('debug');
 const path = require('path');
@@ -19,13 +20,17 @@ let ResearchGroup = require('./models/researchGroup.js');
 var AES = require("crypto-js/aes");
 let UserData = require('./models/userData.js');
 
+const routes = require('./routes');
+
 
 // const insertResearcher = require('bcrypt');
 // const saltRounds = 10;
 var CryptoJS = require("crypto-js");
 
 let similarity = require('compute-cosine-similarity');
-
+const e = require('express');
+// gzip
+if(process.env.NODE_ENV != 'production') app.use(compression());
 app.use("/", express.static(path.join(__dirname, "assests")));
 
 /**
@@ -929,28 +934,7 @@ app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserD
 });
 
 
-app.post('/loginUser', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
-    if (!req) return res.sendStatus(400);
-    if (!req.body) return res.sendStatus(400);
-    if (req.body.userName === undefined || req.body.userPassword === undefined) {
-        return next(err);
-    }
-
-    PublicUsers.find({userName: req.body.userName.toString()}).exec(function (err, docs) {
-        if (err) return next(err);
-        if (docs == null || docs[0] == null || docs[0].password == null) {
-            return next(err);
-        }
-        // var bytes2 = CryptoJS.AES.decrypt(docs[0].password, 'Password');
-        // var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
-        // console.log("docs: ",decrypted2);
-        if (docs[0].password === req.body.userPassword) {
-            res.status(200).json({err: false, items: [].concat(docs)});
-        } else {
-            return next(err)
-        }
-    });
-});
+app.post('/loginUser', routes.post.loginUser);
 
 
 /** ----------------------------------------------------------------------------------
@@ -1110,91 +1094,7 @@ app.get('/selection/:id/:playlist', function (req, res, next) {
  *
  * @RESPONSE-SAMPLE {{}}
  ----------------------------------------------------------------------------------*/
-app.post('/selection/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
-    if (!req.body) return res.sendStatus(400);
-
-    PublicUsers.find({tamaringaId: req.params.id}).exec(function (err, docs) {
-        if (err) return next(err);
-        var userData = docs[0];
-        var flag = false;
-        var reqSongs = JSON.parse(req.body.songs);
-        try {
-            // console.log("userData.songs.count: ",userData.songs.length);
-            if (userData.songs.length > 0) {
-                for (var i = 0; i < userData.songs.length; i++) {
-                    if (userData.songs[i].mbid === reqSongs.mbid) {
-                        userData.songs[i].vote = reqSongs.vote;
-                        flag = true;
-                    }
-                }
-                if (!flag) {
-                    userData.songs.push(JSON.parse(req.body.songs));
-                }
-            } else {
-                userData.songs = JSON.parse(req.body.songs);
-            }
-        } catch (e) {
-            return next(e);
-        }
-
-        var bulk = PublicUsers.collection.initializeOrderedBulkOp();
-        bulk.find({
-            tamaringaId: userData.tamaringaId                 //update the id , if have - update else its build new document
-        }).upsert().updateOne(userData);
-        bulk.execute(function (err, BulkWriteResult) {
-            if (err) return next(err);
-            // do cosine similirity calc in 2 minutes
-            // loop all songs
-            var data = userData.songs[0];
-            var group = userData.group;
-            var lookup = {'name': group, 'records.mbId': data.mbid};
-            var mbId = data.mbid
-            PlayList.findOne(lookup).exec(function (err, q) {
-                // console.log("q: ",q);
-                var pos = q.records.findIndex(e => e.mbId === mbId);
-
-                q.records[pos].votes = q.records[pos].votes || [];
-                var posUser = q.records[pos].votes.findIndex(e => e.userId === data.id);
-
-                if (posUser >= 0) {
-                    q.records[pos].votes[posUser].vote = data.vote
-                } else {
-                    q.records[pos].votes.push({userId: data.id, vote: data.vote})
-                }
-
-                var user = [];
-                var users = [];
-                q.records.forEach(rec => {
-                    user.push(rec.votes.filter(x => x.userId === data.id).map(x => x.vote)[0] || 0);
-                    rec.votes.map(function (x) {
-                        if (users.indexOf(x.userId) === -1 && x.userId !== data.id) users.push(x.userId)
-                    });
-                });
-
-                users.forEach(u => {
-                    var votesByUser = [];
-                    q.records.forEach(rec => {
-                        votesByUser.push(rec.votes.filter(x => x.userId == u).map(x => x.vote)[0] || 0)
-                    });
-                    q.similarity = q.similarity || [];
-                    var pos = q.similarity.findIndex(x => x.user1 == u && x.user2 == data.id || x.user2 == u && x.user1 == data.id);
-                    //console.log(pos);
-                    if (pos >= 0) {
-                        q.similarity[pos].similarity = similarity(user, votesByUser);
-                    } else {
-                        q.similarity.push({user1: u, user2: data.id, similarity: similarity(user, votesByUser)})
-                    }
-                });
-                q.markModified('similarity');
-                q.save(function (err) {
-                    if (err) return next(err);
-                    res.json({message: 'cool man'});
-
-                })
-            });
-        });
-    });
-});
+app.post('/selection/:userId', routes.post.userRateSong);
 
 /** ----------------------------------------------------------------------------------
  * Return and update the user best song, the recommended user best songs and the unseen user song.
@@ -1661,7 +1561,6 @@ app.post('/insertRecord', function (req, res, next) {
     }
 });
 
-
 /** ----------------------------------------------------------------------------------
  * Return error page if have a problem
  * Statics page
@@ -1671,6 +1570,14 @@ app.post('/insertRecord', function (req, res, next) {
 app.use(function (req, res, next) {
     res.sendFile(path.join(__dirname, 'assests', '404.html'));
 });
+
+app.use(function(err, req, res, next){
+    let response = {error: true, message: err.message || 'unkown error'};
+    if(process.env.NODE_ENV != 'production'){
+        response.stack = err.stack.split('\n');
+    }
+    res.status(err.status || 500).json(response);
+})
 
 /** ----------------------------------------------------------------------------------
  * open the connction with the DB.
