@@ -46,14 +46,16 @@
                                 Patient
                             </div>
                         </div>
-
                     </div>
 
 
-                    <div class="wrap-input100 validate-input" data-validate="Name is required">
-                        <span class="label-input100">Select a patient</span>
-                        <select input id='patientsList' class="input100" type="text" name='patientsIds'
-                                placeholder="Select the User name">
+                    <div class="wrap-input100 validate-input">
+                        <span class="label-input100">Select a Patient</span>
+
+                        <!-- user list from the db will be here -->
+
+                        <select input id='patientsList' class="input100" type="text" name='patientsList'
+                                placeholder="Select a patient">
                             <option value="" disabled selected>Israel Israeli</option>
                         </select>
                         <span class="focus-input100"></span>
@@ -62,27 +64,25 @@
 
                     <div class="wrap-contact100-form-btn">
                         <div class="research contact100-form-bgbtn"></div>
-                        <div id='createResearcher' type='button' class="contact100-form-btn">
-                        <span>
-
+                        <div id='selectSession' class="contact100-form-btn">
+                            <span>
                                 Select a Session
                             </span>
                         </div>
                     </div>
 
-                    <div class="wrap-input100 validate-input" data-validate="Name is required">
+                    <div class="wrap-input100 validate-input">
                         <br>
-                        <!-- <span class="label-input100">Select session</span> -->
-                        <select input id='sessionsList' class="input100" type="text" name='patientsIds'
-                                placeholder="Select the User name" size="3">
+                        <select input id='sessionsList' class="input100" type="text" name='sessionsList' size="3">
+
+                            <!-- session list for the current user will be displayed here -->
+
                             <option value="session">session 4, 2/11/2020</option>
                             <option value="session">session 3, 9/11/2020</option>
                             <option value="session">session 2, 16/11/2020</option>
                             <option value="session">session 1, 23/11/2020</option>
                         </select>
                         <span class="focus-input100"></span>
-
-
                     </div>
 
                     <div>
@@ -90,20 +90,16 @@
                             <div class="wrap-contact100-form-btn">
                                 <div class="contact100-form-bgbtn"></div>
                                 <button id='enterSession' type='button' class="contact100-form-btn"
-                                        onclick="location.href='/researchGroupLoginPage'">
+                                        onclick="location.href='/guideSessionPage'">
                         <span>
-                        <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;
+                        <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
                             Enter Session
                         </span>
                                 </button>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
-
             </div>
 
 
