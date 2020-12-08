@@ -13,11 +13,11 @@
         template += '<span class="focus-input100">::name::</span>';
         template += '<iframe width="1024" height="600" src="http://www.youtube.com/embed/::link::"></iframe>';
         template += '<div id = "buttons">';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like" ><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="like" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="like" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" name="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',1)" name="like" id ="like" ><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',2)" name="like" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',3)" name="like" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',4)" name="like" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',5)" name="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
         template += '';
         template += '</div>';
         template += '</div>';
@@ -49,7 +49,6 @@
             } else {
                 var userName = $('#userName');
                 var password = $('#password');
-                var encryptedPass = CryptoJS.AES.encrypt(password.val(), 'Password');
             }
 
             var userData = {
@@ -60,14 +59,78 @@
             var loginUserPath = '/loginUser';
             // console.log(researcherData);
             var postingInsertResearch = $.post(loginUserPath, userData);
-            postingInsertResearch.done(function (data) {
-                if (!data || !data.items || !data.items.length) {
-                    console.log("data.charAt(0)", data.charAt(0));
-                    if (data.charAt(0) === '<') {
-                        alert("Please insert valid User Name or Password!");
-                        return;
+            postingInsertResearch
+            .fail(function(data){
+                if(data.responseJSON && data.responseJSON.message)
+                    alert(data.responseJSON.message);
+            })
+            .done(function (data) {
+
+                var user = data.items[0];
+                if(!user.playlists || !user.playlists.length) return alert("No playlist was defined for this user!");
+
+                var html = '';
+
+                for(var i = 0; i < user.playlists.length; i++){
+                    const playlist = user.playlists[i][0];
+                    const records = playlist.records;
+
+                    for(var r = 0; r < records.length; r++){
+                        console.log(playlist.records[r])
+                        const record = records[r];
+                        const mbid = record.mbId ? record.mbId : '';
+                        const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
+                        const title = (record.title) ? record.title : '';
+                        const artist = (record.artistName) ? record.artistName : '';
+                        const playlistName = playlist.name;
+
+                        html += template
+                                    .replace(new RegExp('::videoId::', 'g'), videoId)
+                                    .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)
+                                    .replace(new RegExp('::link::', 'g'), videoId)
+                                    .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
+                                    .replace(new RegExp('::data::', 'g'), mbid)
+                                    .replace(new RegExp('::playListName::', 'g'), playlistName);
+
+                        html = html
+                                .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
+                                .replace(new RegExp('::data::', 'g'), mbid);
                     }
-                }//return musicWrapper.html('<h3>Get wrong data</h3>');
+                }
+
+                // $('#title').html("Your Music: " + year + ',' + country);
+                window.scrollBy(0, 500);
+                musicWrapper.html(html);
+
+/*
+                for (i = 0; i < playarr.length; i++) {  //show the playlist songs .
+                    var place = playarr[i];
+                    var item = rec[place];
+                    // console.log("item:",item);
+                    var mbid = (item && item.mbId) ? item.mbId : '';
+                    var videoId = (item && item.youtube && item.youtube.videoId) ? item.youtube.videoId : '';
+                    var title = (item && item.title) ? item.title : '';
+                    var artist = (item && item.artistName) ? item.artistName : '';
+                    html += template.replace('::videoId::', videoId).replace('::name::', title + ' - ' + artist).replace('::link::', videoId).replace('::userid::', tamaringaId.toString()).replace('::data::', mbid);
+                    html = html.replace(new RegExp('::userid::', 'g'), tamaringaId.toString()).replace(new RegExp('::data::', 'g'), mbid);
+                }
+                $('#title').html("Your Music: " + year + ',' + country);
+                window.scrollBy(0, 500);
+                musicWrapper.html(html);
+*/
+
+
+                // user.data.firstTime
+                /*
+
+                // if (!data || !data.items || !data.items.length) {
+                //     console.log("data.charAt(0)", data.charAt(0));
+                //     if (data.charAt(0) === '<') {
+                //         alert("Please insert valid User Name or Password!");
+                //         return;
+                //     }
+                // }
+                //return musicWrapper.html('<h3>Get wrong data</h3>');
 
                 console.log("Data", data);
                 var entrance = data.items[0].entrance;
@@ -86,6 +149,7 @@
                             alert("No playlist was defined for this user!");
                             return;
                         }
+
                         if (!data || !data.items || !data.items.length || !data.items[0] || data.items[0].records.length < 1) return musicWrapper.html('<h3>Please rephrase search</h3>');
                         var rec = data.items[0].records; // build the playlist and check don't have double songs.
                         var html = '';
@@ -256,7 +320,7 @@
                         //console.log("top user: "+topUser);
                     });
                 }
-            });
+            */});
         });
 
 
@@ -276,8 +340,17 @@
  ---------------------------------------------------------------------------------- */
 
 
-function f2(id, mbid, n) {
-    $.get('/user/' + id.toString(), function (data) {
+function f2(id, mbId, playlistName, score) {
+    var req =  $.post('selection/'+id, {mbId, playlistName, score});
+
+    req.done(function(){
+        alert('Thanks we recived your score')
+    })
+        //.failed(function(){
+       // alert('oh no, we did not process your score');
+    //})
+
+    /*$.get('/user/' + id.toString(), function (data) {
 
         if (n <= 0 || !n || n > 5)
             n = 0;
@@ -304,14 +377,8 @@ function f2(id, mbid, n) {
         posting.done(function (data) {
             //console.log("data:"+data);
         });
-    });
-    $.get('/user/' + id.toString(), function (data) {
-        // console.log(data.items[0].enterens);
-        if (data.items[0].entrance === 0) {
-            addEnterens(data.items[0].tamaringaId, 1);
-        }
+    });*/
 
-    });
 
 }
 

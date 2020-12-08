@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "./bin/nodemon app.js"
+    "start": "nodemon app.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
@@ -15,6 +15,7 @@
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
+    "compression": "^1.7.4",
     "compute-cosine-similarity": "^1.0.0",
     "crypto-js": "^4.0.0",
     "debug": "^3.2.6",
