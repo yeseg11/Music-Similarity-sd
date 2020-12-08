@@ -185,12 +185,6 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                         if(err) return next(err);
                         res.status(200).json({err: false, items: [user]})
                     })
-
-
-
-
-
-
                 }).catch(e=>next(e))
             });
 
