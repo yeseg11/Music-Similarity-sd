@@ -172,6 +172,10 @@
 
                             // var decade = "";
                             var decade = [];
+                            if (parseInt(yearAtTwenty) <1950 && parseInt(yearAtTwenty) >= 1940){ //50's
+                                //decade = "40";
+                                decade = ["40","50"];
+                            }
                             if (parseInt(yearAtTwenty) <1960 && parseInt(yearAtTwenty) >= 1950){ //50's
                                 //decade = "50";
                                 decade = ["50","60"];
