@@ -214,7 +214,7 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
             let researchListData = {
                 researchId : req.body.researchId,
                 maxSessionNum: req.body.maxSessionNum,
-                sessionList: null
+                sessionList: []
             };
 
             if (req.body.tamaringaId && req.body['playlists[]']) {

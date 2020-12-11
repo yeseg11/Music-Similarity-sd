@@ -27,15 +27,16 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
             .exec(function (err, userDataDocs) {
                 if(err || !userDataDocs.length) return next(err || new Error('Contact support no userData avialable!'));
                 user.data = userDataDocs[0].toObject();
-                user.data.firstTime = user.data.researchList.filter(x=>x.sessionList.length).length != 0?false:true;
 
+                user.data.firstTime = user.data.researchList.filter(x=>x.sessionList == null ? 0:x.sessionList).length != 0?false:true;
                 // @TODO remove me because I'm debug first time
-                // user.data.researchList[0].sessionList = [];
+                //  user.data.researchList[0].sessionList = [];
 
-                if(user.data.researchList[0].maxSessionNum === (user.data.researchList[0].sessionList.length -1)){
+                if (user.data.researchList[0].sessionList != null){
+                    if(user.data.researchList[0].maxSessionNum === (user.data.researchList[0].sessionList.length -1 )){
                         return next(new Error('You max the amount of sessions!'));
+                    }
                 }
-
 
                 const logEntrence = () => new Promise((res, rej)=>{
                     PublicUsers.findOneAndUpdate({_id: user._id}, {$inc: {'entrance': 1}}).exec((err)=>{
@@ -54,6 +55,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                             return items[Math.floor(Math.random()*items.length)]
                         }
                         if(user.data.firstTime){
+
                             return Promise.all(mapPlaylistData.map(playlistData=>{
                                 return new Promise((pres, prej)=>{
                                     PlayList.find({name: playlistData.name}).exec((err, playlistsDocs)=>{
@@ -104,7 +106,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                 records: []
                             }
 
-                            console.log(likedPlaylist);
+                            // console.log(likedPlaylist);
 
                             return Promise.all(mapPlaylistData.map(playlistData=>{
                                 return new Promise((pres, prej)=>{
@@ -113,6 +115,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
 
                                         // join all sessions seen mbid
                                         // @return mbid[]
+                                        // console.log("playlistsDocs",playlistsDocs);
                                         for(let i=0; i < playlistsDocs.length;i++){
                                             const playlist = playlistsDocs[i];
                                             if(!playlist || !playlist.records || !playlist.records.length) continue;
@@ -122,7 +125,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                                 if(mbidLiked.indexOf(record.mbId) != -1 && !likedPlaylist.records.find(x=>x.mbId==record.mbId)) likedPlaylist.records.push(record);
                                             }
                                         }
-                                        console.log("likedPlaylist",likedPlaylist);
+                                        // console.log("likedPlaylist",likedPlaylist);
 
                                             let songs = playlistsDocs.map(doc=>{
                                                 let records = []; //.concat(doc.records.find(x=>mbidLiked.indexOf(x.mbId)!=-1) || []).slice(0, 2);
@@ -151,7 +154,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                     })
                                 })
                             })).then((playlists)=>{
-                                console.log('before res', likedPlaylist);
+                                // console.log('before res', likedPlaylist);
                                 res([playlists, likedPlaylist]);
                             }).catch(e=>rej(e))
 
@@ -167,16 +170,14 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                     }else{
                         playlists = data;
                     }
-
-                    console.log('likedPlaylist', likedPL, typeof likedPL);
                     user.playlists = playlists.filter(x=>x.length).sort((a,b)=>((b || [])[0].records || []).length - ((a || [])[0].records || []).length);
+
                     if(typeof likedPL == 'object') user.playlists.unshift([likedPL]);
 
 
                     if(!user.data.researchList.length) return next(new Error('No research list exists!'));
 
                     let update = {};
-
                         update['$push'] = {
                             'researchList.0.sessionList': {
                                 sessionNumber: (!user.data.researchList[0].sessionList.length) ? 1 : user.data.researchList[0].sessionList.length + 1,
