@@ -67,6 +67,7 @@
             .done(function (data) {
 
                 var user = data.items[0];
+                console.log("user",user)
                 if(!user.playlists || !user.playlists.length) return alert("No playlist was defined for this user!");
 
                 var html = '';
@@ -74,7 +75,7 @@
                 for(var i = 0; i < user.playlists.length; i++){
                     const playlist = user.playlists[i][0];
                     const records = playlist.records;
-
+                    console.log("records",records);
                     for(var r = 0; r < records.length; r++){
                         console.log(playlist.records[r])
                         const record = records[r];
