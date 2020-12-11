@@ -203,7 +203,6 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
 
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
         if (err) return next(err);
-        console.log("docs: ",docs[0]);
         try {
             if (docs[0].playlists != null){
                 playlist = docs[0].playlists;
@@ -220,8 +219,11 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 sessionList: null
             };
 
-            if (req.body.tamaringaId && req.body.playlists) {
-                playlist.push(req.body.playlists)
+            if (req.body.tamaringaId && req.body['playlists[]']) {
+                for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
+                    playlist.push(req.body['playlists[]'][i])
+                }
+               // playlist.push(req.body.playlists)
                 researchList.push(researchListData)
                 const userData = {
                     tamaringaId: req.body.tamaringaId.toString(),
@@ -936,6 +938,20 @@ app.get('/userByResearch/:id', function (req, res, next) {    //call to getUserD
 
 app.post('/loginUser', routes.post.loginUser);
 
+/** ----------------------------------------------------------------------------------
+ * Return decade playlist name if exists
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+app.post('/getDecadePlaylist', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    PlayList.find({name: { $in:req.body['name[]']}}).exec(function (err, docs) {
+        if (err) return next(err);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    })
+});
 
 /** ----------------------------------------------------------------------------------
  * Return the private id by tamaringa id

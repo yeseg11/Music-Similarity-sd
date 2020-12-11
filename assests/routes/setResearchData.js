@@ -20,7 +20,7 @@
 
             getUsers().then(function (result) {
                 var selectElem = $('#patientsIds');
-                console.log(result)
+                //console.log(result)
                 for (var i = 0; i < result.length; i++) {
                     selectElem.append("<option value='" + result[i].tamaringaId + "'>" + result[i].userName +' - '+ result[i].firstName + ' ' + result[i].lastName + "</option>");
                 }
@@ -123,11 +123,13 @@
 
 
 
+
+
             var prom = new Promise(function (resolve, reject) {
                 for (i = 0; i < patientsIds.length; i++) {
                     $.get('/user/' + patientsIds[i].value, function (data) {
                          let items = data.items[0];
-                        console.log("data.items[0]: ",data.items[0]);
+                        // console.log("data.items[0]: ",data.items[0]);
                         tamaringaId = items.tamaringaId;
                         yearAtTwenty = items.yearAtTwenty;
                         countryAtTwenty = items.countryAtTwenty;
@@ -140,6 +142,7 @@
                     }).then(function (response) {
                         var recList = [];
                         // console.log("recList1",recList);
+
                         $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + languageAtTwenty, function (data) {
                             if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
                             // console.log("list data",data);
@@ -165,39 +168,89 @@
                             }
                         }).then(function (response) {
                             // console.log(response.items);
-                            var playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
+                            // check if we have a playlist for the user
+
+                            // var decade = "";
+                            var decade = [];
+                            if (parseInt(yearAtTwenty) <1960 && parseInt(yearAtTwenty) >= 1950){ //50's
+                                //decade = "50";
+                                decade = ["50","60"];
+                            }
+                            else if (parseInt(yearAtTwenty) <1970 && parseInt(yearAtTwenty) >= 1960){
+                                // decade = "60";
+                                decade = ["60","70"];
+                            }//60's
+                            else if (parseInt(yearAtTwenty) <1980 && parseInt(yearAtTwenty) >= 1970){
+                                // decade = "70";
+                                decade = ["70","80"];
+                            }//70's
+                            else if (parseInt(yearAtTwenty) <1990 && parseInt(yearAtTwenty) >= 1980){
+                                // decade = "80";
+                                decade = ["80","90"];
+                            }//80's
+                            else if (parseInt(yearAtTwenty) <2000 && parseInt(yearAtTwenty) >= 1990){
+                                // decade = "90";
+                                decade = ["90","00"];
+                            }//90's
+                            else if (parseInt(yearAtTwenty) <2010 && parseInt(yearAtTwenty) >= 2000){
+                                // decade = "00";
+                                decade = ["00","10"];
+                            }//00's
+                            else if (parseInt(yearAtTwenty) <2020 && parseInt(yearAtTwenty) >= 2010){
+                                // decade = "10";
+                                decade = ["10"];
+                            }//10's
+                            else {
+                                return alert("the decade didnt found");
+                            }
+                            var playlistNames = [];
+                            for (var i = 0 ; i < decade.length ; i++){
+                                playlistNames.push(countryAtTwenty + decade[i] + "DEC");
+                            }
+
                             var playlistData = {
-                                name: playlistName,
-                                year: yearAtTwenty,
-                                country: countryAtTwenty,
-                                language: languageAtTwenty,
-                                records: JSON.stringify(recList)
+                                name: playlistNames
                             };
-                            var createPlaylistUrl = '/playList/createPlaylist';
-                            var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
-                            postingCreatePlaylist.done(function (data) {
-                            });
+                            var checkDecadePlaylistUrl = '/getDecadePlaylist';
+                            var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData);
+                            checkDecadePlaylist.done(function (data) {
+                                if (data.err){alert("Error in find data")}
+                                if (!data.items.length > 0){
+                                    playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
+                                    var playlistData = {
+                                        name: playlistName,
+                                        year: yearAtTwenty,
+                                        country: countryAtTwenty,
+                                        language: languageAtTwenty,
+                                        records: JSON.stringify(recList)
+                                    };
+                                    var createPlaylistUrl = '/playList/createPlaylist';
+                                    var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
+                                    postingCreatePlaylist.done(function (data) {
 
-
-                            var userData = {
-                                tamaringaId: tamaringaId,
-                                playlists: playlistName,
-                                researchId: researchId.val(),
-                                maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
-                                sessionList: null
-                            };
-                            console.log("UserData: ", userData);
-                            var getPlaylistLink = '/updateUserDataCollection';
-                            var postingInsertResearch = $.post(getPlaylistLink, userData);
-                            postingInsertResearch.done(function (data) {
-                                console.log("updateUserDataCollection: " ,data);
+                                    });
+                                }
+                                var userData = {
+                                    tamaringaId: tamaringaId,
+                                    playlists: playlistNames,
+                                    researchId: researchId.val(),
+                                    maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
+                                    sessionList: null
+                                };
+                                var getPlaylistLink = '/updateUserDataCollection';
+                                var postingInsertResearch = $.post(getPlaylistLink, userData);
+                                postingInsertResearch.done(function (data) {
+                                    if (!data.items.length > 0){
+                                        console.log("User Data created ");
+                                    }
+                                    else {
+                                        console.log("User Data was not created ");
+                                    }
+                                });
                             });
                         });
                     });
-
-
                 }//for ended
-
 
 
 

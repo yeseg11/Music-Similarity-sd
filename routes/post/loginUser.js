@@ -2,6 +2,10 @@ let PublicUsers = require('../../models/publicUsers.js');
 let UserData = require('../../models/userData.js');
 let PlayList = require('../../models/playlist.js');
 
+let FULLPLAYLISTSONGS = 3;
+let GENERPLAYLISTSONGS =2;
+
+
 module.exports = function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req || !req.body) return res.sendStatus(400);
 
@@ -38,11 +42,11 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                         if(err) return rej(err);
 
                         // cla + yid (3 digits code) - get 2 songs
-                        // not 3 digits code - get 7 songs
+                        // not 3 digits code - get 3 songs
                         const mapPlaylistData = user.data.playlists.map(x=>{
                             return {
                                 name: x,
-                                songs: (x.length == 3) ? 2 : 7
+                                songs: (x.length == 3) ? GENERPLAYLISTSONGS : FULLPLAYLISTSONGS
                             }
                         });
 
