@@ -1,7 +1,6 @@
 //the main app !!
 
 const express = require('express');
-const compression = require('compression');
 const app = express();
 const debug = require('debug');
 const path = require('path');
@@ -30,7 +29,6 @@ var CryptoJS = require("crypto-js");
 let similarity = require('compute-cosine-similarity');
 const e = require('express');
 // gzip
-if(process.env.NODE_ENV != 'production') app.use(compression());
 app.use("/", express.static(path.join(__dirname, "assests")));
 
 /**
