@@ -126,20 +126,15 @@
 
 
             var prom = new Promise(function (resolve, reject) {
-                console.log("patientsIds",patientsIds);
-                console.log("patientsIds.length",patientsIds.length);
                 for (var i = 0; i < patientsIds.length;) {
-                    console.log("i",i);
                     var waitProm = new Promise(function (resolve, reject) {
-                        console.log("waitProm resolve",resolve);
                         setTimeout( function() {
                             console.log("i:",i);
                         },3000);
                         resolve(i++);
                     }).then(function (response) {
+                        console.log("response:",response);
                         if (response < patientsIds.length){
-                            console.log("ii response",response);
-                            console.log("patientsIds[i]",patientsIds[response]);
                             $.get('/user/' + patientsIds[response], function (data) {
                                  let items = data.items[0];
                                 // console.log("data.items[0]: ",data.items[0]);
@@ -153,7 +148,6 @@
                                 group = items.group;
 
                             }).then(function (response) {
-                                console.log("response: ",response);
                                 var recList = [];
                                 $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + languageAtTwenty, function (data) {
                                     if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
@@ -245,9 +239,7 @@
 
                                             });
                                         }
-                                        console.log("response.items[0].tamaringaId: ",response.items[0].tamaringaId);
-                                        console.log("response2: ",response2);
-                                        console.log("tamaringaId: ",tamaringaId);
+
                                         var userData = {
                                             tamaringaId: response.items[0].tamaringaId,
                                             playlists: playlistNames,
