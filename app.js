@@ -198,7 +198,7 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
     }
     let playlist = [];
     let researchList = [];
-
+    console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
         if (err) return next(err);
         try {
@@ -216,6 +216,7 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 maxSessionNum: req.body.maxSessionNum,
                 sessionList: []
             };
+            console.log("researchListData ",researchListData);
 
             if (req.body.tamaringaId && req.body['playlists[]']) {
                 for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
@@ -223,11 +224,14 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 }
                // playlist.push(req.body.playlists)
                 researchList.push(researchListData)
+
+
                 const userData = {
                     tamaringaId: req.body.tamaringaId.toString(),
                     playlists: playlist,
                     researchList: researchList,
                 };
+
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};
                 UserData.updateOne(query, userData, options)
