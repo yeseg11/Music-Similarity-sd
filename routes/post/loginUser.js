@@ -69,9 +69,9 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                             while(records.length < limitSongs){
                                                 const record = getRandom(doc.records);
                                                 if(!records.filter(x=>
-                                                    record._id.toString()
+                                                    record.mbId.toString()
                                                     ==
-                                                    x._id.toString()
+                                                    x.mbId.toString()
                                                 ).length) records.push(record);
                                             }
                                             doc.records = records;
