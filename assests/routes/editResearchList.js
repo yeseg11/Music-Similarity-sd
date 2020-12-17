@@ -17,12 +17,19 @@
         function getResarches() {
             return new Promise(function (resolve, reject) {
                 var usersList, researchersList = [];
-                $.get('/allresearches', function (data) {
+
+                var researchGroup = {
+                    researchGroupId: localStorage["ResearchGroupId"],
+                };
+                console.log(researchGroup);
+                var insertResearchUrl = '/allresearches';
+                var postingInsertResearch = $.post(insertResearchUrl, researchGroup);
+                postingInsertResearch.done(function (data) {
+                    console.log("HERE",data);
                     if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
-                    usersList = data.items
+                    usersList = data.items;
                     resolve(usersList);
                 });
-
             });
         }
 
@@ -38,7 +45,7 @@
 
 
             var researchId = $('#researchId');
-            console.log(researchId.val())
+            // console.log(researchId.val())
             localStorage["ResearchId"] = researchId.val();
             var pathname = "/editResearchPage"
             window.location.replace(pathname);

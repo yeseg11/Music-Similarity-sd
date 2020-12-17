@@ -1025,9 +1025,10 @@ app.get('/allresearchers', function (req, res, next) {    //call to getUserData.
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
  ----------------------------------------------------------------------------------*/
-app.get('/allresearches', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+app.post('/allresearches', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
-    Research.find({}).exec(function (err, docs) {
+    // console.log("req.body.researchGroupId", req.body.researchGroupId);
+    Research.find({researchGroupId:req.body.researchGroupId}).exec(function (err, docs) {
         if (err) return next(err);
         console.log("allresearches", docs);
         res.status(200).json({err: false, items: [].concat(docs)});
