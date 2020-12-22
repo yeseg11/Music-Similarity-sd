@@ -86,7 +86,7 @@
             console.log("clicked");
             $.get('/allusers', function (data) {
                 if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
-                // console.log(data.items);
+                console.log(data.items);
                 var myJsonString = JSON.stringify(data.items);
                 JSONToCSVConvertor(myJsonString, "Users Data", true);
             });
@@ -120,7 +120,9 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 
         //This loop will extract the label from 1st index of on array
         for (var index in arrData[0]) {
-
+            if (index === "songs"){
+                continue;
+            }
             //Now convert each value to string and comma-seprated
             row += index + ',';
         }
@@ -134,9 +136,12 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     //1st loop is to extract each row
     for (var i = 0; i < arrData.length; i++) {
         var row = "";
-
+        console.log("arrData[i]: ",arrData[i]);
         //2nd loop will extract each column and convert it in string comma-seprated
         for (var index in arrData[i]) {
+            if (index === "songs"){
+                continue;
+            }
             row += '"' + arrData[i][index] + '",';
         }
 

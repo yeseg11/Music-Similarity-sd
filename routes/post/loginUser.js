@@ -26,9 +26,12 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
         UserData.find({tamaringaId: user.tamaringaId.toString()})
             .exec(function (err, userDataDocs) {
                 if(err || !userDataDocs.length) return next(err || new Error('Contact support no userData avialable!'));
+                if(userDataDocs[0].researchList === null) return next(err || new Error('Can not Enter, Please add the user to research!'));
                 user.data = userDataDocs[0].toObject();
 
-                user.data.firstTime = user.data.researchList.filter(x=>x.sessionList == null ? 0:x.sessionList).length != 0?false:true;
+
+
+                user.data.firstTime = user.data.researchList.filter(x=>x.sessionList == null ? 0:x.sessionList).length !== 0?false:true;
                 // @TODO remove me because I'm debug first time
                 //  user.data.researchList[0].sessionList = [];
 
@@ -66,9 +69,9 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                             while(records.length < limitSongs){
                                                 const record = getRandom(doc.records);
                                                 if(!records.filter(x=>
-                                                    record._id.toString()
+                                                    record.mbId.toString()
                                                     ==
-                                                    x._id.toString()
+                                                    x.mbId.toString()
                                                 ).length) records.push(record);
                                             }
                                             doc.records = records;
@@ -138,9 +141,9 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                                 while(records.length < limitSongs){
                                                     const record = getRandom(doc.records);
                                                     if(!records.filter(x=>
-                                                        record._id.toString()
+                                                        record.mbId.toString()
                                                         ==
-                                                        x._id.toString()
+                                                        x.mbId.toString()
                                                     ).length) {
                                                         // prevent duplicate mbid to show on end user
                                                         if(mbidLiked.indexOf(record.mbId) == -1)
