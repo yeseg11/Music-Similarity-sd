@@ -179,19 +179,19 @@
                                     var decade = [];
                                     if (parseInt(yearAtTwenty) <1950 && parseInt(yearAtTwenty) >= 1940){ //50's
                                         //decade = "40";
-                                        decade = ["40","50"];
+                                        decade = ["40","50","60"];
                                     }
                                     if (parseInt(yearAtTwenty) <1960 && parseInt(yearAtTwenty) >= 1950){ //50's
                                         //decade = "50";
-                                        decade = ["50","60"];
+                                        decade = ["50","60","70"];
                                     }
                                     else if (parseInt(yearAtTwenty) <1970 && parseInt(yearAtTwenty) >= 1960){
                                         // decade = "60";
-                                        decade = ["60","70"];
+                                        decade = ["60","70","80"];
                                     }//60's
                                     else if (parseInt(yearAtTwenty) <1980 && parseInt(yearAtTwenty) >= 1970){
                                         // decade = "70";
-                                        decade = ["70","80"];
+                                        decade = ["70","80","90"];
                                     }//70's
                                     else if (parseInt(yearAtTwenty) <1990 && parseInt(yearAtTwenty) >= 1980){
                                         // decade = "80";
