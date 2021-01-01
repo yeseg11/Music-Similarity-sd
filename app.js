@@ -91,7 +91,10 @@ app.get('/newResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests
 app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearchList.html'), {}, () => res.end()));
 app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
 
-
+/**
+ * Guides pages
+ */
+app.get('/createGuide', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createGuide.html'), {}, () => res.end()));
 
 
 /** ----------------------------------------------------------------------------------
