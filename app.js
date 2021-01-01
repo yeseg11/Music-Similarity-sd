@@ -10,6 +10,7 @@ const PLAYLISTSIZE = 50;
 
 let Records = require('./models/records.js');
 // let Users = require('./models/users.js');
+let Guides = require('./models/guides.js');
 let Researchers = require('./models/researchers.js');
 let PlayList = require('./models/playlist.js');
 let PublicUsers = require('./models/publicUsers.js');
@@ -1237,6 +1238,45 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
         var obj = [{topUser, recSongs, notEar}];
         res.status(200).json({err: false, items: [].concat(obj)});
     });
+});
+
+/** ------------------------------------------------------------------
+
+/** -------------------------------------GUIDE--------------------------------------
+ *  Post and add a new guide to Data base
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} name: Given user name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {guideData}
+ ----------------------------------------------------------------------------------*/
+
+app.post('/insertGuide', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400, "Error to adding a guide");
+
+    if (req.body.guideId && req.body.guideName && req.body.guidePassword) {
+        var encryptedPass = CryptoJS.AES.encrypt(req.body.guidePassword, 'Password');
+
+        const guideData = {
+            guideName: req.body.guideName,
+            guideId: req.body.guideId,
+            guidePassword: encryptedPass.toString()
+        };
+
+        console.log('GuideData: ', guideData);
+
+        const query = {guideId: guideData.guideId};
+        const options = {"upsert": true};
+        Guides.updateOne(query, guideData, options) //update mongodb
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+    }
 });
 
 
