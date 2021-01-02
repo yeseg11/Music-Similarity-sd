@@ -214,7 +214,7 @@
                                     }
                                     var playlistNames = [];
                                     for (var i = 0 ; i < decade.length ; i++){
-                                        playlistNames.push(countryAtTwenty + decade[i] + "DEC");
+                                        playlistNames.push(languageAtTwenty + decade[i] + "DEC");
                                     }
 
                                     var playlistData = {
