@@ -111,22 +111,44 @@ app.post('/playList/createPlaylist', function (req, res, next) {
         language: req.body.language,
         records: JSON.parse(req.body.records)
     };
-    // console.log(playlistData);
-    var query = {name: playlistData.name},
-        update = playlistData,
-        options = {upsert: true, new: true, setDefaultsOnInsert: true};
+    var recList = [];
 
-    var exiset = true;
-    PlayList.updateOne(query, update, options)
-        .then(result => {
-            const {matchedCount, modifiedCount} = result;
-            if (matchedCount && modifiedCount) {
-                console.log(`Successfully added a private user.`)
+    db().then(() => {
+        Records.find({
+            year: {$gt: parseInt(playlistData.year) - 10, $lt: parseInt(playlistData.year) + 10},
+            country: playlistData.country,
+            language: playlistData.language
+        }).sort({'youtube.views': -1}).limit(PLAYLISTSIZE).exec(function (err, docs) {
+            if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+            for (var i = 0; i < docs.length ; i++) {
+                recList.push({
+                    mbId: docs[i].mbId,
+                    title: docs[i].title,
+                    year: parseInt(docs[i].year),
+                    artistName: docs[i].artist[0].name,
+                    language: docs[i].language,
+                    country: docs[i].country,
+                    lyrics: docs[i].lyrics,
+                    genre: docs[i].genre,
+                    youtube: docs[i].youtube,
+                    votes: []
+                });
             }
-
+            playlistData.records = recList
+            var query = {name: playlistData.name},
+                update = playlistData,
+                options = {upsert: true, new: true, setDefaultsOnInsert: true};
+            var exiset = true;
+            PlayList.updateOne(query, update, options)
+                .then(result => {
+                    const {matchedCount, modifiedCount} = result;
+                    if (matchedCount && modifiedCount) {
+                        console.log(`Successfully added a private user.`)
+                    }
+                })
+                .catch(err => console.error(`Failed to add review: ${err}`))
         })
-        .catch(err => console.error(`Failed to add review: ${err}`))
-
+    }).catch(next);
 });
 
 /** ----------------------------------------------------------------------------------
