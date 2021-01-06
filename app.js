@@ -95,7 +95,7 @@ app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'as
  * Guides pages
  */
 app.get('/createGuide', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createGuide.html'), {}, () => res.end()));
-
+app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideLoginPage.html'), {}, () => res.end()));
 
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base
