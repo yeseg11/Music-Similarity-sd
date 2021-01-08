@@ -1,6 +1,6 @@
 (function ($) {
     $(document).ready(function () {
-        // onclick="location.href='researches'
+
         $('#login').on("click", function (e) {
 			  console.log("# Guide login button pressed");
             if ($('#guideName').val().length === 0 || $('#password').val().length === 0) {
@@ -17,18 +17,20 @@
                 guidePassword: password.val(),
             };
 
-            var loginResearcher = '/loginGuide';
-            var postingInsertResearch = $.post(loginResearcher, guideData);
-            postingInsertResearch.done(function (data) {
+            console.log(guideData);
+            var loginGuide = '/loginGuide';
+            var postLogin = $.post(loginGuide, guideData);
+            postLogin.done(function (data) {
+                console.log("Data.items", data.items);
+                console.log("data.items.length", data.items.length);
                 console.log("Data", data);
-                if (!data || !data.items || !data.items.length) 
+
+                if (!data || !data.items || !data.items.length)
 					return alert("Error login in, please check you user name and password and try again");
                 var pathname = "/guideMainPage"
                 window.location.replace(pathname);
             });
-
         });
     });
 })(jQuery);
-
 
