@@ -96,7 +96,10 @@ app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'as
  */
 app.get('/createGuide', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createGuide.html'), {}, () => res.end()));
 app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideLoginPage.html'), {}, () => res.end()));
+app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
+
+//guideMainPage
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base
  *
@@ -1254,6 +1257,38 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {guideData}
  ----------------------------------------------------------------------------------*/
+
+
+
+app.post('/loginGuide', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400);
+    //console.log(req.body);
+    //console.log(req.body.guideUserName + "   " + req.body.guidePassword);
+    if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) { //problem with this line - guideName is undefined
+        console.log("req.body is undefined");
+        return next(err);
+    }
+    console.log("test");
+    Guides.find({guideName: req.body.guideUserName}).exec(function (err, docs) {
+
+        if (err) return next(err);
+
+        if (docs[0] === undefined || docs[0].guidePassword === undefined) {
+
+            return next(err);
+        }
+
+        var CryptoJS = require("crypto-js");
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].guidePassword, 'Password');
+        var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
+        if (decrypted2 === req.body.guidePassword) {
+            res.status(200).json({err: false, items: [].concat(docs)});
+        } else {
+            return next(err)
+        }
+    });
+});
+
 
 app.post('/insertGuide', function (req, res, next) {
     if (!req.body) return res.sendStatus(400, "Error to adding a guide");
