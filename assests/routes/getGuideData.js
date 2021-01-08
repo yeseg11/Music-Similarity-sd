@@ -17,13 +17,10 @@
                 guidePassword: password.val(),
             };
 
-            console.log(guideData);
+            //console.log(guideData);
             var loginGuide = '/loginGuide';
             var postLogin = $.post(loginGuide, guideData);
             postLogin.done(function (data) {
-                console.log("Data.items", data.items);
-                console.log("data.items.length", data.items.length);
-                console.log("Data", data);
 
                 if (!data || !data.items || !data.items.length)
 					return alert("Error login in, please check you user name and password and try again");

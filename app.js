@@ -1268,7 +1268,7 @@ app.post('/loginGuide', function (req, res, next) {
         console.log("req.body is undefined");
         return next(err);
     }
-    console.log("test");
+    //console.log("test");
     Guides.find({guideName: req.body.guideUserName}).exec(function (err, docs) {
 
         if (err) return next(err);
