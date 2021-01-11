@@ -26,25 +26,40 @@
 
 
         init();
+        //$( "#patientsIds option:selected" ).text();
 
-        $('#send').on("click", function (e) {
-            if ($('#patientsIds').val() === null) {
-                alert("Please choose one of the users !! ");
-                return $('#error').text("user not selected");
-            }
+        $('#patientsIds').change(function() {
+            var tamId = $(this).val();
+            var UserName = $("#patientsIds option:selected" ).text();
+            alert("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
+            console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
+        });
 
 
 
-            var patientId = $('#patientsIds');
-            console.log(patientId.val())
-            localStorage["UserId"] = patientId.val();
-            var pathname = "/editUserPage"
-            window.location.replace(pathname);
-        })
 
-        $('#main').on("click", function (e) {
-            localStorage["UserId"] = null;
-        })
+
+
+
+
+        // $('#send').on("click", function (e) {
+        //     if ($('#patientsIds').val() === null) {
+        //         alert("Please choose one of the users !! ");
+        //         return $('#error').text("user not selected");
+        //     }
+        //
+        //
+        //
+        //     var patientId = $('#patientsIds');
+        //     console.log(patientId.val())
+        //     localStorage["UserId"] = patientId.val();
+        //     var pathname = "/editUserPage"
+        //     window.location.replace(pathname);
+        // })
+        //
+        // $('#main').on("click", function (e) {
+        //     localStorage["UserId"] = null;
+        // })
 
     });
 })(jQuery);
