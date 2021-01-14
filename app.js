@@ -1318,6 +1318,29 @@ app.post('/insertGuide', function (req, res, next) {
 });
 
 
+
+/** ----------------------------------------------------------------------------------
+ * Return the UserData by tamaringaId
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+//TEST IT!
+
+app.get('/userData/:id', function (req, res, next) {
+    if (!req) return res.sendStatus(400);
+    UserData.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** -------------------------------------END-GUIDE--------------------------------------
+
+
+
 /** ----------------------------------------------------------------------------------
  *  Post and add a new researcher to Data base
  *

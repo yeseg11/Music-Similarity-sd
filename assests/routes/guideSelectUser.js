@@ -31,11 +31,35 @@
         $('#patientsIds').change(function() {
             var tamId = $(this).val();
             var UserName = $("#patientsIds option:selected" ).text();
+//------------------------------------------------------------------------------------------------
+            function getSession() {
+                return new Promise(function (resolve, reject) {
+                    var users, sessions = [];
+                    $.get('/allusers', function (data) { // change to
+                        if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
+                        usersList = data.items
+                        resolve(usersList);
+                    });
+                });
+            }
+//------------------------------------------------------------------------------------------------
+
+
             alert("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
             console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
         });
 
+        function getSession() {
+            return new Promise(function (resolve, reject) {
+                var usersList, researchersList = [];
+                $.get('/allusers', function (data) {
+                    if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
+                    usersList = data.items
+                    resolve(usersList);
+                });
 
+            });
+        }
 
 
 
