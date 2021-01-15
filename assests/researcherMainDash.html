@@ -39,14 +39,16 @@
         </span>
 
         <span style="background:lightgray; font-size: 150%; text-align: center;"
-  //            class="wrap-contact100-form-btn"><b>Subtitle</b></span>
+              class="wrap-contact100-form-btn"><b>Select Patient</b></span>
 
         <div class="container-section-space">
             <div class="container-section">
                 <div>
-                    <span style=" text-align: center" class="class=label-input100"><b>Component Title</b></br></span>
-                    <span class="class=label-input100">Component Subtitle</span>
-
+                    <select input id ='patientsIds' class="input100" type="text" name='patientsIds' placeholder="Select the patients Name" size=3>
+                        <option value="">Israel Israeli</option>
+                        <option value="">Avi cohen</option>
+                        <option value="">Shimi Tavori</option>
+                    </select>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Name is required">
@@ -87,14 +89,36 @@
 
         <div class="container-section-space">
             <div class="container-section">
-                <div align="center" style="background:lightgray; font-size: 150%; text-align: center;"
+
+                <div style="background:lightgray; font-size: 150%"
                      class="wrap-contact100-form-btn">
-                    <span style=" text-align: center" class="class=label-input100"><b>Second Subtitle</b></br></span>
-
+                    <div style="text-align: center; padding-bottom: 1%"><b>Top 10 Songs</b></div>
+                    <span style="background:lightgray; padding-left: 2%; padding-bottom: 1%; font-size: 70%"
+                          class="wrap-contact100-form-btn">
+                        <button type='button' style="padding-right: 2%">All Songs</button>
+                        <button type='button' style="padding-right: 2%">Classical/Traditional</button>
+                        <button type='button' style="padding-right: 2%">Yiddish</button>
+                        <button type='button' style="padding-right: 2%">Arabic</button>
+                        <button type='button' style="padding-right: 2%">Ladino</button>
+                        <button type='button' style="padding-right: 2%">Prayer Songs (Piyutim)</button>
+                        <button type='button' style="padding-right: 2%">Middle Eastern music</button>
+                    </span>
 
                 </div>
-                </br>
-                <div class="wrap-input100 validate-input" data-validate="Name is required">
+
+                <div class="wrap-input100 validate-input" data-validate="Name is required" style="padding-top:1%">
+                    <select input id ='top10' class="input100" type="text" name='top10' size=10 >
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                        <option value="">Artist - Song-Name</option>
+                    </select>
                     <input id='songComment3' class="input100" type="text" name='Comment' placeholder="comment">
                 </div>
 
