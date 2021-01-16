@@ -2,9 +2,7 @@
     $(document).ready(function () {
 
         var PLAYLISTSIZE = 50;
-
-
-
+        
         function init() {
 
             getResearchers().then(function (result1) {
@@ -249,7 +247,7 @@
                     });
 
                 }//for ended
-                
+
                 var researchData = {
                         researchName: researchName.val(),
                         researchId: researchId.val(),

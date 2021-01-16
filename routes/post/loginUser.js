@@ -4,6 +4,7 @@ let PlayList = require('../../models/playlist.js');
 
 let FULLPLAYLISTSONGS = 3;
 let GENERPLAYLISTSONGS =2;
+const TESTFLAG= true
 
 
 module.exports = function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
@@ -57,7 +58,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                         const getRandom = (items)=>{
                             return items[Math.floor(Math.random()*items.length)]
                         }
-                        if(user.data.firstTime){
+                        if(user.data.firstTime || TESTFLAG){
 
                             return Promise.all(mapPlaylistData.map(playlistData=>{
                                 return new Promise((pres, prej)=>{
@@ -115,7 +116,6 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                 return new Promise((pres, prej)=>{
                                     PlayList.find({name: playlistData.name}).exec((err, playlistsDocs)=>{
                                         if(err) return prej(err);
-
                                         // join all sessions seen mbid
                                         // @return mbid[]
                                         // console.log("playlistsDocs",playlistsDocs);
