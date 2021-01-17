@@ -238,13 +238,20 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 maxSessionNum: req.body.maxSessionNum,
                 sessionList: []
             };
-            console.log("researchListData ",researchListData);
+            // console.log("researchListData ",researchListData);
+            // console.log("req.body['playlists[]'] ",req.body['playlists[]']);
+            // console.log("Array.isArray(req.body['playlists[]'])",Array.isArray(req.body['playlists[]']));
 
             if (req.body.tamaringaId && req.body['playlists[]']) {
-                for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
-                    playlist.push(req.body['playlists[]'][i])
+                if (Array.isArray(req.body['playlists[]'])){
+                    for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
+                        playlist.push(req.body['playlists[]'][i])
+                    }
                 }
-               // playlist.push(req.body.playlists)
+                else {
+                    playlist.push(req.body['playlists[]'])
+                }
+                // playlist.push(req.body.playlists)
                 researchList.push(researchListData)
 
 
