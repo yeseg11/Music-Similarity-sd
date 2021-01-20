@@ -155,33 +155,40 @@
                             var recList = [];
                             //********** check if we have a playlist for the user
                             var decade = [];
-                            if (parseInt(birthYear) <1920 && parseInt(birthYear) >= 1940){ //50's
+                            if (parseInt(birthYear) >1920 && parseInt(birthYear) <= 1940){ //50's
                                 //decade = "40";
                                 decade = ["30","40","50","60"];
+                                console.log("decade:",decade);
                             }
                             else if (parseInt(birthYear) <1950 && parseInt(birthYear) >= 1940){ //50's
                                 //decade = "40";
                                 decade = ["40","50","60"];
+                                console.log("decade:",decade);
                             }
                             else if (parseInt(birthYear) <1960 && parseInt(birthYear) >= 1950){ //50's
                                 //decade = "50";
                                 decade = ["50","60","70"];
+                                console.log("decade:",decade);
                             }
                             else if (parseInt(birthYear) <1970 && parseInt(birthYear) >= 1960){
                                 // decade = "60";
                                 decade = ["60","70","80"];
+                                console.log("decade:",decade);
                             }//60's
                             else if (parseInt(birthYear) <1980 && parseInt(birthYear) >= 1970){
                                 // decade = "70";
                                 decade = ["70","80","90"];
+                                console.log("decade:",decade);
                             }//70's
                             else if (parseInt(birthYear) <1990 && parseInt(birthYear) >= 1980){
                                 // decade = "80";
                                 decade = ["80","90"];
+                                console.log("decade:",decade);
                             }//80's
                             else if (parseInt(birthYear) <2000 && parseInt(birthYear) >= 1990){
                                 // decade = "90";
                                 decade = ["90","00"];
+                                console.log("decade:",decade);
                             }//90's
                             else if (parseInt(birthYear) <2010 && parseInt(birthYear) >= 2000){
                                 // decade = "00";
