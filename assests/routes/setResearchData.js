@@ -260,7 +260,6 @@
                     })
                     .catch(e=>console.log(e))
 
-
                 var researchData = {
                         researchName: researchName.val(),
                         researchId: researchId.val(),
