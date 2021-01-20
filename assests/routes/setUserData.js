@@ -84,6 +84,8 @@
                     };
 
                     let playlistArr = []
+                    console.log(Genre1Select.val())
+                    console.log(Genre2Select.val())
                     if (Genre1Select.val() != "None"){
                         playlistArr.push(Genre1Select.val());
                     }
