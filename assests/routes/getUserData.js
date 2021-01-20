@@ -84,7 +84,6 @@
                         const title = (record.title) ? record.title : '';
                         const artist = (record.artistName) ? record.artistName : '';
                         const playlistName = playlist.name;
-
                         html += template
                                     .replace(new RegExp('::videoId::', 'g'), videoId)
                                     .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)

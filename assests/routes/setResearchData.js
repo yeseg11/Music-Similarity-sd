@@ -3,8 +3,6 @@
 
         var PLAYLISTSIZE = 50;
 
-
-
         function init() {
 
             getResearchers().then(function (result1) {
@@ -130,7 +128,7 @@
                     var waitProm = new Promise(function (resolve, reject) {
                         setTimeout( function() {
                             console.log("i:",i);
-                        },3000);
+                        },5000);
                         resolve(i++);
                     }).then(function (response) {
                         console.log("response:",response);
@@ -148,116 +146,109 @@
                                 group = items.group;
 
                             }).then(function (response) {
+                                console.log("response1:",response);
+                                yearAtTwenty = response.items[0].yearAtTwenty
+                                languageAtTwenty = response.items[0].languageAtTwenty
+                                birthYear = response.items[0].birthYear;
+                                // console.log("birthYear:",birthYear);
+                                // console.log("yearAtTwenty:",yearAtTwenty);
+                                // console.log("languageAtTwenty:",languageAtTwenty);
+                                // return;
                                 var recList = [];
-                                $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + languageAtTwenty, function (data) {
-                                    if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
-                                    // console.log("list data",data);
-                                    var size = PLAYLISTSIZE;
-                                    if (data.items.length < size) {
-                                        size = data.items.length;
+                                //********** check if we have a playlist for the user
+                                var decade = [];
+                                if (parseInt(birthYear) <1920 && parseInt(birthYear) >= 1940){ //50's
+                                    //decade = "40";
+                                    decade = ["30","40","50","60"];
+                                }
+                                else if (parseInt(birthYear) <1950 && parseInt(birthYear) >= 1940){ //50's
+                                    //decade = "40";
+                                    decade = ["40","50","60"];
+                                }
+                                else if (parseInt(birthYear) <1960 && parseInt(birthYear) >= 1950){ //50's
+                                    //decade = "50";
+                                    decade = ["50","60","70"];
+                                }
+                                else if (parseInt(birthYear) <1970 && parseInt(birthYear) >= 1960){
+                                    // decade = "60";
+                                    decade = ["60","70","80"];
+                                }//60's
+                                else if (parseInt(birthYear) <1980 && parseInt(birthYear) >= 1970){
+                                    // decade = "70";
+                                    decade = ["70","80","90"];
+                                }//70's
+                                else if (parseInt(birthYear) <1990 && parseInt(birthYear) >= 1980){
+                                    // decade = "80";
+                                    decade = ["80","90"];
+                                }//80's
+                                else if (parseInt(birthYear) <2000 && parseInt(birthYear) >= 1990){
+                                    // decade = "90";
+                                    decade = ["90","00"];
+                                }//90's
+                                else if (parseInt(birthYear) <2010 && parseInt(birthYear) >= 2000){
+                                    // decade = "00";
+                                    decade = ["00","10"];
+                                }//00's
+                                else if (parseInt(birthYear) <2020 && parseInt(birthYear) >= 2010){
+                                    // decade = "10";
+                                    decade = ["10"];
+                                }//10's
+                                else {
+                                    return alert("the decade didnt found");
+                                }
+                                var playlistNames = [];
+                                for (var i = 0 ; i < decade.length ; i++){
+                                    var lang = languageAtTwenty.toUpperCase();
+                                    if (languageAtTwenty === "rus" || languageAtTwenty === "lit" || languageAtTwenty === "lav"){
+                                        lang = "RUS"
                                     }
-                                    for (i = 0; i < size; i++) {
-                                        // console.log(data.items[i].artist[0].name);
-                                        recList.push({
-                                            mbId: data.items[i].mbId,
-                                            title: data.items[i].title,
-                                            year: parseInt(data.items[i].year),
-                                            artistName: data.items[i].artist[0].name,
-                                            language: data.items[i].language,
-                                            country: data.items[i].country,
-                                            lyrics: data.items[i].lyrics,
-                                            genre: data.items[i].genre,
-                                            youtube: data.items[i].youtube,
-                                            votes: []
-                                        });
+                                    playlistNames.push(lang + decade[i] + "DC");
+                                }
+                                var playlistData = {
+                                    name: playlistNames
+                                };
 
-                                    }
-                                }).then(function (response2) {
-                                    // console.log(response.items);
-                                    // check if we have a playlist for the user
-                                    // var decade = "";
-                                    var decade = [];
-                                    if (parseInt(yearAtTwenty) <1950 && parseInt(yearAtTwenty) >= 1940){ //50's
-                                        //decade = "40";
-                                        decade = ["40","50","60"];
-                                    }
-                                    if (parseInt(yearAtTwenty) <1960 && parseInt(yearAtTwenty) >= 1950){ //50's
-                                        //decade = "50";
-                                        decade = ["50","60","70"];
-                                    }
-                                    else if (parseInt(yearAtTwenty) <1970 && parseInt(yearAtTwenty) >= 1960){
-                                        // decade = "60";
-                                        decade = ["60","70","80"];
-                                    }//60's
-                                    else if (parseInt(yearAtTwenty) <1980 && parseInt(yearAtTwenty) >= 1970){
-                                        // decade = "70";
-                                        decade = ["70","80","90"];
-                                    }//70's
-                                    else if (parseInt(yearAtTwenty) <1990 && parseInt(yearAtTwenty) >= 1980){
-                                        // decade = "80";
-                                        decade = ["80","90"];
-                                    }//80's
-                                    else if (parseInt(yearAtTwenty) <2000 && parseInt(yearAtTwenty) >= 1990){
-                                        // decade = "90";
-                                        decade = ["90","00"];
-                                    }//90's
-                                    else if (parseInt(yearAtTwenty) <2010 && parseInt(yearAtTwenty) >= 2000){
-                                        // decade = "00";
-                                        decade = ["00","10"];
-                                    }//00's
-                                    else if (parseInt(yearAtTwenty) <2020 && parseInt(yearAtTwenty) >= 2010){
-                                        // decade = "10";
-                                        decade = ["10"];
-                                    }//10's
-                                    else {
-                                        return alert("the decade didnt found");
-                                    }
-                                    var playlistNames = [];
-                                    for (var i = 0 ; i < decade.length ; i++){
-                                        playlistNames.push(countryAtTwenty + decade[i] + "DEC");
+                                var checkDecadePlaylistUrl = '/getDecadePlaylist';
+                                var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData);
+                                checkDecadePlaylist.done(function (data) {
+                                    console.log("data",data);
+                                    if (data.err){
+                                        alert("Error in find data checkDecadePlaylist")
                                     }
 
-                                    var playlistData = {
-                                        name: playlistNames
-                                    };
-                                    var checkDecadePlaylistUrl = '/getDecadePlaylist';
-                                    var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData);
-                                    checkDecadePlaylist.done(function (data) {
-                                        if (data.err){alert("Error in find data")}
-                                        if (!data.items.length > 0){
-                                            playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
-                                            var playlistData = {
-                                                name: playlistName,
-                                                year: yearAtTwenty,
-                                                country: countryAtTwenty,
-                                                language: languageAtTwenty,
-                                                records: JSON.stringify(recList)
-                                            };
-                                            var createPlaylistUrl = '/playList/createPlaylist';
-                                            var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
-                                            postingCreatePlaylist.done(function (data) {
-
-                                            });
-                                        }
-
-                                        var userData = {
-                                            tamaringaId: response.items[0].tamaringaId,
-                                            playlists: playlistNames,
-                                            researchId: researchId.val(),
-                                            maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
-                                            sessionList: null
+                                    if (!(data.items.length > 0)){
+                                        var playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
+                                        var playlistData = {
+                                            name: playlistName,
+                                            year: yearAtTwenty,
+                                            country: countryAtTwenty,
+                                            language: languageAtTwenty,
+                                            records: JSON.stringify(recList)
                                         };
-                                        console.log("userData ",userData);
-                                        var getPlaylistLink = '/updateUserDataCollection';
-                                        var postingInsertResearch = $.post(getPlaylistLink, userData);
-                                        postingInsertResearch.done(function (data) {
-                                            if (!data.items.length > 0){
-                                                console.log("User Data created ");
-                                            }
-                                            else {
-                                                console.log("User Data was not created ");
-                                            }
+                                        var createPlaylistUrl = '/playList/createPlaylist';
+                                        var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
+                                        postingCreatePlaylist.done(function (data) {
                                         });
+                                        playlistNames =[playlistName]
+                                        console.log("playlistNames",playlistNames);
+                                    }
+                                    var userData = {
+                                        tamaringaId: response.items[0].tamaringaId,
+                                        playlists: playlistNames,
+                                        researchId: researchId.val(),
+                                        maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
+                                        sessionList: null
+                                    };
+                                    console.log("userData ",userData);
+                                    var getPlaylistLink = '/updateUserDataCollection';
+                                    var postingInsertResearch = $.post(getPlaylistLink, userData);
+                                    postingInsertResearch.done(function (data) {
+                                        if (!data.items.length > 0){
+                                            console.log("User Data created ");
+                                        }
+                                        else {
+                                            console.log("User Data was not created ");
+                                        }
                                     });
                                 });
                             });
@@ -265,8 +256,6 @@
                     });
 
                 }//for ended
-
-
 
                 var researchData = {
                         researchName: researchName.val(),
