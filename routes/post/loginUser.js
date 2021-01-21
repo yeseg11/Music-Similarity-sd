@@ -37,8 +37,8 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                 //  user.data.researchList[0].sessionList = [];
 
                 if (user.data.researchList[0].sessionList != null){
-                    if(user.data.researchList[0].maxSessionNum === (user.data.researchList[0].sessionList.length -1 )){
-                        return next(new Error('You max the amount of sessions!'));
+                    if(user.data.researchList[0].maxSessionNum === (user.data.researchList[0].sessionList.length )){
+                        return next(new Error('You max the amount of sessions classes!'));
                     }
                 }
 
@@ -174,7 +174,13 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                     }
 
                     //console.log("playlists2:",playlists);
-                    user.playlists = playlists.filter(x=>x.length).sort((a,b)=>((b || [])[0].records || []).length - ((a || [])[0].records || []).length);
+                    if (playlists.length > 1){
+                        user.playlists = playlists.filter(x=>x.length).sort((a,b)=>((b || [])[0].records || []).length - ((a || [])[0].records || []).length);
+
+                    }
+                    else{
+                        user.playlists = [playlists]
+                    }
                     //console.log("user.playlists:",user.playlists);
                     if(typeof likedPL == 'object') user.playlists.unshift([likedPL]);
                     if(!user.data.researchList.length) return next(new Error('No research list exists!'));
