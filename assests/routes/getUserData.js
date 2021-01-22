@@ -67,15 +67,17 @@
             .done(function (data) {
 
                 var user = data.items[0];
-                console.log("user",user)
+                //console.log("user",user)
                 if(!user.playlists || !user.playlists.length) return alert("No playlist was defined for this user!");
 
                 var html = '';
-
+                //console.log("user.playlists: ",user.playlists);
                 for(var i = 0; i < user.playlists.length; i++){
                     const playlist = user.playlists[i][0];
+                    //console.log("user.playlists[i]",user.playlists);
                     const records = playlist.records;
-                    console.log("records",records);
+                    //console.log("records",records);
+                    //need to get data
                     for(var r = 0; r < records.length; r++){
                         console.log(playlist.records[r])
                         const record = records[r];
