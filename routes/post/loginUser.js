@@ -58,7 +58,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                         const getRandom = (items)=>{
                             return items[Math.floor(Math.random()*items.length)]
                         }
-                        if(user.data.firstTime || TESTFLAG){
+                        if(TESTFLAG || user.data.firstTime){
 
                             return Promise.all(mapPlaylistData.map(playlistData=>{
                                 return new Promise((pres, prej)=>{
@@ -186,6 +186,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                     if(!user.data.researchList.length) return next(new Error('No research list exists!'));
 
                     let update = {};
+                    if (!TESTFLAG){
                         update['$push'] = {
                             'researchList.0.sessionList': {
                                 sessionNumber: (!user.data.researchList[0].sessionList.length) ? 1 : user.data.researchList[0].sessionList.length + 1,
@@ -193,6 +194,9 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                                 songs: []
                             }
                         }
+                    }
+
+
 
                     UserData.findOneAndUpdate({_id:  user.data._id}, update).exec((err, result)=>{
                         if(err) return next(err);
