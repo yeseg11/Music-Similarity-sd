@@ -9,18 +9,24 @@ module.exports = function initDB () {
         keepAlive: 30000,
         reconnectInterval: RETRY_TIMEOUT,
         reconnectTries: 10000,
-        poolSize:10
+        poolSize:100
     }
 
     let isConnectedBefore = false;
 
     const connect = () => {
         if(isConnectedBefore) return Promise.resolve(mongoose); // prevent multiple connections
-
-        // load schemas
-
-        return mongoose.connect(`mongodb://${process.env.mongohost || 'localhost'}/${process.env.mongodb || 'mb'}`, options)
-            .catch(err => debug('app:mongoose')(`ERR ::  mongoose.connect :: ${err.message}`))
+        return new Promise((res,rej)=> {
+            return mongoose.connect(`mongodb://${process.env.mongohost || 'localhost'}/${process.env.mongodb || 'mb'}`, options)
+                // load schemas
+                .then(() => {
+                    isConnectedBefore = true;
+                    res(mongoose);
+                }).catch(err => {
+                    debug('app:mongoose')(`ERR ::  mongoose.connect :: ${err.message}`);
+                    rej(err)
+                })
+        })
     }
 
 
