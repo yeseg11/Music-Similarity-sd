@@ -37,7 +37,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                 //  user.data.researchList[0].sessionList = [];
 
                 if (user.data.researchList[0].sessionList != null){
-                    if(user.data.researchList[0].maxSessionNum === (user.data.researchList[0].sessionList.length )){
+                    if(!TESTFLAG && user.data.researchList[0].maxSessionNum === (user.data.researchList[0].sessionList.length )){
                         return next(new Error('You max the amount of sessions classes!'));
                     }
                 }
@@ -176,7 +176,6 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                     //console.log("playlists2:",playlists);
                     if (playlists.length > 1){
                         user.playlists = playlists.filter(x=>x.length).sort((a,b)=>((b || [])[0].records || []).length - ((a || [])[0].records || []).length);
-
                     }
                     else{
                         user.playlists = [playlists]
@@ -186,15 +185,14 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
                     if(!user.data.researchList.length) return next(new Error('No research list exists!'));
 
                     let update = {};
-                    if (!TESTFLAG){
-                        update['$push'] = {
-                            'researchList.0.sessionList': {
-                                sessionNumber: (!user.data.researchList[0].sessionList.length) ? 1 : user.data.researchList[0].sessionList.length + 1,
-                                sessionDate: new Date(),
-                                songs: []
-                            }
+                    update['$push'] = {
+                        'researchList.0.sessionList': {
+                            sessionNumber: (!user.data.researchList[0].sessionList.length) ? 1 : user.data.researchList[0].sessionList.length + 1,
+                            sessionDate: new Date(),
+                            songs: []
                         }
                     }
+
 
 
 
