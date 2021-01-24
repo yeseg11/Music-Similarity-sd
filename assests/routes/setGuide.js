@@ -29,7 +29,7 @@
 
                 });
                 alert("a guide as been created '\n' The Guide's Id is:" + guideId.val());
-                var pathname = "/adminMainPage"
+                var pathname = "/guideMainPage"
                 window.location.replace(pathname);
             });
         })
