@@ -1293,7 +1293,7 @@ app.post('/loginGuide', function (req, res, next) {
     if (!req.body) return res.sendStatus(400);
     //console.log(req.body);
     //console.log(req.body.guideUserName + "   " + req.body.guidePassword);
-    if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) { //problem with this line - guideName is undefined
+    if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) {
         console.log("req.body is undefined");
         return next(err);
     }
@@ -1359,6 +1359,26 @@ app.post('/insertGuide', function (req, res, next) {
 app.get('/userData/:id', function (req, res, next) {
     if (!req) return res.sendStatus(400);
     UserData.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the sessions of user NOT WORKING YET!!!
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+app.get('/userSessions:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    console.log("params is: "+ req.params.id.toString() + "\n\n\n");
+    UserData.find({tamaringaId: req.params.id.toString()})
+    //UserData.find({tamaringaId: req.params.id.toString()}) printing item of the users document
+        .exec(function (err, docs) {
         if (err) return next(err);
         console.log(docs);
         res.status(200).json({err: false, items: [].concat(docs)});

@@ -26,65 +26,43 @@
 
 
         init();
-        //$( "#patientsIds option:selected" ).text();
 
         $('#patientsIds').change(function() {
             var tamId = $(this).val();
             var UserName = $("#patientsIds option:selected" ).text();
-//------------------------------------------------------------------------------------------------
+            getSession();
+//------------------------------------grab sessions here------------------------------------------
             function getSession() {
                 return new Promise(function (resolve, reject) {
-                    var users, sessions = [];
-                    $.get('/allusers', function (data) { // change to
+                    var researchList = [];
+                    console.log("tamID is: " + tamId);
+                    $.get('/userSessions' + tamId , function (data) { // create a function for getting the users sessions!
+                        // $.get('/userSessions:' + tamId, function (data) { // create a function for getting the users sessions!
+
                         if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
-                        usersList = data.items
-                        resolve(usersList);
+                        researchList = data.items
+                        resolve(researchList);
+                        console.log(data.items);
                     });
                 });
             }
 //------------------------------------------------------------------------------------------------
 
-
             alert("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
             console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
         });
 
-        function getSession() {
-            return new Promise(function (resolve, reject) {
-                var usersList, researchersList = [];
-                $.get('/allusers', function (data) {
-                    if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
-                    usersList = data.items
-                    resolve(usersList);
-                });
-
-            });
-        }
-
-
-
-
-
-
-        // $('#send').on("click", function (e) {
-        //     if ($('#patientsIds').val() === null) {
-        //         alert("Please choose one of the users !! ");
-        //         return $('#error').text("user not selected");
-        //     }
+        // function getSession() {
+        //     return new Promise(function (resolve, reject) {
+        //         var usersList, researchersList = [];
+        //         $.get('/allusers', function (data) {
+        //             if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
+        //             usersList = data.items
+        //             resolve(usersList);
+        //         });
         //
-        //
-        //
-        //     var patientId = $('#patientsIds');
-        //     console.log(patientId.val())
-        //     localStorage["UserId"] = patientId.val();
-        //     var pathname = "/editUserPage"
-        //     window.location.replace(pathname);
-        // })
-        //
-        // $('#main').on("click", function (e) {
-        //     localStorage["UserId"] = null;
-        // })
-
+        //     });
+        // }
     });
 })(jQuery);
 
