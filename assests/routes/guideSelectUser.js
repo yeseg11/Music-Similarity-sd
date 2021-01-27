@@ -40,7 +40,7 @@
             getSession().then(function (result) {
                 var userData = result
                 var selectElem = $('#sessionsList');
-
+                if(userData[0].researchList){
                 for (var i = 0; i <= userData.length; i++) {
 
                     selectElem.append("<option disabled selected value='" + userData[0].researchList[i].researchId + "'>" + "Research ID: " + userData[0].researchList[i].researchId + "</option>");
@@ -57,8 +57,15 @@
                             + "'>" + "Session Number: "
                             + userData[0].researchList[i].sessionList[j].sessionNumber
                             + " &nbsp;&nbsp;&nbsp;" + date +"</option>");
+                        }
+
                     }
+
                 }
+                else {
+                    selectElem.append("<option disabled selected>" + "This user is not registered for any research" + "</option>");
+                }
+
             }).catch(function (err) {
                 console.log(err);
                 return err;
