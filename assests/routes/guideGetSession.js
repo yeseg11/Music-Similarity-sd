@@ -1,16 +1,16 @@
 (function ($) {
     $(document).ready(function () {
-        var titleBlock = $('#titleBlock');
-        var songBlocks = $('#songBlocks');
-        var body = $('#songBlock');
-        var footerBlock = $('#footerBlock');
+        let titleBlock = $('#titleBlock');
+        let songBlocks = $('#songBlocks');
+        let body = $('#songBlock');
+        let footerBlock = $('#footerBlock');
 
-        var header = '<span class="contact100-form-title">';
+        let header = '<span class="contact100-form-title">';
         header += 'Session Playlist';
         header += '</span>';
         header += '<span style="background:lightgray; font-size: 150%; text-align: center;"\n' + 'class="wrap-contact100-form-btn"><b>Name: </b>Israel Israeli&emsp;&emsp;&emsp;<b>Session: </b> 12/01/2021</span>\n'
 
-        var songBlock = '<div class="container-section-space">';
+        let songBlock = '<div class="container-section-space">';
         songBlock += '<div class="container-section">';
         songBlock += '<div>';
         songBlock += '<span style=" text-align: center" class="class=label-input100"><b>Artist Name - Song name</b></br></span>';
@@ -39,7 +39,7 @@
         songBlock += '</div>';
 
         // FOR GENERAL SESSION RATING AT THE END TOF THE SESSION
-        var footer = '<div class="container-section-space">';
+        let footer = '<div class="container-section-space">';
         footer += '<div class="container-section">';
         footer += '<div align="center" style="background:lightgray; font-size: 150%; text-align: center;" class="wrap-contact100-form-btn">';
         footer += '<span style=" text-align: center" class="class=label-input100"><b>General Session Rating</b></br></span>';
@@ -74,7 +74,7 @@
         footer += '</div>';
         footer += '</div>';
 
-        
+
         //injection function here...
 
     });

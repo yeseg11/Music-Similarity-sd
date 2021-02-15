@@ -4,8 +4,8 @@
     $(document).ready(function () {
         function init() {
             getUsers().then(function (result) {
-                var selectElem = $('#patientsIds');
-                for (var i = 0; i < result.length; i++) {
+                let selectElem = $('#patientsIds');
+                for (let i = 0; i < result.length; i++) {
                     selectElem.append("<option value='" + result[i].tamaringaId + "'>" + result[i].userName + "</option>");
                 }
             }).catch(function (err) {
@@ -26,31 +26,32 @@
             });
         }
 
-
         init();
 
         $('#patientsIds').change(function() {
             //add clear select here
-            $('#sessionsList').empty(); //test it
-            var tamId = $(this).val();
-            var UserName = $("#patientsIds option:selected" ).text();
+            //$('#sessionsList').empty(); //test it
+            let tamId = $(this).val();
+            let UserName = $("#patientsIds option:selected").text();
 
             //------------getting the current sessions and putting them inside the select--------------
 
             getSession().then(function (result) {
-                var userData = result
-                var selectElem = $('#sessionsList');
+                let userData = result
+                let selectElem = $('#sessionsList').empty(); //also empty the select session list
                 if(userData[0].researchList){
-                for (var i = 0; i <= userData.length; i++) {
+
+                for (let i = 0; i <= userData.length; i++) {
 
                     selectElem.append("<option disabled selected value='" + userData[0].researchList[i].researchId + "'>" + "Research ID: " + userData[0].researchList[i].researchId + "</option>");
 
-                    for(var j = 0; j < userData[0].researchList[i].sessionList.length; j++) {
+                    for(let j = 0; j < userData[0].researchList[i].sessionList.length; j++) {
+                        console.log("j is: " + j);
                         //console.log(userData[0].researchList[i].sessionList[j].sessionDate);
-                        var d = new Date(userData[0].researchList[i].sessionList[j].sessionDate);
-                        var usdDate = d.toUTCString();
-                        var date = usdDate.slice(0, -4); //slice GMT from time
-                        console.log(date);
+                        let d = new Date(userData[0].researchList[i].sessionList[j].sessionDate);
+                        let usdDate = d.toUTCString();
+                        let date = usdDate.slice(0, -4); //slice GMT from time
+                        //console.log(date);
 
                         selectElem.append("<option value='"
                             + userData[0].researchList[i].sessionList[j].sessionNumber
@@ -58,9 +59,7 @@
                             + userData[0].researchList[i].sessionList[j].sessionNumber
                             + " &nbsp;&nbsp;&nbsp;" + date +"</option>");
                         }
-
                     }
-
                 }
                 else {
                     selectElem.append("<option disabled selected>" + "This user is not registered for any research" + "</option>");
@@ -71,20 +70,32 @@
                 return err;
             });
 
+            $('#sessionsList').change(function() {
+                //alert($(this).val());
+                let selectedSession = $(this).val();
+                console.log("Selected Session is: " + selectedSession);
+
+            });
+
+
             // grabbing userdata by user id
             function getSession() {
                 return new Promise(function (resolve, reject) {
-                    var userData = [];
+                    let userData = [];
                     //console.log("tamID is: " + tamId);
                     $.get('/userSessions' + tamId , function (data) {
                         if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
                         userData = data.items
                         resolve(userData);
-                        //console.log(userData);
+                        console.log(userData);
                     });
                 });
             }
 
+
+            $('#enterSession').on("click", function (e) {
+                alert("get session has been pressed!");
+            });
             //alert("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
             //console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
         });
