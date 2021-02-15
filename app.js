@@ -10,6 +10,7 @@ const PLAYLISTSIZE = 50;
 
 let Records = require('./models/records.js');
 // let Users = require('./models/users.js');
+let Guides = require('./models/guides.js');
 let Researchers = require('./models/researchers.js');
 let PlayList = require('./models/playlist.js');
 let PublicUsers = require('./models/publicUsers.js');
@@ -90,9 +91,15 @@ app.get('/newResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests
 app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearchList.html'), {}, () => res.end()));
 app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
 
+/**
+ * Guides pages
+ */
+app.get('/createGuide', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createGuide.html'), {}, () => res.end()));
+app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideLoginPage.html'), {}, () => res.end()));
+app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
 
-
+//guideMainPage
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base
  *
@@ -1267,6 +1274,120 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
         res.status(200).json({err: false, items: [].concat(obj)});
     });
 });
+
+/** ------------------------------------------------------------------
+
+/** -------------------------------------GUIDE--------------------------------------
+ *  Post and add a new guide to Data base
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} name: Given user name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {guideData}
+ ----------------------------------------------------------------------------------*/
+
+
+
+app.post('/loginGuide', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400);
+    //console.log(req.body);
+    //console.log(req.body.guideUserName + "   " + req.body.guidePassword);
+    if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) {
+        console.log("req.body is undefined");
+        return next(err);
+    }
+    //console.log("test");
+    Guides.find({guideName: req.body.guideUserName}).exec(function (err, docs) {
+
+        if (err) return next(err);
+
+        if (docs[0] === undefined || docs[0].guidePassword === undefined) {
+
+            return next(err);
+        }
+
+        var CryptoJS = require("crypto-js");
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].guidePassword, 'Password');
+        var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
+        if (decrypted2 === req.body.guidePassword) {
+            res.status(200).json({err: false, items: [].concat(docs)});
+        } else {
+            return next(err)
+        }
+    });
+});
+
+
+app.post('/insertGuide', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400, "Error to adding a guide");
+
+    if (req.body.guideId && req.body.guideName && req.body.guidePassword) {
+        var encryptedPass = CryptoJS.AES.encrypt(req.body.guidePassword, 'Password');
+
+        const guideData = {
+            guideName: req.body.guideName,
+            guideId: req.body.guideId,
+            guidePassword: encryptedPass.toString()
+        };
+
+        console.log('GuideData: ', guideData);
+
+        const query = {guideId: guideData.guideId};
+        const options = {"upsert": true};
+        Guides.updateOne(query, guideData, options) //update mongodb
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+    }
+});
+
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the UserData by tamaringaId
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+//TEST IT!
+
+app.get('/userData/:id', function (req, res, next) {
+    if (!req) return res.sendStatus(400);
+    UserData.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the sessions of user NOT WORKING YET!!!
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+app.get('/userSessions:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    console.log("params is: "+ req.params.id.toString() + "\n\n\n");
+    UserData.find({tamaringaId: req.params.id.toString()})
+    //UserData.find({tamaringaId: req.params.id.toString()}) printing item of the users document
+        .exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** -------------------------------------END-GUIDE--------------------------------------
+
 
 
 /** ----------------------------------------------------------------------------------

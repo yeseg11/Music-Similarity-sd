@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+    <title>Guide Main Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--===============================================================================================-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="routes/index.js"></script>
+    <script src="./routes/guideSelectUser.js"></script>
+</head>
+<body>
+<div class="container-contact100">
+    <div class="wrap-contact1100">
+        <form class="contact100-form validate-form">
+				<span class="contact100-form-title">
+					Guide main Screen
+				</span>
+
+            <div class="container-section-space">
+                <div class="container-section">
+                    <div class="container-contact100-form-btn">
+                        <div class="wrap-contact100-form-btn">
+                            <div class="user contact100-form-bgbtn"></div>
+                            <div id='patientHeader' class="contact100-form-btn">
+                                <i class="fa fa-blind fa-2x" aria-hidden="true" style="padding-right: 10px"></i>
+                                Patient
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="wrap-input100 validate-input" data-validate="Name is required">
+                        <span class="label-input100">Choose the patients</span>
+                        <select input id ='patientsIds' class="input100" type="text" name='patientsIds' placeholder="Select the patients Name" size=3>
+                            <!-- <option value="" disabled selected>Select a patient</option> -->
+                        </select>
+                        <!--                <input id ='patientsIds' class="input100" type="text" name="patientsIds" placeholder="Enter patients Name">-->
+                        <span class="focus-input100"></span>
+                    </div>
+
+
+                    <div class="wrap-contact100-form-btn">
+                        <div class="research contact100-form-bgbtn"></div>
+                        <div id='selectSession' class="contact100-form-btn">
+                            <span>
+                                Select a Session
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <br>
+                        <select input id='sessionsList' class="input100" type="text" name='sessionsList' size=4>
+
+                            <!-- session list for the current user will be displayed here -->
+                            <!-- note: consider using slide down for the session list  -->
+<!--                            <option value="session">session 4, 2/11/2020</option>-->
+<!--                            <option value="session">session 3, 9/11/2020</option>-->
+<!--                            <option value="session">session 2, 16/11/2020</option>-->
+<!--                            <option value="session">session 1, 23/11/2020</option>-->
+                        </select>
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div>
+                        <div class="container-contact100-form-btn">
+                            <div class="wrap-contact100-form-btn">
+                                <div class="contact100-form-bgbtn"></div>
+                                <button id='enterSession' type='button' class="contact100-form-btn">
+                        <span>
+                        <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
+                            Enter Session
+                        </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container-contact100-back-btn">
+                <div class="wrap-contact100-back-btn">
+                    <div class="contact100-back-bgbtn"></div>
+                    <button id='main' type='button' class="contact100-back-btn" onclick="location.href='/'">
+                        <i class="fa fa-arrow-left m-l-7" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<script>
+    $(".selection-2").select2({
+        minimumResultsForSearch: 20,
+        dropdownParent: $('#dropDownSelect1')
+    });
+</script>
+<!--===============================================================================================-->
+<script src="vendor/daterangepicker/moment.min.js"></script>
+<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23581568-13');
+</script>
+</body>
+</html>
