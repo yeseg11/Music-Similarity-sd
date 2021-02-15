@@ -2,13 +2,15 @@ var debug = require('debug');
 const mongoose = require('mongoose');
 const RETRY_TIMEOUT = 3000;
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
 module.exports = function initDB () {
     mongoose.Promise = global.Promise;
     const options = {
-        autoReconnect: true,
         keepAlive: 30000,
-        reconnectInterval: RETRY_TIMEOUT,
-        reconnectTries: 10000,
         poolSize:100
     }
 
