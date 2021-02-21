@@ -1,25 +1,27 @@
 (function ($) {
     $(document).ready(function () {
-        let titleBlock = $('#titleBlock');
-        let songBlocks = $('#songBlocks');
-        let body = $('#songBlock');
-        let footerBlock = $('#footerBlock');
+        let titleBlock = '';
+        let songBlocks = '';
+        let body = '';
+        let footerBlock = '';
+        let curSession = '';
 
-        let header = '<span class="contact100-form-title">';
-        header += 'Session Playlist';
-        header += '</span>';
-        header += '<span style="background:lightgray; font-size: 150%; text-align: center;"\n' + 'class="wrap-contact100-form-btn"><b>Name: </b>Israel Israeli&emsp;&emsp;&emsp;<b>Session: </b> 12/01/2021</span>\n'
+        let title = '<span class="contact100-form-title" >';
+        title += 'Session Playlist';
+        title += '</span>';
+        title += '<span style="background:lightgray; font-size: 150%; text-align: center;"\n' + 'class="wrap-contact100-form-btn"><b>Name: ';
+        let endTitle = '</b></br><b>Session: </b>';
 
         let songBlock = '<div class="container-section-space">';
         songBlock += '<div class="container-section">';
         songBlock += '<div>';
         songBlock += '<span style=" text-align: center" class="class=label-input100"><b>Artist Name - Song name</b></br></span>';
-        songBlock += '<span class="class=label-input100">Rate song</span>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="Joyful">😆</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happy">😀</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad">🙁</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<span class="class=label-input100">Rate song:</br></span>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad">🙁</button>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Indifferent" id ="Indifferent">😐</button>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happy">😀</button>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="Joyful">😆</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
@@ -43,11 +45,11 @@
         footer += '<div class="container-section">';
         footer += '<div align="center" style="background:lightgray; font-size: 150%; text-align: center;" class="wrap-contact100-form-btn">';
         footer += '<span style=" text-align: center" class="class=label-input100"><b>General Session Rating</b></br></span>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="Joyful3">😆</button>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happy3">😀</button>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="like" id ="Angry3">😐</button>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad3">🙁</button>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad3">😟</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySadGen">😟</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="SadGen">🙁</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="like" id ="IndifferentGen">😐</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happyGen">😀</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😆</button>';
         footer += '</div>';
         footer += '</br>';
         footer += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
@@ -74,7 +76,25 @@
         footer += '</div>';
         footer += '</div>';
 
+        $('#enterSession').on("click", function (e) {
+            console.log('hello from guideGetSession.js! ');
+            console.log('selected data is: ' + selectedData[0].firstName);
+            $('#guideTitle').remove(); //remove user and session selection before injecting
+            $('#mainDiv').remove();
 
+            //inject header
+            $('#selectedSession').html(title
+                + '\xa0' + selectedData[0].firstName
+                + endTitle + sessionDate + '</span>'
+                + footer
+
+        );
+
+
+        });
+
+        //curSession += titleBlock += songBlocks += body += footerBlock;
+        //console.log("current session: " + curSession);
         //injection function here...
 
     });

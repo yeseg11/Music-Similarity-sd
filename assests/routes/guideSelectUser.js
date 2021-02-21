@@ -1,9 +1,18 @@
+let selectedData;
+let sessionDate;
 
-//var obg = 'dfd';
 (function ($) {
     $(document).ready(function () {
         function init() {
-            getUsers().then(function (result) {
+            return new Promise(function (resolve, reject) {
+                let usersList, researchersList = [];
+                $.get('/allusers', function (data) {
+                    if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
+                    usersList = data.items
+                    resolve(usersList);
+                });
+
+            }).then(function (result) {
                 let selectElem = $('#patientsIds');
                 for (let i = 0; i < result.length; i++) {
                     selectElem.append("<option value='" + result[i].tamaringaId + "'>" + result[i].userName + "</option>");
@@ -14,17 +23,6 @@
             });
         }
 
-        function getUsers() {
-            return new Promise(function (resolve, reject) {
-                var usersList, researchersList = [];
-                $.get('/allusers', function (data) {
-                    if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
-                    usersList = data.items
-                    resolve(usersList);
-                });
-
-            });
-        }
 
         init();
 
@@ -51,6 +49,7 @@
                         let d = new Date(userData[0].researchList[i].sessionList[j].sessionDate);
                         let usdDate = d.toUTCString();
                         let date = usdDate.slice(0, -4); //slice GMT from time
+                        sessionDate = date;
                         //console.log(date);
 
                         selectElem.append("<option value='"
@@ -85,19 +84,26 @@
                     //console.log("tamID is: " + tamId);
                     $.get('/userSessions' + tamId , function (data) {
                         if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
-                        userData = data.items
-                        resolve(userData);
+                        userData = data.items;
+                        selectedData = userData;
+                        //console.log(data.items.firstName);
                         console.log(userData);
+                        resolve(userData);
+
                     });
                 });
             }
 
 
-            $('#enterSession').on("click", function (e) {
-                alert("get session has been pressed!");
-            });
-            //alert("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
-            //console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
+            // $('#enterSession').on("click", function (e) {
+            //     //alert("get session has been pressed!");
+            //     $('#mainDiv').hide(); //hide user selection before injecting
+            //     console.log("check");
+            //     document.getElementById('selectedSession').innerHTML = title.toString();
+            // });
+
+
+            console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
         });
 
     });
