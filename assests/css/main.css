@@ -170,6 +170,7 @@ iframe {
   background-size: 100% 100%;
 }
 
+
 .wrap-contact100 {
   width: 500px;
   background: #fff;
@@ -192,6 +193,14 @@ iframe {
     border-radius: 10px;
     overflow: hidden;
     padding: 42px 55px 45px 55px;
+}
+
+.wrap-contact1100-mobile {
+    width: 1100px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 42px 25px 45px 25px;
 }
 
 .container-section-space {
@@ -233,6 +242,16 @@ iframe {
   line-height: 1.2;
   text-align: center;
   padding-bottom: 44px;
+}
+
+.contact100-form-title-mobile {
+    display: block;
+    font-family: Poppins-Bold;
+    font-size: 30px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+    padding-bottom: 30px;
 }
 
 .contact100-form-subTitle {
