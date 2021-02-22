@@ -5,8 +5,7 @@
         let body = '';
         let footerBlock = '';
         let curSession = '';
-
-        let title = '<span class="contact100-form-title" >';
+        let title = '<span class="contact100-form-title-mobile" >';
         title += 'Session Playlist';
         title += '</span>';
         title += '<span style="background:lightgray; font-size: 150%; text-align: center;"\n' + 'class="wrap-contact100-form-btn"><b>Name: ';
@@ -15,7 +14,8 @@
         let songBlock = '<div class="container-section-space">';
         songBlock += '<div class="container-section">';
         songBlock += '<div>';
-        songBlock += '<span style=" text-align: center" class="class=label-input100"><b>Artist Name - Song name</b></br></span>';
+        songBlock += '<span style=" text-align: center" class="class=label-input100"><b>ArtistName</b>';
+        songBlock += '<br><b>SongName</b></br></span></br>';
         songBlock += '<span class="class=label-input100">Rate song:</br></span>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad">😟</button>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad">🙁</button>';
@@ -69,26 +69,31 @@
         footer += '</div>';
         footer += '<div class="container-contact100-back-btn">';
         footer += '<div class="wrap-contact100-back-btn">';
-        footer += '<div class="contact100-back-bgbtn"></div>';
-        footer += '<button id=\'main\' type=\'button\' class="contact100-back-btn" onclick="location.href=\'/guideMainPage\'">';
-        footer += '<i class="fa fa-arrow-left m-l-7" aria-hidden="true"></i>';
-        footer += '</button>';
-        footer += '</div>';
+
         footer += '</div>';
 
         $('#enterSession').on("click", function (e) {
-            console.log('hello from guideGetSession.js! ');
-            console.log('selected data is: ' + selectedData[0].firstName);
+            let currentResearch = sessionAndResearch.split('R')[1];
+            let currentSession = sessionAndResearch.split('R')[0]
+            console.log("current session is:" + currentSession + ", current research is: " + currentResearch);
+
+            let sessionHtml = title
+                + '\xa0' + selectedData[0].firstName
+                + endTitle + sessionDate + '</span>'
+                + songBlock;
+
+            //loop over songs here
+
+            sessionHtml += footer;
             $('#guideTitle').remove(); //remove user and session selection before injecting
             $('#mainDiv').remove();
 
-            //inject header
-            $('#selectedSession').html(title
-                + '\xa0' + selectedData[0].firstName
-                + endTitle + sessionDate + '</span>'
-                + footer
 
-        );
+            $('#selectedSession').html(sessionHtml).ready(function(){
+                $("html, body").animate({ scrollTop: 0 });
+                //console.log("Session and research are: " + sessionAndResearch);
+
+            });
 
 
         });
