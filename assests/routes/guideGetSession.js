@@ -13,10 +13,11 @@
 
         let songBlock = '<div class="container-section-space">';
         songBlock += '<div class="container-section">';
-        songBlock += '<div>';
-        songBlock += '<span style=" text-align: center" class="class=label-input100"><b>ArtistName</b>';
-        songBlock += '<br><b>SongName</b></br></span></br>';
-        songBlock += '<span class="class=label-input100">Rate song:</br></span>';
+        songBlock += '<div style=" text-align: center;">';
+        songBlock += '<span style="class="class=label-input100"><b>ArtistName</b>';
+        songBlock += '<br><b>SongName</b></br></span>';
+        songBlock += '<b>SongYear</b></br></span></br>';
+        songBlock += '<span class="class=label-input100" style="font-size: 150%"><b>Rate song:</b></br></span>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad">😟</button>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad">🙁</button>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Indifferent" id ="Indifferent">😐</button>';
@@ -123,6 +124,7 @@
 
                 let recordArtist = record.items[0].artist[0].name;
                 let recordTitle = record.items[0].title;
+                let recordYear = record.items[0].year;
 
                 console.log("artists = " + recordArtist);
                 console.log("title = " + recordTitle);
@@ -130,7 +132,8 @@
 
                 let newBlock = songBlock
                     .replace("ArtistName", recordArtist)
-                    .replace("SongName", recordTitle);
+                    .replace("SongName", recordTitle)
+                    .replace("SongYear", recordYear);
 
 
                 console.log("session number is:" + currentSession + ", Research number is: " + currentResearch);
