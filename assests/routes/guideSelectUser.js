@@ -42,7 +42,8 @@ let researchID;
                 for (let i = 0; i <= userData.length; i++) {
 
                     selectElem.append("<option disabled selected value='" + userData[0].researchList[i].researchId + "'>" + "Research ID: " + userData[0].researchList[i].researchId + "</option>");
-                    this.researchID = userData[0].researchList[i].researchId;
+                    //this.researchID = userData[0].researchList[i].researchId;
+                    this.researchID = i;
 
 
                     for(let j = 0; j < userData[0].researchList[i].sessionList.length; j++) {
