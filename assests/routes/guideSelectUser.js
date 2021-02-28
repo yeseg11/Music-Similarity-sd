@@ -40,8 +40,9 @@ let researchID;
                 if(userData[0].researchList){
 
                 for (let i = 0; i <= userData.length; i++) {
-
-                    selectElem.append("<option disabled selected value='" + userData[0].researchList[i].researchId + "'>" + "Research ID: " + userData[0].researchList[i].researchId + "</option>");
+                    if(userData[0].researchList[i].sessionList.length !==0){
+                        selectElem.append("<option disabled selected value='" + userData[0].researchList[i].researchId + "'>" + "Research ID: " + userData[0].researchList[i].researchId + "</option>");
+                    }
                     //this.researchID = userData[0].researchList[i].researchId;
                     this.researchID = i;
 
@@ -71,7 +72,7 @@ let researchID;
                 return err;
             });
 
-            $('#sessionsList').change(function() {
+            $('#sessionsList').animate({ scrollTop: 0 }).change(function() { //check if animate works
                 sessionAndResearch = $(this).val();
                 console.log("Session and research are: " + sessionAndResearch);
 
