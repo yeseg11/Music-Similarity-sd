@@ -21,8 +21,8 @@
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad">😟</button>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad">🙁</button>';
         songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happy">😀</button>';
-        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="Joyful">😆</button>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happy">🙂</button>';
+        songBlock += '<button style="font-size: 115%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
@@ -41,6 +41,22 @@
         songBlock += '</div>';
         songBlock += '</div>';
 
+        let emptyBlock = '<div class="container-section-space">';
+        emptyBlock += '<div class="container-section">';
+        emptyBlock += '<div style=" text-align: center;">';
+        emptyBlock += '<span class="class=label-input100" style="font-size: 150%"><b></br></br>No Songs found for this user session!</b></br></br></br></span>';
+        emptyBlock += '</div>';
+        emptyBlock += '<div class="container-contact100-form-btn">';
+        emptyBlock += '<div class="wrap-contact100-form-btn">';
+        emptyBlock += '<div class="contact100-form-bgbtn"></div>';;
+        emptyBlock += '</div>';
+        emptyBlock += '</div>';
+        emptyBlock += '</div>';
+        emptyBlock += '</div>';
+
+
+
+
         // FOR GENERAL SESSION RATING AT THE END TOF THE SESSION
         let footer = '<div class="container-section-space">';
         footer += '<div class="container-section">';
@@ -49,8 +65,8 @@
         footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySadGen">😟</button>';
         footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="SadGen">🙁</button>';
         footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="like" id ="IndifferentGen">😐</button>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happyGen">😀</button>';
-        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😆</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happyGen">🙂</button>';
+        footer += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😀</button>';
         footer += '</div>';
         footer += '</br>';
         footer += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
@@ -70,102 +86,78 @@
         footer += '</div>';
         footer += '<div class="container-contact100-back-btn">';
         footer += '<div class="wrap-contact100-back-btn">';
-
         footer += '</div>';
 
-
-        // function getRecord(testmbId) {
-        //     return new Promise(function (resolve, reject) {
-        //         //console.log("tamID is: " + tamId);
-        //         $.get('/mb/track/record/' + testmbId , function (data) {
-        //             console.log("data is: " + JSON.stringify(data.items));
-        //             if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST")); //do i need it if i
-        //             //console.log("data is" + data[0] + "data.items is:" + data.items);
-        //
-        //             resolve(data.items);
-        //
-        //         });
-        //     });
-        // }
-
-
-        //needs to be reviewed!!!
-        async function getRecord2(testmbId) {
-                try{
-                    return await $.get('/mb/track/record/' + testmbId , function (data) {
-                        console.log("data func2 is: " + JSON.stringify(data.items));
-                        //console.log("data is" + data[0] + "data.items is:" + data.items);
-                    });
-                }
-                catch(error){
-                    return null;
-                }
-        }
-
-
-
         $('#enterSession').on("click", function (e) {
-            let currentResearch = sessionAndResearch.split('R')[1];
-            let currentSession = sessionAndResearch.split('R')[0];
-            let songs = selectedData[0]
-                .researchList[currentResearch]
-                .sessionList[currentSession].songs;
-
-            // getting mbId from a session
-            //let selectedSession = selectedData[0]
-            //                 .researchList[currentResearch]
-            //                 .sessionList[currentSession].songs[0].mbId;
-
-            let testmbId = "6f6e5761-9b5a-47fd-9479-8c97ff732410";
+            $('#guideTitle').remove(); //remove user and session selection before injecting
+            $('#mainDiv').remove();
+            let sessionHtml = title
+                + '\xa0' + selectedData[0].firstName
+                + endTitle + sessionDate + '</span>';
 
             (async function(){
-                let record = await getRecord2(testmbId);
-                console.log(record);
+                let currentResearch = sessionAndResearch.split('R')[1];
+                let currentSession = sessionAndResearch.split('R')[0];
+                let songs = selectedData[0]
+                    .researchList[currentResearch]
+                    .sessionList[currentSession-1].songs; //
 
-                let recordArtist = record.items[0].artist[0].name;
-                let recordTitle = record.items[0].title;
-                let recordYear = record.items[0].year;
-
-                console.log("artists = " + recordArtist);
-                console.log("title = " + recordTitle);
-
-
-                let newBlock = songBlock
-                    .replace("ArtistName", recordArtist)
-                    .replace("SongName", recordTitle)
-                    .replace("SongYear", recordYear);
+                if(songs.length === 0) {
+                    sessionHtml +=  emptyBlock;
+                }
+                for(let r = 0; r < songs.length; r++){
 
 
-                console.log("session number is:" + currentSession + ", Research number is: " + currentResearch);
+                    let currentMbId = songs[r].mbId;
+                    let record = await getRecord2(currentMbId);
+                    let recordArtist = record.items[0].artist[0].name;
+                    let recordTitle = record.items[0].title;
+                    let recordYear = record.items[0].year;
 
-                let sessionHtml = title
-                    + '\xa0' + selectedData[0].firstName
-                    + endTitle + sessionDate + '</span>'
-                    + newBlock;
+                    let newBlock = songBlock
+                        .replace("ArtistName", recordArtist)
+                        .replace("SongName", recordTitle)
+                        .replace("SongYear", recordYear);
 
-                //loop over songs here
-                // for(let r = 0; r < songs.length; r++){
-                //     const mbid = songs[r].mbId;
-                //     const artist = '';
-                //     const songTitle = '';
-                // }
+                    sessionHtml +=  newBlock;
 
 
-                sessionHtml += footer;
-                $('#guideTitle').remove(); //remove user and session selection before injecting
-                $('#mainDiv').remove();
+                    // console.log("loop: currentMbId: " + currentMbId1);
+                    // console.log("record1 is:" + record1.items[0]);
+                    // console.log(record);
+                    // console.log("artists = " + recordArtist);
+                    // console.log("title = " + recordTitle);
+                    // console.log("artists = " + recordArtist1);
+                    // console.log("title = " + recordTitle1);
 
+                }
+
+                if(songs.length !== 0) {
+                    sessionHtml += footer;
+                }
 
                 $('#selectedSession').html(sessionHtml).ready(function(){
                     $("html, body").animate({ scrollTop: 0 });
                     //console.log("Session and research are: " + sessionAndResearch);
 
                 });
-
             })();
-
-
         });
+
+        async function getRecord2(currentMbId) {
+            try{
+                let record = await $.get('/mb/track/record/' + currentMbId , function (data, status) {
+                    //if (!data || !data.items || !data.items.length) throw TypeError("ERROR IN FIND LIST");
+                    console.log("data func2 is: " + JSON.stringify(data.items));
+                    console.log("status is: " + status);
+                });
+
+                return record;
+            }
+            catch(error){
+                return null;
+            }
+        }
 
     });
 })(jQuery);
