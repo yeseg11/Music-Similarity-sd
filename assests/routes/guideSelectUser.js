@@ -47,18 +47,18 @@ let researchID;
                     this.researchID = i;
 
 
-                    for(let j = 0; j < userData[0].researchList[i].sessionList.length; j++) {
+                    for(let sessionIndex = 0; sessionIndex < userData[0].researchList[i].sessionList.length; sessionIndex++) {
                         //console.log(userData[0].researchList[i].sessionList[j]);
-                        let d = new Date(userData[0].researchList[i].sessionList[j].sessionDate);
+                        let d = new Date(userData[0].researchList[i].sessionList[sessionIndex].sessionDate);
                         let usdDate = d.toUTCString();
                         let date = usdDate.slice(0, -4); //slice GMT from time
                         sessionDate = date;
                         //console.log(date);
 
                         selectElem.append("<option value='"
-                            + userData[0].researchList[i].sessionList[j].sessionNumber + 'R' + this.researchID
+                            + sessionIndex + 'R' + this.researchID
                             + "'>" + "Session Number: "
-                            + userData[0].researchList[i].sessionList[j].sessionNumber
+                            + userData[0].researchList[i].sessionList[sessionIndex].sessionNumber
                             + " &nbsp;&nbsp;&nbsp;" + date +"</option>");
                         }
                     }

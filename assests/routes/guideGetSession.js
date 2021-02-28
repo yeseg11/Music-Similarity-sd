@@ -39,7 +39,7 @@
         songBlock += '</div>';
         songBlock += '</div>';
         songBlock += '</div>';
-        songBlock += '</div>';
+        songBlock += '</div></br>';
 
         let emptyBlock = '<div class="container-section-space">';
         emptyBlock += '<div class="container-section">';
@@ -83,7 +83,7 @@
         footer += '</div>';
         footer += '</div>';
         footer += '</div>';
-        footer += '</div>';
+        //footer += '</div>';
         footer += '<div class="container-contact100-back-btn">';
         footer += '<div class="wrap-contact100-back-btn">';
         footer += '</div>';
@@ -100,14 +100,12 @@
                 let currentSession = sessionAndResearch.split('R')[0];
                 let songs = selectedData[0]
                     .researchList[currentResearch]
-                    .sessionList[currentSession-1].songs; //
+                    .sessionList[currentSession].songs; //
 
                 if(songs.length === 0) {
                     sessionHtml +=  emptyBlock;
                 }
                 for(let r = 0; r < songs.length; r++){
-
-
                     let currentMbId = songs[r].mbId;
                     let record = await getRecord2(currentMbId);
                     let recordArtist = record.items[0].artist[0].name;
