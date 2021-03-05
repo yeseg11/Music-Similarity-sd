@@ -1,6 +1,6 @@
 (function ($) {
     $(document).ready(function () {
-        let titleBlock = '';
+        let titleBlock = '<div class="container-contact100">';
         let songBlocks = '';
         let body = '';
         let footerBlock = '';
@@ -30,7 +30,7 @@
         songBlock += '<div class="container-contact100-form-btn">';
         songBlock += '<div class="wrap-contact100-form-btn">';
         songBlock += '<div class="contact100-form-bgbtn"></div>';
-        songBlock += '<button type="button" id=\'send\' class="contact100-form-btn">';
+        songBlock += '<button type="button" id=\'send\' onclick="CommentFunc" class="contact100-form-btn">';
         songBlock += '<span>';
         songBlock += 'Save';
         songBlock += '<i class="fa m-l-7" aria-hidden="true"></i>';
@@ -70,12 +70,12 @@
         footer += '</div>';
         footer += '</br>';
         footer += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
-        footer += '<input id=\'songComment3\' class="input100" type="text" name=\'sessionComment\' placeholder="Session comment">';
+        footer += '<input id=\'sessionComment\' class="input100" type="text" name=\'sessionComment\' placeholder="Session comment">';
         footer += '</div>';
         footer += '<div class="container-contact100-form-btn">';
         footer += '<div class="wrap-contact100-form-btn">';
         footer += '<div class="contact100-form-bgbtn"></div>';
-        footer += '<button type="button" id=\'send3\' class="contact100-form-btn">';
+        footer += '<button type="button" id=\'commentSessionButton\' onclick="commentSession()" class="contact100-form-btn">';
         footer += '<span>';
         footer += 'Save';
         footer += '</span>';
@@ -87,6 +87,8 @@
         footer += '<div class="container-contact100-back-btn">';
         footer += '<div class="wrap-contact100-back-btn">';
         footer += '</div>';
+
+
 
         $('#enterSession').on("click", function (e) {
             $('#guideTitle').remove(); //remove user and session selection before injecting
@@ -107,15 +109,20 @@
                 }
                 for(let r = 0; r < songs.length; r++){
                     let currentMbId = songs[r].mbId;
-                    let record = await getRecord2(currentMbId);
+                    let record = await getRecord(currentMbId);
                     let recordArtist = record.items[0].artist[0].name;
                     let recordTitle = record.items[0].title;
                     let recordYear = record.items[0].year;
+                    let commentWithIndex = "songComment" + r;
+
 
                     let newBlock = songBlock
                         .replace("ArtistName", recordArtist)
                         .replace("SongName", recordTitle)
-                        .replace("SongYear", recordYear);
+                        .replace("SongYear", recordYear)
+                        .replace("songComment", commentWithIndex)
+                        .replace("CommentFunc", "commentSong(" + r + ")");
+
 
                     sessionHtml +=  newBlock;
 
@@ -142,21 +149,47 @@
             })();
         });
 
-        async function getRecord2(currentMbId) {
+        async function getRecord(currentMbId) {
             try{
-                let record = await $.get('/mb/track/record/' + currentMbId , function (data, status) {
+                return await $.get('/mb/track/record/' + currentMbId, function (data, status) {
                     //if (!data || !data.items || !data.items.length) throw TypeError("ERROR IN FIND LIST");
                     console.log("data func2 is: " + JSON.stringify(data.items));
                     console.log("status is: " + status);
                 });
-
-                return record;
             }
             catch(error){
                 return null;
             }
         }
 
-    });
-})(jQuery);
+        function rating(record){
+            //post function here...
 
+            console.log("record button has been pressed");
+        }
+
+
+
+
+    });
+})
+
+(jQuery);
+
+function commentSong(index) {
+
+    let commentID = "songComment" + index;
+    let inputValue = "";
+    inputValue += document.getElementById(commentID).value;
+
+    //call post here...
+    alert("Current song comment is:" + inputValue);
+}
+
+function commentSession() {
+    let SessionInputValue = "";
+    SessionInputValue += document.getElementById("sessionComment").value;
+
+    //call post here...
+    alert("Current session comment is:" + SessionInputValue);
+}
