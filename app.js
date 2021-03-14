@@ -99,7 +99,7 @@ app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'asse
 app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
 
-//guideMainPage
+
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base
  *
@@ -863,7 +863,7 @@ app.get('/playlistRecords/:playlistName', function (req, res, next) {
 
 
 /** ----------------------------------------------------------------------------------
- * Return the record if exisset
+ * Return the record if exist
  *
  * @PARAM {String} record data.............................:
  *
@@ -871,10 +871,12 @@ app.get('/playlistRecords/:playlistName', function (req, res, next) {
  * @RESPONSE-SAMPLE {docs: []}
  ----------------------------------------------------------------------------------*/
 app.get('/mb/track/record/:mbid', function (req, res, next) {
+
+    //console.log("req.mbid is: " + req.params.mbid.toString());
     db().then(() => {
-        Records.find({mbid: req.mbid}).limit(1).exec(function (err, docs) {
+        Records.find({mbId: req.params.mbid}).exec(function (err, docs) {
             if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
-            // console.log(docs);
+            console.log(docs);
             res.status(200).json({err: false, items: [].concat(docs)});
         })
     }).catch(next);
@@ -1354,7 +1356,6 @@ app.post('/insertGuide', function (req, res, next) {
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
  ----------------------------------------------------------------------------------*/
-//TEST IT!
 
 app.get('/userData/:id', function (req, res, next) {
     if (!req) return res.sendStatus(400);
@@ -1367,7 +1368,7 @@ app.get('/userData/:id', function (req, res, next) {
 
 
 /** ----------------------------------------------------------------------------------
- * Return the sessions of user NOT WORKING YET!!!
+ * Return the sessions of user
  *
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
@@ -1375,12 +1376,11 @@ app.get('/userData/:id', function (req, res, next) {
 
 app.get('/userSessions:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
-    console.log("params is: "+ req.params.id.toString() + "\n\n\n");
+    //console.log("params is: "+ req.params.id.toString() + "\n\n\n");
     UserData.find({tamaringaId: req.params.id.toString()})
-    //UserData.find({tamaringaId: req.params.id.toString()}) printing item of the users document
         .exec(function (err, docs) {
         if (err) return next(err);
-        console.log(docs);
+        //console.log(docs);
         res.status(200).json({err: false, items: [].concat(docs)});
     });
 });
