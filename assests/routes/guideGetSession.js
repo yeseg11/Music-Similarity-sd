@@ -18,11 +18,11 @@
         songBlock += '<br>SongName</br>';
         songBlock += 'SongYear</br></span></span></br>';
         songBlock += '<span class="class=label-input100" style="font-size: 150%"><b>Rate song:</b></br></span>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySad">😟</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="Sad">🙁</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happy">🙂</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="Joyful">😀</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Sad" id ="Sad">🙁</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Indifferent" id ="Indifferent">😐</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="happy" id ="happy">🙂</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
@@ -162,11 +162,7 @@
             }
         }
 
-        function rating(record){
-            //post function here...
 
-            console.log("record button has been pressed");
-        }
 
 
 
@@ -192,4 +188,10 @@ function commentSession() {
 
     //call post here...
     alert("Current session comment is:" + SessionInputValue);
+}
+
+function rating(status){
+
+    //call post here...
+    alert("Current rating is:" + status);
 }
