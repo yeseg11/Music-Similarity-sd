@@ -22,7 +22,8 @@
                     templateSahow += '<td >' + result1[i].countryAtTwenty + '</td>'; //'<th>::Length of session:::</th>';
                     templateSahow += '<td >' + result1[i].countryOrigin + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].languageOrigin + '</td>'; //'<th>::algorithm:::</th>';
-                    templateSahow += '<td >' + result1[i].languageAtTwenty + '</td>'; //'<th>::algorithm:::</th>';
+                    templateSahow += '<td >' + result1[i].firstLangAtTwenty + '</td>'; //'<th>::algorithm:::</th>';
+					templateSahow += '<td >' + result1[i].secondLangAtTwenty + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].yearOfImmigration + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].Genre1Select + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].Genre2Select + '</td>'; //'<th>::algorithm:::</th>';

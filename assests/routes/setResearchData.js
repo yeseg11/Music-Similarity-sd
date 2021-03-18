@@ -114,7 +114,8 @@
             var countryAtTwenty = "";
             var countryOrigin = "";
             var languageOrigin = "";
-            var languageAtTwenty = "";
+            var firstLangAtTwenty = "";
+            var secondLangAtTwenty = "";
             var yearOfImmigration = "";
             var group = "";
 
@@ -143,13 +144,14 @@
                                 countryAtTwenty = items.countryAtTwenty;
                                 countryOrigin = items.countryOrigin;
                                 languageOrigin = items.languageOrigin;
-                                languageAtTwenty = items.languageAtTwenty;
+                                firstLangAtTwenty = items.firstLangAtTwenty;
+                                secondLangAtTwenty = items.secondLangAtTwenty;
                                 yearOfImmigration = items.yearOfImmigration;
                                 group = items.group;
 
                             }).then(function (response) {
                                 var recList = [];
-                                $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + languageAtTwenty, function (data) {
+                                $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + firstLangAtTwenty, function (data) {
                                     if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
                                     // console.log("list data",data);
                                     var size = PLAYLISTSIZE;
@@ -225,12 +227,12 @@
                                     checkDecadePlaylist.done(function (data) {
                                         if (data.err){alert("Error in find data")}
                                         if (!data.items.length > 0){
-                                            playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
+                                            playlistName = countryAtTwenty + firstLangAtTwenty + yearAtTwenty;
                                             var playlistData = {
                                                 name: playlistName,
                                                 year: yearAtTwenty,
                                                 country: countryAtTwenty,
-                                                language: languageAtTwenty,
+                                                language: firstLangAtTwenty,
                                                 records: JSON.stringify(recList)
                                             };
                                             var createPlaylistUrl = '/playList/createPlaylist';

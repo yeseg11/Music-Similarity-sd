@@ -2,8 +2,8 @@
     $(document).ready(function () {
         // console.log("here");
         $('#send').on("click", function (e) {
-            let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#languageAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
+            let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#firstLangAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty', '#secondLangAtTwenty'];
 
             for (const element of inputsArr) {
                 // console.log("element", element)
@@ -28,7 +28,8 @@
                 countryOrigin = $('#countryOrigin'),
                 countryAtTwenty = $('#countryAtTwenty'),
                 languageOrigin = $('#languageOrigin'),
-                languageAtTwenty = $('#languageAtTwenty'),
+                firstLangAtTwenty = $('#firstLangAtTwenty'),
+				secondLangAtTwenty = $('#secondLangAtTwenty'),
                 yearOfImmigration = $('#yearOfImmigration'),
                 Genre1Select = $('#Genre1Select'),
                 Genre2Select = $('#Genre2Select');
@@ -70,14 +71,15 @@
                         birthYear : parseInt(birthYear.val()),
                         yearAtTwenty: parseInt(yearTwenty),
                         languageOrigin : languageOrigin.val(),
-                        languageAtTwenty : languageAtTwenty.val(),
+                        firstLangAtTwenty : firstLangAtTwenty.val(),
+						secondLangAtTwenty : secondLangAtTwenty.val(),
                         countryAtTwenty: countryAtTwenty.val(),
                         countryOrigin: countryOrigin.val(),
                         yearOfImmigration : parseInt(yearOfImmigration.val()),
                         Genre1Select : Genre1Select.val(),
                         Genre2Select : Genre2Select.val(),
                         nursingHome : nursingHome.val(),
-                        group: countryAtTwenty.val() + languageAtTwenty.val() +yearTwenty.toString(),
+                        group: countryAtTwenty.val() + firstLangAtTwenty.val() +yearTwenty.toString(),
                         entrance: 0,
                         songs: JSON.stringify(recList)
                     };
