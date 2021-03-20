@@ -10,6 +10,7 @@ const PLAYLISTSIZE = 50;
 
 let Records = require('./models/records.js');
 // let Users = require('./models/users.js');
+let Guides = require('./models/guides.js');
 let Researchers = require('./models/researchers.js');
 let PlayList = require('./models/playlist.js');
 let PublicUsers = require('./models/publicUsers.js');
@@ -90,6 +91,12 @@ app.get('/newResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests
 app.get('/editResearch', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearchList.html'), {}, () => res.end()));
 app.get('/editResearchPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/editResearch.html'), {}, () => res.end()));
 
+/**
+ * Guides pages
+ */
+app.get('/createGuide', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/createGuide.html'), {}, () => res.end()));
+app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideLoginPage.html'), {}, () => res.end()));
+app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
 
 
@@ -111,22 +118,44 @@ app.post('/playList/createPlaylist', function (req, res, next) {
         language: req.body.language,
         records: JSON.parse(req.body.records)
     };
-    // console.log(playlistData);
-    var query = {name: playlistData.name},
-        update = playlistData,
-        options = {upsert: true, new: true, setDefaultsOnInsert: true};
+    var recList = [];
 
-    var exiset = true;
-    PlayList.updateOne(query, update, options)
-        .then(result => {
-            const {matchedCount, modifiedCount} = result;
-            if (matchedCount && modifiedCount) {
-                console.log(`Successfully added a private user.`)
+    db().then(() => {
+        Records.find({
+            year: {$gt: parseInt(playlistData.year) - 10, $lt: parseInt(playlistData.year) + 10},
+            country: playlistData.country,
+            language: playlistData.language
+        }).sort({'youtube.views': -1}).limit(PLAYLISTSIZE).exec(function (err, docs) {
+            if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
+            for (var i = 0; i < docs.length ; i++) {
+                recList.push({
+                    mbId: docs[i].mbId,
+                    title: docs[i].title,
+                    year: parseInt(docs[i].year),
+                    artistName: docs[i].artist[0].name,
+                    language: docs[i].language,
+                    country: docs[i].country,
+                    lyrics: docs[i].lyrics,
+                    genre: docs[i].genre,
+                    youtube: docs[i].youtube,
+                    votes: []
+                });
             }
-
+            playlistData.records = recList
+            var query = {name: playlistData.name},
+                update = playlistData,
+                options = {upsert: true, new: true, setDefaultsOnInsert: true};
+            var exiset = true;
+            PlayList.updateOne(query, update, options)
+                .then(result => {
+                    const {matchedCount, modifiedCount} = result;
+                    if (matchedCount && modifiedCount) {
+                        console.log(`Successfully added a private user.`)
+                    }
+                })
+                .catch(err => console.error(`Failed to add review: ${err}`))
         })
-        .catch(err => console.error(`Failed to add review: ${err}`))
-
+    }).catch(next);
 });
 
 /** ----------------------------------------------------------------------------------
@@ -216,13 +245,20 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 maxSessionNum: req.body.maxSessionNum,
                 sessionList: []
             };
-            console.log("researchListData ",researchListData);
+            // console.log("researchListData ",researchListData);
+            // console.log("req.body['playlists[]'] ",req.body['playlists[]']);
+            // console.log("Array.isArray(req.body['playlists[]'])",Array.isArray(req.body['playlists[]']));
 
             if (req.body.tamaringaId && req.body['playlists[]']) {
-                for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
-                    playlist.push(req.body['playlists[]'][i])
+                if (Array.isArray(req.body['playlists[]'])){
+                    for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
+                        playlist.push(req.body['playlists[]'][i])
+                    }
                 }
-               // playlist.push(req.body.playlists)
+                else {
+                    playlist.push(req.body['playlists[]'])
+                }
+                // playlist.push(req.body.playlists)
                 researchList.push(researchListData)
 
 
@@ -828,7 +864,7 @@ app.get('/playlistRecords/:playlistName', function (req, res, next) {
 
 
 /** ----------------------------------------------------------------------------------
- * Return the record if exisset
+ * Return the record if exist
  *
  * @PARAM {String} record data.............................:
  *
@@ -836,10 +872,12 @@ app.get('/playlistRecords/:playlistName', function (req, res, next) {
  * @RESPONSE-SAMPLE {docs: []}
  ----------------------------------------------------------------------------------*/
 app.get('/mb/track/record/:mbid', function (req, res, next) {
+
+    //console.log("req.mbid is: " + req.params.mbid.toString());
     db().then(() => {
-        Records.find({mbid: req.mbid}).limit(1).exec(function (err, docs) {
+        Records.find({mbId: req.params.mbid}).exec(function (err, docs) {
             if (err) return next(err);       //the data we get sorted from the bigest views number to the smalll ones and limit to 10 top .
-            // console.log(docs);
+            console.log(docs);
             res.status(200).json({err: false, items: [].concat(docs)});
         })
     }).catch(next);
@@ -1239,6 +1277,118 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
         res.status(200).json({err: false, items: [].concat(obj)});
     });
 });
+
+/** ------------------------------------------------------------------
+
+/** -------------------------------------GUIDE--------------------------------------
+ *  Post and add a new guide to Data base
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} name: Given user name
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {guideData}
+ ----------------------------------------------------------------------------------*/
+
+
+
+app.post('/loginGuide', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400);
+    //console.log(req.body);
+    //console.log(req.body.guideUserName + "   " + req.body.guidePassword);
+    if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) {
+        console.log("req.body is undefined");
+        return next(err);
+    }
+    //console.log("test");
+    Guides.find({guideName: req.body.guideUserName}).exec(function (err, docs) {
+
+        if (err) return next(err);
+
+        if (docs[0] === undefined || docs[0].guidePassword === undefined) {
+
+            return next(err);
+        }
+
+        var CryptoJS = require("crypto-js");
+        var bytes2 = CryptoJS.AES.decrypt(docs[0].guidePassword, 'Password');
+        var decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
+        if (decrypted2 === req.body.guidePassword) {
+            res.status(200).json({err: false, items: [].concat(docs)});
+        } else {
+            return next(err)
+        }
+    });
+});
+
+
+app.post('/insertGuide', function (req, res, next) {
+    if (!req.body) return res.sendStatus(400, "Error to adding a guide");
+
+    if (req.body.guideId && req.body.guideName && req.body.guidePassword) {
+        var encryptedPass = CryptoJS.AES.encrypt(req.body.guidePassword, 'Password');
+
+        const guideData = {
+            guideName: req.body.guideName,
+            guideId: req.body.guideId,
+            guidePassword: encryptedPass.toString()
+        };
+
+        console.log('GuideData: ', guideData);
+
+        const query = {guideId: guideData.guideId};
+        const options = {"upsert": true};
+        Guides.updateOne(query, guideData, options) //update mongodb
+            .then(result => {
+                const {matchedCount, modifiedCount} = result;
+                if (matchedCount && modifiedCount) {
+                    console.log(`Successfully added a private user.`)
+                }
+            })
+            .catch(err => console.error(`Failed to add review: ${err}`))
+    }
+});
+
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the UserData by tamaringaId
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+app.get('/userData/:id', function (req, res, next) {
+    if (!req) return res.sendStatus(400);
+    UserData.find({tamaringaId: req.params.id.toString()}).exec(function (err, docs) {
+        if (err) return next(err);
+        console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return the sessions of user
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+
+app.get('/userSessions:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    //console.log("params is: "+ req.params.id.toString() + "\n\n\n");
+    UserData.find({tamaringaId: req.params.id.toString()})
+        .exec(function (err, docs) {
+        if (err) return next(err);
+        //console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** -------------------------------------END-GUIDE--------------------------------------
+
 
 
 /** ----------------------------------------------------------------------------------
