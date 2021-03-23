@@ -59,9 +59,11 @@
 
 
         $('#send').on("click", function (e) {
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty', '#secondLangAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty'];
 
             for (const element of inputsArr) {
+                console.log("element", element);
+                // console.log("element length", $(element).val().length)
                 if ($(element).val().length <= 1) {
                     var element2 = element.substr(1);
                     alert("Please fill the missing details in " + element2);

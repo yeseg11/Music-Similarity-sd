@@ -2,11 +2,11 @@
     $(document).ready(function () {
         // console.log("here");
         $('#send').on("click", function (e) {
-            let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#firstLangAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty', '#secondLangAtTwenty'];
+            let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#firstLangAtTwenty','#secondLangAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty','#secondLangAtTwenty', '#secondLangAtTwenty'];
 
             for (const element of inputsArr) {
-                // console.log("element", element)
+                console.log("element", element)
                 // console.log("element length", $(element).val().length)
                 if ($(element).val().length <= 1) {
                     var element2 = element.substr(1);
@@ -15,6 +15,9 @@
                 }
             }
 
+
+
+            
             //the new user data
             var userName = $('#userName'),
                 firstName = $('#firstName'),
