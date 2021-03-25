@@ -140,14 +140,16 @@
                             countryAtTwenty = items.countryAtTwenty;
                             countryOrigin = items.countryOrigin;
                             languageOrigin = items.languageOrigin;
-                            languageAtTwenty = items.languageAtTwenty;
+                            firstLangAtTwenty = items.firstLangAtTwenty;
+                            secondLangAtTwenty = items.secondLangAtTwenty;
                             yearOfImmigration = items.yearOfImmigration;
                             group = items.group;
 
                         }).then(function (response) {
                             console.log("response1:",response);
-                            yearAtTwenty = response.items[0].yearAtTwenty
-                            languageAtTwenty = response.items[0].languageAtTwenty
+                            yearAtTwenty = response.items[0].yearAtTwenty;
+                            firstLangAtTwenty = response.items[0].firstLangAtTwenty;
+                            secondLangAtTwenty = response.items[0].secondLangAtTwenty;
                             birthYear = response.items[0].birthYear;
                             // console.log("birthYear:",birthYear);
                             // console.log("yearAtTwenty:",yearAtTwenty);
@@ -202,20 +204,39 @@
                             else {
                                 return alert("the decade didnt found");
                             }
-                            var playlistNames = [];
+                            var playlistNamesLang1 = [];
+                            var playlistNamesLang2 = [];
+                            var onlyOneLang = false;
+                            
+                            if(firstLangAtTwenty.toUpperCase() == secondLangAtTwenty.toUpperCase())
+                                onlyOneLang = true;
+
                             for (var i = 0 ; i < decade.length ; i++){
-                                var lang = languageAtTwenty.toUpperCase();
-                                if (languageAtTwenty === "rus" || languageAtTwenty === "lit" || languageAtTwenty === "lav"){
-                                    lang = "RUS"
+                                var lang1 = firstLangAtTwenty.toUpperCase();
+
+                                if (firstLangAtTwenty === "rus" || firstLangAtTwenty === "lit" || firstLangAtTwenty === "lav"){
+                                    lang1 = "RUS"
                                 }
-                                playlistNames.push(lang + decade[i] + "DC");
+
+                                playlistNamesLang1.push(lang1 + decade[i] + "DC");
+                                
+                                if(!onlyOneLang){
+                                    var lang2 = secondLangAtTwenty.toUpperCase();
+                                    if (secondLangAtTwenty === "rus" || secondLangAtTwenty === "lit" || secondLangAtTwenty === "lav"){
+                                        lang2 = "RUS"
+                                    }
+                                    playlistNamesLang2.push(lang2 + decade[i] + "DC");
+                                }
                             }
-                            var playlistData = {
-                                name: playlistNames
+
+                            var playlistData1 = {
+                                name: playlistNamesLang1
                             };
 
                             var checkDecadePlaylistUrl = '/getDecadePlaylist';
-                            var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData);
+                            var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData1);
+
+
                             checkDecadePlaylist.done(function (data) {
                                 console.log("data",data);
                                 if (data.err){
@@ -223,24 +244,25 @@
                                 }
 
                                 if (!(data.items.length > 0)){
-                                    var playlistName = countryAtTwenty + languageAtTwenty + yearAtTwenty;
-                                    var playlistData = {
+                                    var playlistName = countryAtTwenty + firstLangAtTwenty + yearAtTwenty;
+                                    var playlistData1 = {
                                         name: playlistName,
                                         year: yearAtTwenty,
                                         country: countryAtTwenty,
-                                        language: languageAtTwenty,
+                                        language: firstLangAtTwenty,
                                         records: JSON.stringify(recList)
                                     };
+                                    
                                     var createPlaylistUrl = '/playList/createPlaylist';
-                                    var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
+                                    var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData1);
                                     postingCreatePlaylist.done(function (data) {
                                     });
-                                    playlistNames =[playlistName]
-                                    console.log("playlistNames",playlistNames);
+                                    playlistNamesLang1 =[playlistName]
+                                    console.log("playlistNamesLang1",playlistNamesLang1);
                                 }
                                 var userData = {
                                     tamaringaId: response.items[0].tamaringaId,
-                                    playlists: playlistNames,
+                                    playlists: playlistNamesLang1,
                                     researchId: researchId.val(),
                                     maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
                                     sessionList: null
@@ -257,7 +279,8 @@
                                     }
                                 });
                             });
-                            //////////////////////
+
+
                         });
                         res();
                     })
