@@ -77,7 +77,8 @@
         html += '<th>Country At Twenty</th>\n';
         html += '<th>Origin Country</th>\n';
         html += '<th>Origin language</th>\n';
-        html += '<th>Language At Twenty</th>\n';
+        html += '<th>First Language At Twenty</th>\n';
+        html += '<th>Second Language At Twenty</th>\n';
         html += '<th>Year Of Immigration</th>\n';
         html += '<th>Genre1</th>\n';
         html += '<th>Genre2</th>\n';

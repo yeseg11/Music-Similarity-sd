@@ -59,7 +59,7 @@
 
 
         $('#send').on("click", function (e) {
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty', '#secondLangAtTwenty'];
 
             for (const element of inputsArr) {
                 console.log("element", element);
