@@ -84,19 +84,11 @@
             for (var i = 0 ; i < decade.length ; i++){
                 var lang = langAtTwenty.toUpperCase();
 
-                if (firstLangAtTwenty === "rus" || firstLangAtTwenty === "lit" || firstLangAtTwenty === "lav"){
-                    lang1 = "RUS"
+                if (langAtTwenty === "rus" || langAtTwenty === "lit" || langAtTwenty === "lav"){
+                    lang = "RUS"
                 }
 
-                playlistNamesLang1.push(lang1 + decade[i] + "DC");
-
-                if(!onlyOneLang){
-                    var lang2 = secondLangAtTwenty.toUpperCase();
-                    if (secondLangAtTwenty === "rus" || secondLangAtTwenty === "lit" || secondLangAtTwenty === "lav"){
-                        lang2 = "RUS"
-                    }
-                    playlistNamesLang2.push(lang2 + decade[i] + "DC");
-                }
+                playlistNames.push(lang + decade[i] + "DC");
             }
 
             var playlistData = {
@@ -113,25 +105,25 @@
                 }
 
                 if (!(data.items.length > 0)){
-                    var playlistName = countryAtTwenty + firstLangAtTwenty + yearAtTwenty;
-                    var playlistData1 = {
+                    var playlistName = countryAtTwenty + langAtTwenty + yearAtTwenty;
+                    var playlistData = {
                         name: playlistName,
                         year: yearAtTwenty,
                         country: countryAtTwenty,
-                        language: firstLangAtTwenty,
+                        language: langAtTwenty,
                         records: JSON.stringify(recList)
                     };
 
                     var createPlaylistUrl = '/playList/createPlaylist';
-                    var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData1);
+                    var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
                     postingCreatePlaylist.done(function (data) {
                     });
-                    playlistNamesLang1 =[playlistName]
-                    console.log("playlistNamesLang1",playlistNamesLang1);
+                    playlistNames =[playlistName]
+                    console.log("playlistNames",playlistNames);
                 }
                 var userData = {
                     tamaringaId: response.items[0].tamaringaId,
-                    playlists: playlistNamesLang1,
+                    playlists: playlistNames,
                     researchId: researchId.val(),
                     maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
                     sessionList: null
@@ -309,9 +301,10 @@
                             // var checkDecadePlaylistUrl = '/getDecadePlaylist';
                             // var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData1);
 
-
-
-
+                            findOrCreatePlaylist(playlistNamesLang1, firstLangAtTwenty, decade);
+                            if(!onlyOneLang){
+                                findOrCreatePlaylist(playlistNamesLang2, secondLangAtTwenty, decade);
+                            }
 
                         });
                         res();
