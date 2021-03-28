@@ -1,7 +1,7 @@
 (function ($) {
     $(document).ready(function () {
 
-        var PLAYLISTSIZE = 50;
+        const PLAYLISTSIZE = 50;
 
         function init() {
 
@@ -73,14 +73,14 @@
             });
         }
 
-
-
         init();
 
 
-        //CONTINUE HERE...
         //this function will be call twice if the user has selected a second language.
-        function findOrCreatePlaylist(playlistNames, langAtTwenty, decade) {
+        function postPlaylistForLang(langAtTwenty, decade, langID, countryAtTwenty, yearAtTwenty, response, researchId, meetingPerWeek, numberOfWeeks) {
+            var playlistNames = [];
+            var recList = [];
+            
             for (var i = 0 ; i < decade.length ; i++){
                 var lang = langAtTwenty.toUpperCase();
 
@@ -101,7 +101,7 @@
             checkDecadePlaylist.done(function (data) {
                 console.log("data",data);
                 if (data.err){
-                    alert("Error in find data checkDecadePlaylist")
+                    alert("Error in find data checkDecadePlaylist for " + langID)
                 }
 
                 if (!(data.items.length > 0)){
@@ -119,24 +119,26 @@
                     postingCreatePlaylist.done(function (data) {
                     });
                     playlistNames =[playlistName]
-                    console.log("playlistNames",playlistNames);
+                    console.log("playlistNames for " + langID + " " + playlistNames);
                 }
                 var userData = {
                     tamaringaId: response.items[0].tamaringaId,
                     playlists: playlistNames,
                     researchId: researchId.val(),
+
+                    //researchId: researchId
                     maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
                     sessionList: null
                 };
-                console.log("userData ",userData);
+                console.log("userData for" + langID + " " + userData);
                 var getPlaylistLink = '/updateUserDataCollection';
                 var postingInsertResearch = $.post(getPlaylistLink, userData);
                 postingInsertResearch.done(function (data) {
                     if (!data.items.length > 0){
-                        console.log("User Data created ");
+                        console.log("User Data for " + langID + "created ");
                     }
                     else {
-                        console.log("User Data was not created ");
+                        console.log("User Data for " + langID + "was not created ");
                     }
                 });
             });
@@ -156,7 +158,6 @@
                     return $('#error').text("insert all the details");
                 }
             }
-
 
 
             var researchName = $('#researchName'),
@@ -181,13 +182,6 @@
             var secondLangAtTwenty = "";
             var yearOfImmigration = "";
             var group = "";
-
-            //need to add to UserData the name of the new playlist.
-            // add data to userData as a research: researchId = new researchId,maxSessionNum = new research maxSessionNum and sessionList = []
-
-
-
-
 
             var prom = new Promise(function (resolve, reject) {
 
@@ -220,7 +214,7 @@
                             // console.log("yearAtTwenty:",yearAtTwenty);
                             // console.log("languageAtTwenty:",languageAtTwenty);
                             // return;
-                            var recList = [];
+                            //var recList = [];
                             //********** check if we have a playlist for the user
                             var decade = [];
                             if (parseInt(birthYear) >1920 && parseInt(birthYear) <= 1940){ //50's
@@ -269,41 +263,19 @@
                             else {
                                 return alert("the decade didnt found");
                             }
-                            var playlistNamesLang1 = [];
-                            var playlistNamesLang2 = [];
-                            var onlyOneLang = false;
-                            
-                            if(firstLangAtTwenty.toUpperCase() == secondLangAtTwenty.toUpperCase())
+
+                            var onlyOneLang = false;                            
+                            if(firstLangAtTwenty.toUpperCase() === secondLangAtTwenty.toUpperCase() || secondLangAtTwenty === "empty")
                                 onlyOneLang = true;
 
-                            // for (var i = 0 ; i < decade.length ; i++){
-                            //     var lang1 = firstLangAtTwenty.toUpperCase();
-                            //
-                            //     if (firstLangAtTwenty === "rus" || firstLangAtTwenty === "lit" || firstLangAtTwenty === "lav"){
-                            //         lang1 = "RUS"
-                            //     }
-                            //
-                            //     playlistNamesLang1.push(lang1 + decade[i] + "DC");
-                            //
-                            //     if(!onlyOneLang){
-                            //         var lang2 = secondLangAtTwenty.toUpperCase();
-                            //         if (secondLangAtTwenty === "rus" || secondLangAtTwenty === "lit" || secondLangAtTwenty === "lav"){
-                            //             lang2 = "RUS"
-                            //         }
-                            //         playlistNamesLang2.push(lang2 + decade[i] + "DC");
-                            //     }
-                            // }
 
-                            // var playlistData1 = {
-                            //     name: playlistNamesLang1
-                            // };
+                            var langID1 = "first language";
+                            var landID2 = "second language";
 
-                            // var checkDecadePlaylistUrl = '/getDecadePlaylist';
-                            // var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData1);
+                            postPlaylistForLang(firstLangAtTwenty, decade, langID1, countryAtTwenty, yearAtTwenty, response, researchId, meetingPerWeek, numberOfWeeks);
 
-                            findOrCreatePlaylist(playlistNamesLang1, firstLangAtTwenty, decade);
                             if(!onlyOneLang){
-                                findOrCreatePlaylist(playlistNamesLang2, secondLangAtTwenty, decade);
+                                postPlaylistForLang(secondLangAtTwenty, decade, landID2, countryAtTwenty, yearAtTwenty, response, researchId, meetingPerWeek, numberOfWeeks);
                             }
 
                         });
