@@ -236,13 +236,27 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
         return next(err);
     }
     let playlist = [];
+    let langAtTwenty = req.body.langAtTwenty;
     let researchList = [];
+
+
+    //let langAtTwenty = req.body.langAtTwenty;
     console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
+        let firstPlaylistDB = docs[0].playlists.firstLanguage;
+        let secondPlaylistDB = docs[0].playlists.firstLanguage;
+        let langFlag = "";
+
         if (err) return next(err);
         try {
-            if (docs[0].playlists != null){
-                playlist = docs[0].playlists;
+            if (firstPlaylistDB.language === langAtTwenty && firstPlaylistDB.playlists != null){
+                playlist = firstPlaylistDB.playlists;
+                langFlag = "first";
+            }
+
+            if (secondPlaylistDB.language === langAtTwenty && secondPlaylistDB.playlists != null){
+                playlist = secondPlaylistDB.playlists;
+                langFlag = "second";
             }
             if (docs[0].researchList != null){
                 researchList = docs[0].researchList;
@@ -262,21 +276,39 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
             if (req.body.tamaringaId && req.body['playlists[]']) {
                 if (Array.isArray(req.body['playlists[]'])){
                     for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
-                        playlist.push(req.body['playlists[]'][i])
+                        playlist.push(req.body['playlists[]'][i]);
                     }
                 }
                 else {
-                    playlist.push(req.body['playlists[]'])
+                    playlist.push(req.body['playlists[]']);
                 }
                 // playlist.push(req.body.playlists)
                 researchList.push(researchListData)
 
+                let userData;
+                if(langFlag === "first") {
+                    userData = {
+                        tamaringaId: req.body.tamaringaId.toString(),
+                        playlists: [{
+                            firstLanguage: [{
+                                language: req.body.langAtTwenty,
+                                playlists: playlist
+                            }]}],
+                        researchList: researchList,
+                    };
+                }
 
-                const userData = {
-                    tamaringaId: req.body.tamaringaId.toString(),
-                    playlists: playlist,
-                    researchList: researchList,
-                };
+                else{
+                    userData = {
+                        tamaringaId: req.body.tamaringaId.toString(),
+                        playlists: [{
+                            secondLanguage: [{
+                                language: req.body.langAtTwenty,
+                                playlists: playlist
+                            }]}],
+                        researchList: researchList,
+                    };
+                }
 
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};

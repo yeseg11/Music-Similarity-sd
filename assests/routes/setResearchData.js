@@ -124,6 +124,7 @@
                 var userData = {
                     tamaringaId: response.items[0].tamaringaId,
                     playlists: playlistNames,
+                    langAtTwenty: langAtTwenty,
                     researchId: researchId.val(),
 
                     //researchId: researchId
