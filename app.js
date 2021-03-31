@@ -173,7 +173,17 @@ app.post('/insertUserData', function (req, res, next) {
             lastName: req.body.lastName,
             userName: req.body.userName,
             tamaringaId: req.body.tamaringaId.toString(),
-            playlists: req.body['playlists[]'], //need to added
+            playlists: [{
+                firstLanguage: [{
+                    language: req.body.playlists[0],
+                    playlists: []
+                }],
+                secondLanguage: [{
+                    language: req.body.playlists[1],
+                    playlists: []
+                }]
+            }],
+            //playlists: req.body['playlists[]'], //need to added
             researchList: req.body.researchList
         };
 

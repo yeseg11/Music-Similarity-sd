@@ -104,7 +104,7 @@
                         lastName: lastName.val(),
                         userName: userName.val(),
                         tamaringaId: publicId.toString(),
-                        playlists: playlistArr,
+                        playlists: [firstLangAtTwenty.val(), secondLangAtTwenty.val()],
                         researchList: []
                     };
 
