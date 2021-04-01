@@ -77,18 +77,18 @@
 
 
         //this function will be call twice if the user has selected a second language.
-        function postPlaylistForLang(langAtTwenty, decade, langID, countryAtTwenty, yearAtTwenty, response, researchId, meetingPerWeek, numberOfWeeks) {
+        function postPlaylistForLang(postingData) {
             var playlistNames = [];
             var recList = [];
-            
-            for (var i = 0 ; i < decade.length ; i++){
-                var lang = langAtTwenty.toUpperCase();
 
-                if (langAtTwenty === "rus" || langAtTwenty === "lit" || langAtTwenty === "lav"){
+            for (var i = 0 ; i < postingData.decade.length ; i++){
+                var lang = postingData.langAtTwenty.toUpperCase();
+
+                if (postingData.langAtTwenty === "rus" || postingData.langAtTwenty === "lit" || postingData.langAtTwenty === "lav"){
                     lang = "RUS"
                 }
 
-                playlistNames.push(lang + decade[i] + "DC");
+                playlistNames.push(lang + postingData.decade[i] + "DC");
             }
 
             var playlistData = {
@@ -101,16 +101,16 @@
             checkDecadePlaylist.done(function (data) {
                 console.log("data",data);
                 if (data.err){
-                    alert("Error in find data checkDecadePlaylist for " + langID)
+                    alert("Error in find data checkDecadePlaylist for " + postingData.langID)
                 }
 
                 if (!(data.items.length > 0)){
-                    var playlistName = countryAtTwenty + langAtTwenty + yearAtTwenty;
+                    var playlistName = postingData.countryAtTwenty + postingData.langAtTwenty + postingData.yearAtTwenty;
                     var playlistData = {
                         name: playlistName,
-                        year: yearAtTwenty,
-                        country: countryAtTwenty,
-                        language: langAtTwenty,
+                        year: postingData.yearAtTwenty,
+                        country: postingData.countryAtTwenty,
+                        language: postingData.langAtTwenty,
                         records: JSON.stringify(recList)
                     };
 
@@ -119,27 +119,26 @@
                     postingCreatePlaylist.done(function (data) {
                     });
                     playlistNames =[playlistName]
-                    console.log("playlistNames for " + langID + " " + playlistNames);
+                    console.log("playlistNames for " + postingData.langID + " " + playlistNames);
                 }
                 var userData = {
-                    tamaringaId: response.items[0].tamaringaId,
+                    tamaringaId: postingData.response.items[0].tamaringaId,
                     playlists: playlistNames,
-                    langAtTwenty: langAtTwenty,
-                    researchId: researchId.val(),
+                    researchId: postingData.researchId.val(),
 
                     //researchId: researchId
-                    maxSessionNum: numberOfWeeks.val() * meetingPerWeek.val(),
+                    maxSessionNum: postingData.numberOfWeeks.val() * postingData.meetingPerWeek.val(),
                     sessionList: null
                 };
-                console.log("userData for" + langID + " " + userData);
+                console.log("userData for" + postingData.langID + " " + userData);
                 var getPlaylistLink = '/updateUserDataCollection';
                 var postingInsertResearch = $.post(getPlaylistLink, userData);
                 postingInsertResearch.done(function (data) {
                     if (!data.items.length > 0){
-                        console.log("User Data for " + langID + "created ");
+                        console.log("User Data for " + postingData.langID + "created ");
                     }
                     else {
-                        console.log("User Data for " + langID + "was not created ");
+                        console.log("User Data for " + postingData.langID + "was not created ");
                     }
                 });
             });
@@ -191,6 +190,7 @@
                         // insert logic foreach id here on done return res()
                         console.log(patientsId)
                         //run patient by patient
+
                         $.get('/user/' + patientsId, function (data) {
                             let items = data.items[0];
                             //console.log("data: ",data);
@@ -265,20 +265,54 @@
                                 return alert("the decade didnt found");
                             }
 
-                            var onlyOneLang = false;                            
+                            let onlyOneLang = false;
                             if(firstLangAtTwenty.toUpperCase() === secondLangAtTwenty.toUpperCase() || secondLangAtTwenty === "empty")
                                 onlyOneLang = true;
 
 
-                            var langID1 = "first language";
-                            var landID2 = "second language";
+                            let langID1 = "first language";
+                            let landID2 = "second language";
 
-                            postPlaylistForLang(firstLangAtTwenty, decade, langID1, countryAtTwenty, yearAtTwenty, response, researchId, meetingPerWeek, numberOfWeeks);
-
-                            if(!onlyOneLang){
-                                postPlaylistForLang(secondLangAtTwenty, decade, landID2, countryAtTwenty, yearAtTwenty, response, researchId, meetingPerWeek, numberOfWeeks);
+                            var postingData = {
+                                langAtTwenty: firstLangAtTwenty,
+                                decade: decade,
+                                langID: langID1,
+                                countryAtTwenty: countryAtTwenty,
+                                yearAtTwenty: yearAtTwenty,
+                                response: response,
+                                researchId: researchId,
+                                meetingPerWeek: meetingPerWeek,
+                                numberOfWeeks: numberOfWeeks
                             }
 
+                            var postingData2 = {
+                                langAtTwenty: secondLangAtTwenty,
+                                decade: decade,
+                                langID: landID2,
+                                countryAtTwenty: countryAtTwenty,
+                                yearAtTwenty: yearAtTwenty,
+                                response: response,
+                                researchId: researchId,
+                                meetingPerWeek: meetingPerWeek,
+                                numberOfWeeks: numberOfWeeks
+                            }
+
+
+                            async function createPl() {
+                                try {
+                                    const res = await postPlaylistForLang(postingData);
+                                    //console.log("not yet inside the if...");
+                                    if(!onlyOneLang){
+                                        //console.log("inside the if!")
+                                        const res2 = await postPlaylistForLang(postingData2);
+                                    }
+
+                                } catch(err) {
+                                    console.log(err);
+                                }
+                            }
+
+                            const res = createPl();
                         });
                         res();
                     })
@@ -290,19 +324,19 @@
                     .catch(e=>console.log(e))
 
                 var researchData = {
-                        researchName: researchName.val(),
-                        researchId: researchId.val(),
-                        researchersIds: researchersIds.val(),
-                        researchGroupId : researchGroupId.val(),
-                        description : description.val(),
-                        patientsIds: patientsIds,
-                        nursingHome: nursingHome.val(),
-                        department: department.val(),
-                        numberOfWeeks: numberOfWeeks.val(),
-                        meetingPerWeek: meetingPerWeek.val(),
-                        lengthOfSession: lengthOfSession.val(),
-                        algorithm:algorithm.val(),
-                        // created: false
+                    researchName: researchName.val(),
+                    researchId: researchId.val(),
+                    researchersIds: researchersIds.val(),
+                    researchGroupId : researchGroupId.val(),
+                    description : description.val(),
+                    patientsIds: patientsIds,
+                    nursingHome: nursingHome.val(),
+                    department: department.val(),
+                    numberOfWeeks: numberOfWeeks.val(),
+                    meetingPerWeek: meetingPerWeek.val(),
+                    lengthOfSession: lengthOfSession.val(),
+                    algorithm:algorithm.val(),
+                    // created: false
                 };
 
                 var insertResearchUrl = '/insertResearch';
