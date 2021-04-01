@@ -151,7 +151,9 @@ app.post('/playList/createPlaylist', function (req, res, next) {
                     const {matchedCount, modifiedCount} = result;
                     if (matchedCount && modifiedCount) {
                         console.log(`Successfully added a private user.`)
+                        return res.status(200);
                     }
+                    return res.status(500);
                 })
                 .catch(err => console.error(`Failed to add review: ${err}`))
         })
@@ -168,21 +170,25 @@ app.post('/insertUserData', function (req, res, next) {
     // console.log("req.body.playlists: ",req.body['playlists[]']);
 
     if (req.body.tamaringaId && req.body.userName && req.body.firstName && req.body.lastName) {
+        let firstLang = req.body["playlists[]"]["0"];
+        let secondLang = req.body["playlists[]"]["1"];
+        //console.log("first lang is: " + firstLang + " ,second lang is: " + secondLang);
+
         const userData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             userName: req.body.userName,
             tamaringaId: req.body.tamaringaId.toString(),
-            playlists: [{
-                firstLanguage: [{
-                    language: req.body.playlists[0],
+            playlists: {
+                firstLanguage: {
+                    language: firstLang,
                     playlists: []
-                }],
-                secondLanguage: [{
-                    language: req.body.playlists[1],
+                },
+                secondLanguage: {
+                    language: secondLang,
                     playlists: []
-                }]
-            }],
+                }
+            },
             //playlists: req.body['playlists[]'], //need to added
             researchList: req.body.researchList
         };
@@ -193,7 +199,8 @@ app.post('/insertUserData', function (req, res, next) {
             .then(result => {
                 const {matchedCount, modifiedCount} = result;
                 if (matchedCount && modifiedCount) {
-                    console.log(`Successfully added a new User Data.`)
+                    console.log(`Successfully added a new User Data.`);
+                    res.send(200);
                 }
             }).catch(err => console.error(`Failed to add review: ${err}`))
     }
@@ -316,7 +323,8 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                     .then(result => {
                         const {matchedCount, modifiedCount} = result;
                         if (matchedCount && modifiedCount) {
-                            console.log(`Successfully added a new User Data.`)
+                            console.log(`Successfully added a new User Data.`);
+                            res.send(200);
                         }
                     }).catch(err => console.error(`Failed to add review: ${err}`))
             }
@@ -1031,7 +1039,8 @@ app.post('/getDecadePlaylist', function (req, res, next) {    //call to getUserD
     if (!req) return res.sendStatus(400);
     PlayList.find({name: { $in:req.body['name[]']}}).exec(function (err, docs) {
         if (err) return next(err);
-        res.status(200).json({err: false, items: [].concat(docs)});
+        res.status(200).json({err: false, items: docs});
+        //res.status(200).json({err: false, items: [].concat(docs)});
     })
 });
 

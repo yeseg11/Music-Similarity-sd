@@ -10,16 +10,16 @@ var userDataSchema = new Schema({ //create when create a user .
     lastName: String,
     userName: String,
     tamaringaId: String,
-    playlists: [{
-        firstLanguage: [{
+    playlists: {
+        firstLanguage: {
             language: String,
             playlists: []
-        }],
-        secondLanguage: [{
+        },
+        secondLanguage: {
             language: String,
             playlists: []
-        }]
-    }],
+        }
+    },
     researchList: [{
         //added when research created with the user.
         researchId: String,

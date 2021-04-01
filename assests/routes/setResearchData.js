@@ -121,12 +121,12 @@
                     playlistNames =[playlistName]
                     console.log("playlistNames for " + postingData.langID + " " + playlistNames);
                 }
+                console.log("language before userdata" + postingData.langAtTwenty);
                 var userData = {
                     tamaringaId: postingData.response.items[0].tamaringaId,
                     playlists: playlistNames,
                     researchId: postingData.researchId.val(),
-
-                    //researchId: researchId
+                    langAtTwenty: postingData.langAtTwenty,
                     maxSessionNum: postingData.numberOfWeeks.val() * postingData.meetingPerWeek.val(),
                     sessionList: null
                 };
