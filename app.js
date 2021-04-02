@@ -250,18 +250,18 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
     //let langAtTwenty = req.body.langAtTwenty;
     console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
-        let firstPlaylistDB = docs[0].playlists.firstLanguage;
-        let secondPlaylistDB = docs[0].playlists.firstLanguage;
+        let firstPlaylistDB = docs["0"]._doc.playlists.firstLanguage;
+        let secondPlaylistDB = docs["0"]._doc.playlists.secondLanguage;
         let langFlag = "";
 
         if (err) return next(err);
         try {
-            if (firstPlaylistDB.language === langAtTwenty && firstPlaylistDB.playlists != null){
+            if (firstPlaylistDB.language === langAtTwenty){
                 playlist = firstPlaylistDB.playlists;
                 langFlag = "first";
             }
 
-            if (secondPlaylistDB.language === langAtTwenty && secondPlaylistDB.playlists != null){
+            if (secondPlaylistDB.language === langAtTwenty){
                 playlist = secondPlaylistDB.playlists;
                 langFlag = "second";
             }
@@ -279,7 +279,7 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
             // console.log("researchListData ",researchListData);
             // console.log("req.body['playlists[]'] ",req.body['playlists[]']);
             // console.log("Array.isArray(req.body['playlists[]'])",Array.isArray(req.body['playlists[]']));
-
+            //docs["0"]._doc.playlists.firstLanguage.playlists
             if (req.body.tamaringaId && req.body['playlists[]']) {
                 if (Array.isArray(req.body['playlists[]'])){
                     for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
@@ -300,16 +300,25 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                             firstLanguage: {
                                 language: req.body.langAtTwenty,
                                 playlists: playlist
+                            },
+                            secondLanguage: {
+                                language: secondPlaylistDB.language,
+                                playlists: secondPlaylistDB.playlists
                             }
                         },
                         researchList: researchList,
                     };
                 }
 
-                else{
+                else {
                     userData = {
                         tamaringaId: req.body.tamaringaId.toString(),
                         playlists: {
+                            firstLanguage: {
+                                language: firstPlaylistDB.language,
+                                playlists: firstPlaylistDB.playlists
+                            },
+
                             secondLanguage: {
                                 language: req.body.langAtTwenty,
                                 playlists: playlist
