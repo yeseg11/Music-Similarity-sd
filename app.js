@@ -296,11 +296,12 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 if(langFlag === "first") {
                     userData = {
                         tamaringaId: req.body.tamaringaId.toString(),
-                        playlists: [{
-                            firstLanguage: [{
+                        playlists: {
+                            firstLanguage: {
                                 language: req.body.langAtTwenty,
                                 playlists: playlist
-                            }]}],
+                            }
+                        },
                         researchList: researchList,
                     };
                 }
@@ -308,18 +309,22 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                 else{
                     userData = {
                         tamaringaId: req.body.tamaringaId.toString(),
-                        playlists: [{
-                            secondLanguage: [{
+                        playlists: {
+                            secondLanguage: {
                                 language: req.body.langAtTwenty,
                                 playlists: playlist
-                            }]}],
+                            }
+                        },
                         researchList: researchList,
                     };
                 }
 
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};
-                UserData.updateOne(query, userData, options)
+                //const setuserData = "\"{$set:\"" + userData + "}";
+                //{ $set: { "local.userName": "whatsup" }
+
+                UserData.updateOne(query, userData , options)
                     .then(result => {
                         const {matchedCount, modifiedCount} = result;
                         if (matchedCount && modifiedCount) {
