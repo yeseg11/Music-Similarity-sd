@@ -3,26 +3,21 @@ var Schema = mongoose.Schema;
 
 
 var globalRatingSchema = new Schema({
+    language: String,
     playlists: [{
-
-        language: String,
-        playlists: [
+        name:String,
+        year:Number,
+        country:String,
+        records: [
             {
-                name:String,
-                year:Number,
-                country:String,
-                language:String,
-                records: [
-                    {
-                        mbId: String,
-                        title: String,
-                        year: Number,
-                        artistName: String,
-                        language: String,
-                        country: String,
-                        SumOfRatings: Number,
-                        CountOfRaters: Number
-                    }]
+                mbId: String,
+                title: String,
+                year: Number,
+                artistName: String,
+                language: String,
+                country: String,
+                SumOfRatings: Number,
+                CountOfRaters: Number
             }]
     }]
 });
