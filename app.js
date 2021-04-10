@@ -1360,7 +1360,7 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
 app.post('/loginGuide', function (req, res, next) {
     if (!req.body) return res.sendStatus(400);
     //console.log(req.body);
-    //console.log(req.body.guideUserName + "   " + req.body.guidePassword);
+    //console.log(req.body.guideUserName + "   " + req.body.gufidePassword);
     if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) {
         console.log("req.body is undefined");
         return next(err);

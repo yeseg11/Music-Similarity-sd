@@ -91,21 +91,28 @@
                 playlistNames.push(lang + postingData.decade[i] + "DC");
             }
 
+            console.log("Playlist Names are: " + playlistNames);
+
             var playlistData = {
                 name: playlistNames
             };
 
+            console.log("Getting decade playlists...");
             var checkDecadePlaylistUrl = '/getDecadePlaylist';
             var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData);
 
             checkDecadePlaylist.done(function (data) {
-                console.log("data",data);
+                console.log("decade playlists done!  the data is: " + data);
+                //console.log("data",data);
                 if (data.err){
                     alert("Error in find data checkDecadePlaylist for " + postingData.langID)
                 }
 
                 if (!(data.items.length > 0)){
+                    console.log("decade playlists empty! creating playlist...");
                     var playlistName = postingData.countryAtTwenty + postingData.langAtTwenty + postingData.yearAtTwenty;
+                    console.log("playlistName is: " + playlistName);
+
                     var playlistData = {
                         name: playlistName,
                         year: postingData.yearAtTwenty,
@@ -113,10 +120,13 @@
                         language: postingData.langAtTwenty,
                         records: JSON.stringify(recList)
                     };
+                    console.log("playlist data is: " + JSON.stringify(playlistData));
+                    console.log("posting playlist data to /playList/createPlaylist...");
 
                     var createPlaylistUrl = '/playList/createPlaylist';
                     var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
                     postingCreatePlaylist.done(function (data) {
+                        console.log("DONE! - posting playlist data. The data is: " + data);
                     });
                     playlistNames =[playlistName]
                     console.log("playlistNames for " + postingData.langID + " " + playlistNames);
@@ -301,9 +311,9 @@
                             async function createPl() {
                                 try {
                                     const res = await postPlaylistForLang(postingData);
-                                    //console.log("not yet inside the if...");
+                                    console.log("Entering postPlaylist for first language");
                                     if(!onlyOneLang){
-                                        //console.log("inside the if!")
+                                        console.log("Entering postPlaylist for second language");
                                         const res2 = await postPlaylistForLang(postingData2);
                                     }
 
@@ -342,12 +352,13 @@
                 var insertResearchUrl = '/insertResearch';
                 var postingInsertResearch = $.post(insertResearchUrl, researchData);
                 postingInsertResearch.done(function (data) {
+                    console.log("create a research...");
                     alert("Research Created '\n' The research Id is: " + researchId.val());
                     // var pathname = "/researchGroupMainPage"
                     // window.location.replace(pathname);
                 });
                 alert("Research Created '\n' The research Id is: " + researchId.val() +"\n Please wait a few seconds till the page will go back");
-                // setTimeout(myFunction, 1000);
+                setTimeout(myFunction, 1000);
             });
         })
 
