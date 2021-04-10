@@ -91,8 +91,6 @@
                 playlistNames.push(lang + postingData.decade[i] + "DC");
             }
 
-            console.log("Playlist Names are: " + playlistNames);
-
             var playlistData = {
                 name: playlistNames
             };
@@ -311,9 +309,7 @@
                             async function createPl() {
                                 try {
                                     const res = await postPlaylistForLang(postingData);
-                                    console.log("Entering postPlaylist for first language");
                                     if(!onlyOneLang){
-                                        console.log("Entering postPlaylist for second language");
                                         const res2 = await postPlaylistForLang(postingData2);
                                     }
 
@@ -329,7 +325,7 @@
                 }))
                     .then(()=>{
                         // continue logic, done all the patients run
-                        alert("all the user data created and updated")
+                        alert("Creating User data... Please wait for 5-10 seconds and press OK")
                     })
                     .catch(e=>console.log(e))
 
@@ -352,7 +348,7 @@
                 var insertResearchUrl = '/insertResearch';
                 var postingInsertResearch = $.post(insertResearchUrl, researchData);
                 postingInsertResearch.done(function (data) {
-                    console.log("create a research...");
+                    //console.log("create a research...");
                     alert("Research Created '\n' The research Id is: " + researchId.val());
                     // var pathname = "/researchGroupMainPage"
                     // window.location.replace(pathname);

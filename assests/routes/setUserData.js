@@ -3,7 +3,7 @@
         // console.log("here");
         $('#send').on("click", function (e) {
             let newData = ['#name','#password','#id','#department','#medicalProfile','#countryAtTwenty','#countryOrigin', '#age','#languageOrigin','#firstLangAtTwenty','#secondLangAtTwenty','#yearOfImmigration','#Genre1Select','#Genre2Select','#nursingHome'];
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty','#secondLangAtTwenty', '#secondLangAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#id', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty','#secondLangAtTwenty'];
 
             for (const element of inputsArr) {
                 console.log("element", element)
@@ -72,7 +72,7 @@
                         department: department.val(),
                         medicalProfile : medicalProfile.val(),
                         birthYear : parseInt(birthYear.val()),
-                        yearAtTwenty: parseInt(yearTwenty),
+                        yearAtTwenty: yearTwenty,
                         languageOrigin : languageOrigin.val(),
                         firstLangAtTwenty : firstLangAtTwenty.val(),
 						secondLangAtTwenty : secondLangAtTwenty.val(),
@@ -105,6 +105,7 @@
                         userName: userName.val(),
                         tamaringaId: publicId.toString(),
                         playlists: [firstLangAtTwenty.val(), secondLangAtTwenty.val()],
+                        genrePlaylists: playlistArr,
                         researchList: []
                     };
 

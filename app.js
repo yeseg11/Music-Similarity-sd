@@ -172,6 +172,7 @@ app.post('/insertUserData', function (req, res, next) {
     if (req.body.tamaringaId && req.body.userName && req.body.firstName && req.body.lastName) {
         let firstLang = req.body["playlists[]"]["0"];
         let secondLang = req.body["playlists[]"]["1"];
+        let genrePlaylists = req.body["genrePlaylists[]"];
         //console.log("first lang is: " + firstLang + " ,second lang is: " + secondLang);
 
         const userData = {
@@ -187,7 +188,9 @@ app.post('/insertUserData', function (req, res, next) {
                 secondLanguage: {
                     language: secondLang,
                     playlists: []
-                }
+                },
+                genrePlaylists: genrePlaylists
+
             },
             //playlists: req.body['playlists[]'], //need to added
             researchList: req.body.researchList
@@ -252,6 +255,7 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
         let firstPlaylistDB = docs["0"]._doc.playlists.firstLanguage;
         let secondPlaylistDB = docs["0"]._doc.playlists.secondLanguage;
+        let genrePlaylists = docs["0"]._doc.playlists.genrePlaylists;
         let langFlag = "";
 
         if (err) return next(err);
@@ -304,7 +308,8 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                             secondLanguage: {
                                 language: secondPlaylistDB.language,
                                 playlists: secondPlaylistDB.playlists
-                            }
+                            },
+                            genrePlaylists: genrePlaylists
                         },
                         researchList: researchList,
                     };
@@ -322,7 +327,8 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                             secondLanguage: {
                                 language: req.body.langAtTwenty,
                                 playlists: playlist
-                            }
+                            },
+                            genrePlaylists: genrePlaylists
                         },
                         researchList: researchList,
                     };

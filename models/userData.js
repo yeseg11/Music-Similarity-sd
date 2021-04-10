@@ -18,7 +18,8 @@ var userDataSchema = new Schema({ //create when create a user .
         secondLanguage: {
             language: String,
             playlists: []
-        }
+        },
+        genrePlaylists: []
     },
     researchList: [{
         //added when research created with the user.
