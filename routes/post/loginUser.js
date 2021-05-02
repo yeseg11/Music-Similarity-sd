@@ -4,28 +4,27 @@ let PlayList = require('../../models/playlist.js');
 
 //add test flag and test the first session
 //take the names from the Word document
-let FULLPLAYLISTSONGS = 3; //need to edit to support the new config file
-let GENREPLAYLISTSONGS = 2;//	"				"				"
+
+let NumSongsForLanguage = 3; //need to edit to support the new config file
+let NumSongsForGenre = 2;//	"				"				"
 const TESTFIRSTSESSION = true;
 
 module.exports = async function (req, res, next) {  
 		if (!req || !req.body) return res.sendStatus(400); //if the request is empty, return it
-		if (req.body.userName === undefined || req.body.userPassword === undefined)
+		if (req.body.userName === undefined || req.body.userPassword === undefined) //check for isEmpty
 			return next(new Error('User name or Password is missing'));
 	
 	try{
-		const user = await getUser(req); // getting the user from PublicUsers collection
-		const userData = await getUserData(user); //getting the user data from UserDatas collection
-		const firstLogin = sessionChecker(userData); //return true for first session, reject if exceeded session limit
-		const mapPlaylistData = await getPlaylistsNames(userData);
+		const user = await getUser(req); // getting the user from PublicUsers collection ///// pass the body only
+		const userData = await getUserData(user); //getting the user data from UserDatas collection //pass only the user id, not the all user
+		const firstLogin = sessionChecker(userData); //return true for first session, reject if exceeded session limit //don't pass all of the user data, only the research array
+		const mapPlaylistData = getPlaylistsNames(userData);
 
 		let session;
-		if(firstLogin || TESTFIRSTSESSION) {
+		if (firstLogin || TESTFIRSTSESSION) {
 			session = await startFirstSession(mapPlaylistData);
-
 		}
-		
-		else{
+		else {
 				session = await startSession(mapPlaylistData);
 				const logAnEntrance = await logEntrance(user); // if everything went well, log an entrance
 		}
@@ -36,7 +35,7 @@ module.exports = async function (req, res, next) {
 	catch(err){
 		next(err);
 	}
-}
+ }
 
 
 //grab the user from PublicUsers collection
@@ -46,12 +45,12 @@ function getUser(req){
 			userName: req.body.userName.toString(),
 			password: req.body.userPassword.toString()
 		}).exec(function (err, docs) {
-        
-		if (err || !docs.length) {
-			reject(new Error('Invalid user!'));
-		}
-		
-		else resolve(docs[0].toObject());
+			if (err || !docs.length) {
+				reject(new Error('Invalid user!'));
+			}
+			else {
+				resolve(docs[0].toObject());
+			}
 		})
 	})
 }
@@ -102,7 +101,7 @@ function getPlaylistsNames(user){
 	return playlistData.map(x => {
 		return {
 			name: x,
-			songs: (x.length === 3) ? GENREPLAYLISTSONGS : FULLPLAYLISTSONGS
+			songs: (x.length === 3) ? NumSongsForGenre : NumSongsForLanguage
 		}
 	});
 }
@@ -112,31 +111,58 @@ function getPlaylistsNames(user){
 // at the first session, returning an array with random songs from all of the user's playlists
 async function startFirstSession(mapPlaylistData) {
 try{
-	let records =[];
-	for (const plName of mapPlaylistData) {
-		await PlayList.find({name: playlistData.name}).exec((err, playlistsDocs)=>{
-		if(err)
-			return err;
-		
-		const songLimit = mapPlaylistData.find(x => x.name === plName.name).songs;
-		while(records.length < songLimit){
-			const record = playlistsDocs.records[Math.floor(Math.random() * playlistsDocs.records.length)];
-				if(!records.filter(x=> record.mbId.toString() === x.mbId.toString()).length)
-				records.push(record);
-		}
-		return records;
-
-		//playlistDocs === corrent playlist
-
+	return new Promise(function (resolve, reject) {
+		const playlistNames = mapPlaylistData.map(function(playlist) {
+			return playlist.name;
 		})
-	}
+		PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
+			//console.log("playlists ", playLists)
+			const records = playLists.map(x => {
+				const correntPl = mapPlaylistData.find(element => {
+					return element.name === x.name
+				});
+
+				const songLimit = correntPl.songs;
+
+				const currentRecords = [];
+				while(currentRecords.length < songLimit) {
+					const record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
+					currentRecords.push(record);
+				}
+				//console.log(x.name + " songs are: " + plSongs);
+				return currentRecords;
+			});
+			const flatRecord = records.flat()
+			//console.log("records: " + records);
+
+			resolve(flatRecord)
+		})
+
+	})
+
 }
 
 catch(err){
 	return err;
-	}
 }
-	
+}
+
+
+// function getUserData(user){
+// 	return new Promise(function(resolve,reject) {
+// 		UserData.find({tamaringaId: user.tamaringaId.toString()})
+// 			.exec(function (err, userDataDocs) {
+// 				if(err || !userDataDocs.length)
+// 					reject(new Error('Error: No userData available!'));
+// 				else if(userDataDocs[0].researchList === null) reject(new Error('Can not Enter, Please add the user to research!'));
+// 				else{
+// 					user.data = userDataDocs[0].toObject();
+// 					resolve(user.data);
+// 				}
+// 			})
+// 	})
+// }
+
 
 
 //after the first session, this function will be used
