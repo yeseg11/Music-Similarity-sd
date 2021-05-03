@@ -28,7 +28,10 @@ module.exports = async function (req, res, next) {
 				session = await startSession(mapPlaylistData);
 		}
 		const logAnEntrance = await logEntrance(user); // if everything went well, log an entrance
-		return session;
+		const newUserData = await updateUserData(session, firstLogin, userData);
+		const userAndData = user;
+		user.data = userData;
+		res.status(200).json({err: false, items: [user]});
 	}
 	
 	catch(err){
@@ -122,9 +125,11 @@ try{
 
 				const songLimit = correntPl.songs;
 				const currentRecords = [];
+				//currentRecords.name = x.name;
 				while(currentRecords.length < songLimit) {
 					let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
-					record._doc.playlist = x.name;
+					record._doc.playlistName = x.name;
+					record._doc.score = 0;
 					currentRecords.push(record);
 				}
 				return currentRecords;
@@ -150,8 +155,21 @@ function startSession(mapPlaylistData) {
 	
 }
 
-function updateUserData(mapPlaylistData) {
-	
+function updateUserData(session, firstLogin, userData) {
+	let data = {};
+	data['$push'] = {
+		'researchList.0.sessionList': {
+			sessionNumber: (!userData.researchList[0].sessionList.length) ? 1 : userData.researchList[0].sessionList.length + 1,
+			sessionDate: new Date(),
+			songs: session
+		}
+	}
+
+	UserData.findOneAndUpdate({_id:  userData._id}, data).exec((err, result)=>{ //edit
+		if(err) return next(err);
+	})
+
+	return data;
 }
 	
 // if everything went well, log an entrace
