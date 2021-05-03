@@ -15,7 +15,7 @@ module.exports = async function (req, res, next) {
 			return next(new Error('User name or Password is missing'));
 	
 	try{
-		const user = await getUser(req); // getting the user from PublicUsers collection ///// pass the body only
+		const user = await getUser(req.body); // getting the user from PublicUsers collection ///// pass the body only
 		const userData = await getUserData(user); //getting the user data from UserDatas collection //pass only the user id, not the all user
 		const firstLogin = sessionChecker(userData); //return true for first session, reject if exceeded session limit //don't pass all of the user data, only the research array
 		const mapPlaylistData = getPlaylistsNames(userData);
@@ -26,7 +26,6 @@ module.exports = async function (req, res, next) {
 		}
 		else {
 				session = await startSession(mapPlaylistData);
-				const logAnEntrance = await logEntrance(user); // if everything went well, log an entrance
 		}
 		const logAnEntrance = await logEntrance(user); // if everything went well, log an entrance
 		return session;
@@ -42,8 +41,8 @@ module.exports = async function (req, res, next) {
 function getUser(req){
 	return new Promise(function(resolve,reject) {
 		PublicUsers.find({
-			userName: req.body.userName.toString(),
-			password: req.body.userPassword.toString()
+			userName: req.userName.toString(),
+			password: req.userPassword.toString()
 		}).exec(function (err, docs) {
 			if (err || !docs.length) {
 				reject(new Error('Invalid user!'));
@@ -116,54 +115,35 @@ try{
 			return playlist.name;
 		})
 		PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
-			//console.log("playlists ", playLists)
 			const records = playLists.map(x => {
 				const correntPl = mapPlaylistData.find(element => {
 					return element.name === x.name
 				});
 
 				const songLimit = correntPl.songs;
-
 				const currentRecords = [];
 				while(currentRecords.length < songLimit) {
-					const record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
+					let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
+					record._doc.playlist = x.name;
 					currentRecords.push(record);
 				}
-				//console.log(x.name + " songs are: " + plSongs);
 				return currentRecords;
 			});
-			const flatRecord = records.flat()
-			//console.log("records: " + records);
 
-			resolve(flatRecord)
+
+			const finalRecords = records.flat().map(x => {
+				return x._doc;
+			});
+
+			resolve(finalRecords)
 		})
-
 	})
-
 }
 
 catch(err){
 	return err;
+	}
 }
-}
-
-
-// function getUserData(user){
-// 	return new Promise(function(resolve,reject) {
-// 		UserData.find({tamaringaId: user.tamaringaId.toString()})
-// 			.exec(function (err, userDataDocs) {
-// 				if(err || !userDataDocs.length)
-// 					reject(new Error('Error: No userData available!'));
-// 				else if(userDataDocs[0].researchList === null) reject(new Error('Can not Enter, Please add the user to research!'));
-// 				else{
-// 					user.data = userDataDocs[0].toObject();
-// 					resolve(user.data);
-// 				}
-// 			})
-// 	})
-// }
-
-
 
 //after the first session, this function will be used
 function startSession(mapPlaylistData) {
@@ -179,7 +159,7 @@ function logEntrance(user){
 	return new Promise(function(resolve,reject) {
 		PublicUsers.findOneAndUpdate({_id: user._id}, {$inc: {'entrance': 1}})
 		.exec(function (err, entranceData) {
-			if(err || !entranceData.length) 
+			if(err || !entranceData)
 				reject(new Error('Problem register entrance'));
 			else if(entranceData === null) reject(new Error('can\'t register enterace'));
 			else{
@@ -206,5 +186,18 @@ function logEntrance(user){
 
 
 
-
+// function getUserData(user){
+// 	return new Promise(function(resolve,reject) {
+// 		UserData.find({tamaringaId: user.tamaringaId.toString()})
+// 			.exec(function (err, userDataDocs) {
+// 				if(err || !userDataDocs.length)
+// 					reject(new Error('Error: No userData available!'));
+// 				else if(userDataDocs[0].researchList === null) reject(new Error('Can not Enter, Please add the user to research!'));
+// 				else{
+// 					user.data = userDataDocs[0].toObject();
+// 					resolve(user.data);
+// 				}
+// 			})
+// 	})
+// }
 
