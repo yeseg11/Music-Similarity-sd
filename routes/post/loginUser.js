@@ -31,6 +31,18 @@ module.exports = async function (req, res, next) {
 		const newUserData = await updateUserData(session, firstLogin, userData);
 		const userAndData = user;
 		user.data = userData;
+		user.playlists = session.map(x => {
+			const filterDocs = x.map(docs => {
+				return docs._doc;
+			});
+
+			const currentName = x.name;
+			return {
+				name: currentName,
+				records: filterDocs
+			}
+		});
+
 		res.status(200).json({err: false, items: [user]});
 	}
 	
@@ -125,7 +137,7 @@ try{
 
 				const songLimit = correntPl.songs;
 				const currentRecords = [];
-				//currentRecords.name = x.name;
+				currentRecords.name = x.name;
 				while(currentRecords.length < songLimit) {
 					let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
 					record._doc.playlistName = x.name;
@@ -136,11 +148,7 @@ try{
 			});
 
 
-			const finalRecords = records.flat().map(x => {
-				return x._doc;
-			});
-
-			resolve(finalRecords)
+			resolve(records)
 		})
 	})
 }
@@ -156,12 +164,17 @@ function startSession(mapPlaylistData) {
 }
 
 function updateUserData(session, firstLogin, userData) {
+	const sessionSongs = session.flat().map(x => {
+		return x._doc;
+	});
+
+
 	let data = {};
 	data['$push'] = {
 		'researchList.0.sessionList': {
 			sessionNumber: (!userData.researchList[0].sessionList.length) ? 1 : userData.researchList[0].sessionList.length + 1,
 			sessionDate: new Date(),
-			songs: session
+			songs: sessionSongs
 		}
 	}
 
