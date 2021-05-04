@@ -34,13 +34,19 @@ module.exports = async function (req, res, next) {
 		user.playlists = session.map(x => {
 			const filterDocs = x.map(docs => {
 				return docs._doc;
+				//return Object.keys(docs._doc);
+				//return Object.values(docs._doc);
 			});
 
+
+
+
 			const currentName = x.name;
-			return {
+			return [{
 				name: currentName,
-				records: filterDocs
-			}
+				records: [Object.values(filterDocs)]
+				//records: [Object.values(filterDocs)]
+			}]
 		});
 
 		res.status(200).json({err: false, items: [user]});
