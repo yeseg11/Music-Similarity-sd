@@ -42,12 +42,12 @@ module.exports = async function (req, res, next) {
 
 
 			const currentName = x.name;
-			return [{
+			return [[{
 				name: currentName,
-				records: [Object.values(filterDocs)]
+				records: Object.values(filterDocs)
 				//records: [Object.values(filterDocs)]
-			}]
-		});
+			}]]
+		}).flat();
 
 		res.status(200).json({err: false, items: [user]});
 	}
