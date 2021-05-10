@@ -1159,7 +1159,7 @@ app.get('/getResearcheGroupsSize', function (req, res, next) {    //call to getU
     })
 });
 /** ----------------------------------------------------------------------------------
- * Return all the researchs Data from DB
+ * Return all the researches Data from DB
  *
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
