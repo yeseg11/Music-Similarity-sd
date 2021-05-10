@@ -148,7 +148,10 @@ try{
 					let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
 					record._doc.playlistName = x.name;
 					record._doc.score = 0;
-					currentRecords.push(record);
+
+					// if(!currentRecords.filter(x=> currentRecords.mbId.toString() === record.mbId.toString()))
+						currentRecords.push(record);
+
 				}
 				return currentRecords;
 			});
