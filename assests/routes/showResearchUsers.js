@@ -22,7 +22,8 @@
                     templateSahow += '<td >' + result1[i].countryAtTwenty + '</td>'; //'<th>::Length of session:::</th>';
                     templateSahow += '<td >' + result1[i].countryOrigin + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].languageOrigin + '</td>'; //'<th>::algorithm:::</th>';
-                    templateSahow += '<td >' + result1[i].languageAtTwenty + '</td>'; //'<th>::algorithm:::</th>';
+                    templateSahow += '<td >' + result1[i].firstLangAtTwenty + '</td>'; //'<th>::algorithm:::</th>';
+					templateSahow += '<td >' + result1[i].secondLangAtTwenty + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].yearOfImmigration + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].Genre1Select + '</td>'; //'<th>::algorithm:::</th>';
                     templateSahow += '<td >' + result1[i].Genre2Select + '</td>'; //'<th>::algorithm:::</th>';
@@ -76,7 +77,8 @@
         html += '<th>Country At Twenty</th>\n';
         html += '<th>Origin Country</th>\n';
         html += '<th>Origin language</th>\n';
-        html += '<th>Language At Twenty</th>\n';
+        html += '<th>First Language At Twenty</th>\n';
+        html += '<th>Second Language At Twenty</th>\n';
         html += '<th>Year Of Immigration</th>\n';
         html += '<th>Genre1</th>\n';
         html += '<th>Genre2</th>\n';

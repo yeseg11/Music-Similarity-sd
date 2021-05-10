@@ -1,15 +1,11 @@
 (function ($) {
     $(document).ready(function () {
         // console.log("here");
-
+        const PLAYLISTSIZE = 50;
         var researchId = localStorage["ResearchId"];
         console.log("researchId: ",researchId);
 
-        // var oldEntrance = 0;
-        // var oldrecList = [];
         function init() {
-
-
             getResearchData().then(function (result1) {
                 $('#researchName').val(result1[0].researchName);
                 $('#researchId').val(result1[0].researchId);
@@ -111,8 +107,6 @@
             });
         }
 
-
-
         init();
 
 
@@ -130,8 +124,6 @@
                     return $('#error').text("insert all the details");
                 }
             }
-
-
 
             var researchName = $('#researchName'),
                 researchId = $('#researchId'),
@@ -151,12 +143,13 @@
             var countryAtTwenty = "";
             var countryOrigin = "";
             var languageOrigin = "";
-            var languageAtTwenty = "";
+            var firstLangAtTwenty = "";
+			var secondLangAtTwenty = "";
             var yearOfImmigration = "";
             var group = "";
 
             var prom = new Promise(function (resolve, reject) {
-                for (i = 0; i < patientsIds.length; i++) {
+                for (var i = 0; i < patientsIds.length; i++) {
                     $.get('/user/' + patientsIds[i].value, function (data) {
                         console.log(data.items);
                         let items = data.items[0];
@@ -164,19 +157,21 @@
                         countryAtTwenty = items.countryAtTwenty;
                         countryOrigin = items.countryOrigin;
                         languageOrigin = items.languageOrigin;
-                        languageAtTwenty = items.languageAtTwenty;
+                        firstLangAtTwenty = items.firstLangAtTwenty;
+						secondLangAtTwenty = items.secondLangAtTwenty;
                         yearOfImmigration = items.yearOfImmigration;
                         group = items.group;
 
                     }).then(function (response) {
                         var recList = [];
-                        $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + languageAtTwenty, function (data) {
+
+                        $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + firstLangAtTwenty, function (data) {
                             if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
                             var size = PLAYLISTSIZE;
                             if (data.items.length < size) {
                                 size = data.items.length;
                             }
-                            for (i = 0; i < size; i++) {
+                            for (var i = 0; i < size; i++) {
                                 // console.log(data.items[i].artist[0].name);
                                 recList.push({
                                     mbId: data.items[i].mbId,
@@ -192,18 +187,57 @@
                                 });
 
                             }
-                        }).then(function (response) {
+                        }).then(function(response) {
                             // console.log(response.items);
                             var playlistData = {
-                                name: countryAtTwenty + languageAtTwenty + yearAtTwenty,
+                                name: countryAtTwenty + firstLangAtTwenty + yearAtTwenty,
                                 year: yearAtTwenty,
                                 country: countryAtTwenty,
-                                language: languageAtTwenty,
+                                language: firstLangAtTwenty,
                                 records: JSON.stringify(recList)
                             };
                             var createPlaylistUrl = '/playList/createPlaylist';
                             var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
                             postingCreatePlaylist.done(function (data) {
+                            });
+                        }).then(function (response2) {
+                            var recList2 = [];
+
+                            $.get('/mb/track/recording/' + yearAtTwenty + '/' + countryAtTwenty + '/' + secondLangAtTwenty, function (data2) {
+                                if (!data2 || !data2.items || !data2.items.length) return reject(Error("ERROR IN FIND LIST"));
+                                var size = PLAYLISTSIZE;
+                                if (data2.items.length < size) {
+                                    size = data2.items.length;
+                                }
+                                for (var i = 0; i < size; i++) {
+                                    // console.log(data.items[i].artist[0].name);
+                                    recList2.push({
+                                        mbId: data2.items[i].mbId,
+                                        title: data2.items[i].title,
+                                        year: parseInt(data2.items[i].year),
+                                        artistName: data2.items[i].artist[0].name,
+                                        language: data2.items[i].language,
+                                        country: data2.items[i].country,
+                                        lyrics: data2.items[i].lyrics,
+                                        genre: data2.items[i].genre,
+                                        youtube: data2.items[i].youtube,
+                                        votes: []
+                                    });
+
+                                }
+                            }).then(function(){
+                                // console.log(response.items);
+                                var playlistData2 = {
+                                    name: countryAtTwenty + secondLangAtTwenty + yearAtTwenty,
+                                    year: yearAtTwenty,
+                                    country: countryAtTwenty,
+                                    language: secondLangAtTwenty,
+                                    records: JSON.stringify(recList2)
+                                };
+                                var createPlaylistUrl2 = '/playList/createPlaylist';
+                                var postingCreatePlaylist2 = $.post(createPlaylistUrl2, playlistData2);
+                                postingCreatePlaylist2.done(function (data2) {
+                                });
                             });
                         });
                     });
@@ -228,7 +262,6 @@
                 var insertResearchUrl = '/insertResearch';
                 var postingInsertResearch = $.post(insertResearchUrl, researchData);
                 postingInsertResearch.done(function (data) {
-
                 });
                 alert("Research Created '\n' The research Id is: " + researchId.val());
                 var pathname = "/researchGroupMainPage"

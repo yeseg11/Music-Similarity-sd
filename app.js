@@ -151,7 +151,9 @@ app.post('/playList/createPlaylist', function (req, res, next) {
                     const {matchedCount, modifiedCount} = result;
                     if (matchedCount && modifiedCount) {
                         console.log(`Successfully added a private user.`)
+                        return res.status(200);
                     }
+                    return res.status(500);
                 })
                 .catch(err => console.error(`Failed to add review: ${err}`))
         })
@@ -168,12 +170,29 @@ app.post('/insertUserData', function (req, res, next) {
     // console.log("req.body.playlists: ",req.body['playlists[]']);
 
     if (req.body.tamaringaId && req.body.userName && req.body.firstName && req.body.lastName) {
+        let firstLang = req.body["playlists[]"]["0"];
+        let secondLang = req.body["playlists[]"]["1"];
+        let genrePlaylists = req.body["genrePlaylists[]"];
+        //console.log("first lang is: " + firstLang + " ,second lang is: " + secondLang);
+
         const userData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             userName: req.body.userName,
             tamaringaId: req.body.tamaringaId.toString(),
-            playlists: req.body['playlists[]'], //need to added
+            playlists: {
+                firstLanguage: {
+                    language: firstLang,
+                    playlists: []
+                },
+                secondLanguage: {
+                    language: secondLang,
+                    playlists: []
+                },
+                genrePlaylists: genrePlaylists
+
+            },
+            //playlists: req.body['playlists[]'], //need to added
             researchList: req.body.researchList
         };
 
@@ -183,7 +202,8 @@ app.post('/insertUserData', function (req, res, next) {
             .then(result => {
                 const {matchedCount, modifiedCount} = result;
                 if (matchedCount && modifiedCount) {
-                    console.log(`Successfully added a new User Data.`)
+                    console.log(`Successfully added a new User Data.`);
+                    res.send(200);
                 }
             }).catch(err => console.error(`Failed to add review: ${err}`))
     }
@@ -226,13 +246,28 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
         return next(err);
     }
     let playlist = [];
+    let langAtTwenty = req.body.langAtTwenty;
     let researchList = [];
+
+
+    //let langAtTwenty = req.body.langAtTwenty;
     console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
+        let firstPlaylistDB = docs["0"]._doc.playlists.firstLanguage;
+        let secondPlaylistDB = docs["0"]._doc.playlists.secondLanguage;
+        let genrePlaylists = docs["0"]._doc.playlists.genrePlaylists;
+        let langFlag = "";
+
         if (err) return next(err);
         try {
-            if (docs[0].playlists != null){
-                playlist = docs[0].playlists;
+            if (firstPlaylistDB.language === langAtTwenty){
+                playlist = firstPlaylistDB.playlists;
+                langFlag = "first";
+            }
+
+            if (secondPlaylistDB.language === langAtTwenty){
+                playlist = secondPlaylistDB.playlists;
+                langFlag = "second";
             }
             if (docs[0].researchList != null){
                 researchList = docs[0].researchList;
@@ -248,33 +283,68 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
             // console.log("researchListData ",researchListData);
             // console.log("req.body['playlists[]'] ",req.body['playlists[]']);
             // console.log("Array.isArray(req.body['playlists[]'])",Array.isArray(req.body['playlists[]']));
-
+            //docs["0"]._doc.playlists.firstLanguage.playlists
             if (req.body.tamaringaId && req.body['playlists[]']) {
                 if (Array.isArray(req.body['playlists[]'])){
                     for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
-                        playlist.push(req.body['playlists[]'][i])
+                        playlist.push(req.body['playlists[]'][i]);
                     }
                 }
                 else {
-                    playlist.push(req.body['playlists[]'])
+                    playlist.push(req.body['playlists[]']);
                 }
                 // playlist.push(req.body.playlists)
                 researchList.push(researchListData)
 
+                let userData;
+                if(langFlag === "first") {
+                    userData = {
+                        tamaringaId: req.body.tamaringaId.toString(),
+                        playlists: {
+                            firstLanguage: {
+                                language: req.body.langAtTwenty,
+                                playlists: playlist
+                            },
+                            secondLanguage: {
+                                language: secondPlaylistDB.language,
+                                playlists: secondPlaylistDB.playlists
+                            },
+                            genrePlaylists: genrePlaylists
+                        },
+                        researchList: researchList,
+                    };
+                }
 
-                const userData = {
-                    tamaringaId: req.body.tamaringaId.toString(),
-                    playlists: playlist,
-                    researchList: researchList,
-                };
+                else {
+                    userData = {
+                        tamaringaId: req.body.tamaringaId.toString(),
+                        playlists: {
+                            firstLanguage: {
+                                language: firstPlaylistDB.language,
+                                playlists: firstPlaylistDB.playlists
+                            },
+
+                            secondLanguage: {
+                                language: req.body.langAtTwenty,
+                                playlists: playlist
+                            },
+                            genrePlaylists: genrePlaylists
+                        },
+                        researchList: researchList,
+                    };
+                }
 
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};
-                UserData.updateOne(query, userData, options)
+                //const setuserData = "\"{$set:\"" + userData + "}";
+                //{ $set: { "local.userName": "whatsup" }
+
+                UserData.updateOne(query, userData , options)
                     .then(result => {
                         const {matchedCount, modifiedCount} = result;
                         if (matchedCount && modifiedCount) {
-                            console.log(`Successfully added a new User Data.`)
+                            console.log(`Successfully added a new User Data.`);
+                            res.send(200);
                         }
                     }).catch(err => console.error(`Failed to add review: ${err}`))
             }
@@ -328,7 +398,8 @@ app.post('/insertPublicUsers', function (req, res, next) {
             countryAtTwenty: req.body.countryAtTwenty,
             countryOrigin: req.body.countryOrigin,
             languageOrigin: req.body.languageOrigin,
-            languageAtTwenty: req.body.languageAtTwenty,
+            firstLangAtTwenty: req.body.firstLangAtTwenty,
+			secondLangAtTwenty: req.body.secondLangAtTwenty,
             yearOfImmigration: req.body.yearOfImmigration,
             Genre1Select: req.body.Genre1Select,
             Genre2Select: req.body.Genre2Select,
@@ -988,7 +1059,8 @@ app.post('/getDecadePlaylist', function (req, res, next) {    //call to getUserD
     if (!req) return res.sendStatus(400);
     PlayList.find({name: { $in:req.body['name[]']}}).exec(function (err, docs) {
         if (err) return next(err);
-        res.status(200).json({err: false, items: [].concat(docs)});
+        res.status(200).json({err: false, items: docs});
+        //res.status(200).json({err: false, items: [].concat(docs)});
     })
 });
 
@@ -1087,7 +1159,7 @@ app.get('/getResearcheGroupsSize', function (req, res, next) {    //call to getU
     })
 });
 /** ----------------------------------------------------------------------------------
- * Return all the researchs Data from DB
+ * Return all the researches Data from DB
  *
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
@@ -1294,7 +1366,7 @@ app.get('/playlist/:playlist/:id', function (req, res, next) {
 app.post('/loginGuide', function (req, res, next) {
     if (!req.body) return res.sendStatus(400);
     //console.log(req.body);
-    //console.log(req.body.guideUserName + "   " + req.body.guidePassword);
+    //console.log(req.body.guideUserName + "   " + req.body.gufidePassword);
     if (req.body.guideUserName === undefined || req.body.guidePassword === undefined) {
         console.log("req.body is undefined");
         return next(err);

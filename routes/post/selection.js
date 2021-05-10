@@ -1,6 +1,7 @@
 let PlayList = require('../../models/playlist.js');
 let PublicUsers = require('../../models/publicUsers.js');
 let UserData = require('../../models/userData.js');
+let GlobalRating = require('../../models/globalRating');
 
 module.exports = function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     const tamaringaId = req.params.userId;
@@ -25,8 +26,7 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
             currentSession.songs.push({
                 playlistName: playlistName,
                 mbId: mbId,
-                score: score,
-                guideComment: "",
+                score: score
             })
         }
 
