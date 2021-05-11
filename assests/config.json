@@ -1,0 +1,12 @@
+{
+  "Text": {
+    "Font_color": "red",
+    "Font_Size" : "18px"
+  },
+  "Size":{
+    "playlistSize": 20
+  },
+  "Display": {
+
+  }
+}
