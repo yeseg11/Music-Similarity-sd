@@ -24,7 +24,8 @@
                 $('#countryOrigin').val(result1[0].countryOrigin);
                 $('#countryAtTwenty').val(result1[0].countryAtTwenty);
                 $('#languageOrigin').val(result1[0].languageOrigin);
-                $('#languageAtTwenty').val(result1[0].languageAtTwenty);
+                $('#firstLangAtTwenty').val(result1[0].firstLangAtTwenty);
+				$('#secondLangAtTwenty').val(result1[0].secondLangAtTwenty);
                 $('#yearOfImmigration').val(result1[0].yearOfImmigration);
                 $('#Genre1Select').val(result1[0].Genre1Select);
                 $('#Genre2Select').val(result1[0].Genre2Select);
@@ -58,9 +59,11 @@
 
 
         $('#send').on("click", function (e) {
-            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#languageAtTwenty'];
+            let inputsArr = ['#birthYear', '#userName', '#firstName', '#lastName', '#nursingHome', '#countryAtTwenty','#countryOrigin', '#languageOrigin', '#firstLangAtTwenty', '#secondLangAtTwenty'];
 
             for (const element of inputsArr) {
+                console.log("element", element);
+                // console.log("element length", $(element).val().length)
                 if ($(element).val().length <= 1) {
                     var element2 = element.substr(1);
                     alert("Please fill the missing details in " + element2);
@@ -81,7 +84,8 @@
                 countryOrigin = $('#countryOrigin'),
                 countryAtTwenty = $('#countryAtTwenty'),
                 languageOrigin = $('#languageOrigin'),
-                languageAtTwenty = $('#languageAtTwenty'),
+                firstLangAtTwenty = $('#firstLangAtTwenty'),
+				secondLangAtTwenty = $('#secondLangAtTwenty'),
                 yearOfImmigration = $('#yearOfImmigration'),
                 Genre1Select = $('#Genre1Select'),
                 Genre2Select = $('#Genre2Select');
@@ -117,14 +121,15 @@
                     birthYear : parseInt(birthYear.val()),
                     yearAtTwenty: parseInt(yearTwenty),
                     languageOrigin : languageOrigin.val(),
-                    languageAtTwenty : languageAtTwenty.val(),
+                    firstLangAtTwenty : firstLangAtTwenty.val(),
+					secondLangAtTwenty : secondLangAtTwenty.val(),
                     countryAtTwenty: countryAtTwenty.val(),
                     countryOrigin: countryOrigin.val(),
                     yearOfImmigration : parseInt(yearOfImmigration.val()),
                     Genre1Select : Genre1Select.val(),
                     Genre2Select : Genre2Select.val(),
                     nursingHome : nursingHome.val(),
-                    group: countryAtTwenty.val() + languageAtTwenty.val() +yearTwenty.toString(),
+                    group: countryAtTwenty.val() + firstLangAtTwenty.val() +yearTwenty.toString(),
                     entrance: oldEntrance,
                     songs: JSON.stringify(oldrecList)
                 };

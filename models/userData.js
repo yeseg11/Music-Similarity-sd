@@ -10,7 +10,17 @@ var userDataSchema = new Schema({ //create when create a user .
     lastName: String,
     userName: String,
     tamaringaId: String,
-    playlists: [], //need to added
+    playlists: {
+        firstLanguage: {
+            language: String,
+            playlists: []
+        },
+        secondLanguage: {
+            language: String,
+            playlists: []
+        },
+        genrePlaylists: []
+    },
     researchList: [{
         //added when research created with the user.
         researchId: String,
@@ -20,11 +30,14 @@ var userDataSchema = new Schema({ //create when create a user .
             {
                 sessionNumber: String,
                 sessionDate: Date,
+                guideName: String,
+                guideGeneralScore: String,
                 songs: [{
                     playlistName: String,
                     mbId: String,
                     score: Number,
-                    guideComment:String,
+                    guideScore: Number,
+                    guideComment: String,
                 }]
             }]
     }]

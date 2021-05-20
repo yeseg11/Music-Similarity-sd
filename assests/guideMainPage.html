@@ -28,16 +28,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script src="routes/index.js"></script>
     <script src="./routes/guideSelectUser.js"></script>
+    <script src="./routes/guideGetSession.js"></script>
+
+
 </head>
 <body>
 <div class="container-contact100">
-    <div class="wrap-contact1100">
+    <div class="wrap-contact1100-mobile">
         <form class="contact100-form validate-form">
-				<span class="contact100-form-title">
+				<span class="contact100-form-title-mobile" id="guideTitle">
 					Guide main Screen
 				</span>
 
-            <div class="container-section-space">
+            <div id="mainDiv">
                 <div class="container-section">
                     <div class="container-contact100-form-btn">
                         <div class="wrap-contact100-form-btn">
@@ -72,13 +75,6 @@
                     <div class="wrap-input100 validate-input">
                         <br>
                         <select input id='sessionsList' class="input100" type="text" name='sessionsList' size=4>
-
-                            <!-- session list for the current user will be displayed here -->
-                            <!-- note: consider using slide down for the session list  -->
-<!--                            <option value="session">session 4, 2/11/2020</option>-->
-<!--                            <option value="session">session 3, 9/11/2020</option>-->
-<!--                            <option value="session">session 2, 16/11/2020</option>-->
-<!--                            <option value="session">session 1, 23/11/2020</option>-->
                         </select>
                         <span class="focus-input100"></span>
                     </div>
@@ -87,8 +83,7 @@
                         <div class="container-contact100-form-btn">
                             <div class="wrap-contact100-form-btn">
                                 <div class="contact100-form-bgbtn"></div>
-                                <button id='enterSession' type='button' class="contact100-form-btn"
-                                        onclick="location.href='/guideSessionPage'">
+                                <button id='enterSession' type='button' class="contact100-form-btn">
                         <span>
                         <i class="fa fa-users fa-lg fa-fw" aria-hidden="true"></i>
                             Enter Session
@@ -100,11 +95,15 @@
                 </div>
             </div>
 
+                <div id="selectedSession">
+
+                </div>
+
 
             <div class="container-contact100-back-btn">
                 <div class="wrap-contact100-back-btn">
                     <div class="contact100-back-bgbtn"></div>
-                    <button id='main' type='button' class="contact100-back-btn" onclick="location.href='/'">
+                    <button id='main' type='button' class="contact100-back-btn" onclick="location.href='/guideMainPage'">
                         <i class="fa fa-arrow-left m-l-7" aria-hidden="true"></i>
                     </button>
                 </div>
