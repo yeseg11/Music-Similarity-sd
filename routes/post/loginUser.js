@@ -7,7 +7,8 @@ let PlayList = require('../../models/playlist.js');
 
 let NumSongsForLanguage = 3; //need to edit to support the new config file
 let NumSongsForGenre = 2;//	"				"				"
-const TESTFIRSTSESSION = true;
+let SESSIONSONGLIMIT = 20;
+const TESTFIRSTSESSION = false;
 
 module.exports = async function (req, res, next) {  
 		if (!req || !req.body) return res.sendStatus(400); //if the request is empty, return it
@@ -25,7 +26,7 @@ module.exports = async function (req, res, next) {
 			session = await startFirstSession(mapPlaylistData);
 		}
 		else {
-				session = await startSession(mapPlaylistData);
+				session = await nonInitialSession(mapPlaylistData, userData);
 		}
 		const logAnEntrance = await logEntrance(user); // if everything went well, log an entrance
 		const newUserData = await updateUserData(session, firstLogin, userData);
@@ -34,18 +35,12 @@ module.exports = async function (req, res, next) {
 		user.playlists = session.map(x => {
 			const filterDocs = x.map(docs => {
 				return docs._doc;
-				//return Object.keys(docs._doc);
-				//return Object.values(docs._doc);
 			});
-
-
-
 
 			const currentName = x.name;
 			return [[{
 				name: currentName,
 				records: Object.values(filterDocs)
-				//records: [Object.values(filterDocs)]
 			}]]
 		}).flat();
 
@@ -137,11 +132,11 @@ try{
 		})
 		PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
 			const records = playLists.map(x => {
-				const correntPl = mapPlaylistData.find(element => {
+				const currentPl = mapPlaylistData.find(element => {
 					return element.name === x.name
 				});
 
-				const songLimit = correntPl.songs;
+				const songLimit = currentPl.songs;
 				const currentRecords = [];
 				currentRecords.name = x.name;
 				while(currentRecords.length < songLimit) {
@@ -168,8 +163,84 @@ catch(err){
 }
 
 //after the first session, this function will be used
-function startSession(mapPlaylistData) {
+async function nonInitialSession(mapPlaylistData, userData) {
+	//get songs from previous sessions with like score of 3-5
+
+	// const mbidLiked = userData.researchList[0].sessionList.map(x=> { // liked songs
+	// 	return x.songs.filter(song => song.score > 3 && song.score <= 5)
+	// }).flat();
+
+	const mbidLiked = userData.researchList[0].sessionList.map(x=>{
+		return x.songs
+			.filter(s=>s.score >= 3 && s.score <= 5)
+			.map(s=> s.mbId)
+	}).reduce(function(o, v, i, arr){
+		for(let i=0; i < v.length; i++){
+			if(o.indexOf(v[i]) != -1) continue;
+			o.push(v[i]);
+		}
+		return o;
+	}, []);
+
+	const mbidUnLiked = userData.researchList[0].sessionList.map(x=>{ // unliked songs
+		return x.songs.filter(song => song.score > 0 && song.score <= 3)
+	}).flat();
 	
+	
+	try{
+		return new Promise(function (resolve, reject) {
+			const playlistNames = mapPlaylistData.map(function(playlist) {
+				return playlist.name;
+			})
+
+			//get playlists names
+			PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
+
+
+				const likedRecords = playLists.map(x => {
+					let records = x._doc.records.flat();
+
+					let records2 = records.map(docs => {
+						return docs._doc;
+					}).flat();
+
+
+					records2 = records2.filter(function(element) {
+						return mbidLiked.includes(element.mbId);
+					});
+
+					return records2;
+				})
+
+				const records = playLists.map(x => {
+					const currentPl = mapPlaylistData.find(element => {
+						return element.name === x.name;
+					});
+
+					const songLimit = currentPl.songs;
+					const currentRecords = [];
+					currentRecords.name = x.name;
+					while(currentRecords.length < songLimit) {
+						let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
+						record._doc.playlistName = x.name;
+						record._doc.score = 0;
+
+						// if(!currentRecords.filter(x=> currentRecords.mbId.toString() === record.mbId.toString()))
+						currentRecords.push(record);
+
+					}
+					return currentRecords;
+				});
+
+
+				resolve(records)
+			})
+		})
+	}
+
+	catch(err){
+		return err;
+	}
 }
 
 function updateUserData(session, firstLogin, userData) {
@@ -208,36 +279,19 @@ function logEntrance(user){
 		})	
 	})
 }
-	
-	
-	//require playlist object by playlist names
-	
-	
-	/* 	
-            User.findOne({"username":req.body.username}, function(err,user) {
-                if (err) {
-                    reject(err)
-                } else {
-                    console.log("yaha b agyaaa");
-                    var errorsArr = [];
-                    errorsArr.push({"msg":"Username already been taken."});
-                    resolve(errorsArr);
-                } */
 
 
 
-// function getUserData(user){
-// 	return new Promise(function(resolve,reject) {
-// 		UserData.find({tamaringaId: user.tamaringaId.toString()})
-// 			.exec(function (err, userDataDocs) {
-// 				if(err || !userDataDocs.length)
-// 					reject(new Error('Error: No userData available!'));
-// 				else if(userDataDocs[0].researchList === null) reject(new Error('Can not Enter, Please add the user to research!'));
-// 				else{
-// 					user.data = userDataDocs[0].toObject();
-// 					resolve(user.data);
-// 				}
-// 			})
-// 	})
+
+// for(let i = 0; i < currentPl.songs;i++) {
+// 	const playlist = currentPl[i];
+// 	if(!playlist || !playlist.records || !playlist.records.length)
+// 		continue;
+// 	for(let j = 0; j < playlist.records.length; j++) {
+// 		const record = playlist.records[j];
+// 		if(!record)
+// 			continue;
+// 		if(mbidLiked.indexOf(record.mbId) != -1 && !likedPlaylist.records.find( x => x.mbId == record.mbId))
+// 			likedPlaylist.records.push(record);
+// 	}
 // }
-
