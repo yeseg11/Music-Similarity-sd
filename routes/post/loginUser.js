@@ -198,18 +198,13 @@ async function nonInitialSession(mapPlaylistData, userData) {
 
 
 				const likedRecords = playLists.map(x => {
-					let records = x._doc.records.flat();
+					let records = x._doc.records;
 
-					let records2 = records.map(docs => {
-						return docs._doc;
-					}).flat();
-
-
-					records2 = records2.filter(function(element) {
-						return mbidLiked.includes(element.mbId);
+					records = records.filter(function(element) {
+						return mbidLiked.includes(element._doc.mbId);
 					});
 
-					return records2;
+					return records;
 				})
 
 				const records = playLists.map(x => {
