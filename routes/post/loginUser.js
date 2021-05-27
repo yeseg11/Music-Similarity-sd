@@ -166,13 +166,9 @@ catch(err){
 
 //after the first session, this function will be used
 async function nonInitialSession(mapPlaylistData, userData) {
+
 	//get songs from previous sessions with like score of 3-5
-
-	// const mbidLiked = userData.researchList[0].sessionList.map(x=> { // liked songs
-	// 	return x.songs.filter(song => song.score > 3 && song.score <= 5)
-	// }).flat();
-
-	const mbidLiked = userData.researchList[0].sessionList.map(x=>{
+	let mbidLiked = userData.researchList[0].sessionList.map(x=>{
 		return x.songs
 			.filter(s=>s.score >= 3 && s.score <= 5)
 			.map(s=> s.mbId)
@@ -184,11 +180,35 @@ async function nonInitialSession(mapPlaylistData, userData) {
 		return o;
 	}, []);
 
-	const mbidUnLiked = userData.researchList[0].sessionList.map(x=>{ // unliked songs
-		return x.songs.filter(song => song.score > 0 && song.score <= 3)
-	}).flat();
-	
-	
+	// low rating songs
+	const mbidUnLiked = userData.researchList[0].sessionList.map(x=>{
+		return x.songs
+			.filter(song => song.score > 0 && song.score <= 3)
+			.map(s=> s.mbId)
+	}).reduce(function(o, v, i, arr){
+		for(let i=0; i < v.length; i++){
+			if(o.indexOf(v[i]) !== -1) continue;
+			o.push(v[i]);
+		}
+		return o;
+	}, []);
+
+	const unlikedPlaylists = userData.researchList[0].sessionList.map(x=>{
+		return x.songs
+			.map(s=> s.playlistName)
+	}).reduce(function(o, v, i, arr){
+		for(let i=0; i < v.length; i++){
+			if(o.indexOf(v[i]) !== -1) continue;
+			if(v[i]) {
+				o.push(v[i]);
+			}
+		}
+		return o;
+	}, []);
+
+	mbidLiked = mbidLiked.filter(songs => mbidUnLiked.indexOf(songs) === -1);
+	//firstArr.filter(el => secondArr.indexOf(el) === -1);
+
 	try{
 		return new Promise(function (resolve, reject) {
 			const playlistNames = mapPlaylistData.map(function(playlist) {
@@ -216,13 +236,22 @@ async function nonInitialSession(mapPlaylistData, userData) {
 					result.name = playlistName;
 
 					//filling the blanks of the playlist's slots(up to playlist songLimit) with random new songs
-					while(result.length < songLimit){
-						let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
+					for(let i = 0; i < x._doc.records.length; i++) {
+						let record = x._doc.records[i]; //Math.floor(Math.random() * x._doc.records.length)
 						record._doc.playlistName = x.name;
 						record._doc.score = 0;
+						let flatResult = result.flat();
 
-						if((result.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)) == 0)
+						//filter duplicate songs
+						const checkDup = flatResult.filter(resultRec => record._doc.mbId === resultRec._doc.mbId)
+
+						//check if record is a low rated song
+						const removeUnliked = mbidUnLiked.indexOf(record._doc.mbId);
+
+						if(checkDup.length === 0 && removeUnliked === -1)
 							result.push(record);
+						if(result.length === songLimit)
+							break;
 					}
 						return result;
 				});
@@ -273,19 +302,3 @@ function logEntrance(user){
 		})	
 	})
 }
-
-
-
-
-// for(let i = 0; i < currentPl.songs;i++) {
-// 	const playlist = currentPl[i];
-// 	if(!playlist || !playlist.records || !playlist.records.length)
-// 		continue;
-// 	for(let j = 0; j < playlist.records.length; j++) {
-// 		const record = playlist.records[j];
-// 		if(!record)
-// 			continue;
-// 		if(mbidLiked.indexOf(record.mbId) != -1 && !likedPlaylist.records.find( x => x.mbId == record.mbId))
-// 			likedPlaylist.records.push(record);
-// 	}
-// }
