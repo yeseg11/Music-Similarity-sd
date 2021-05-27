@@ -196,40 +196,33 @@ async function nonInitialSession(mapPlaylistData, userData) {
 			//get playlists names
 			PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
 
-
-				const likedRecords = playLists.map(x => {
-
-					let records = x._doc.records;
-					const playlistName = x._doc.name;
-					records = records.filter(function(element) {
-						return mbidLiked.includes(element._doc.mbId);
-					});
-
-					let result =Array.from(records.flat(0));
-					result.name = playlistName;
-					return result;
-				});
-
 				const records = playLists.map(x => {
 					const currentPl = mapPlaylistData.find(element => {
 						return element.name === x.name;
 					});
 
 					const songLimit = currentPl.songs;
-					const currentRecords = [];
-					currentRecords.name = x.name;
-					while(currentRecords.length < songLimit) {
+					let records = x._doc.records;
+					const playlistName = x._doc.name;
+
+					//pushing the liked songs
+					records = records.filter(function(element) {
+						return mbidLiked.includes(element._doc.mbId);
+					});
+
+					let result = Array.from(records.flat(0));
+					result.name = playlistName;
+
+					//filling the blanks of the playlist's slots(up to playlist songLimit) with random new songs
+					while(result.length < songLimit){
 						let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
 						record._doc.playlistName = x.name;
 						record._doc.score = 0;
-
 						// if(!currentRecords.filter(x=> currentRecords.mbId.toString() === record.mbId.toString()))
-						currentRecords.push(record);
-
+						result.push(record);
 					}
-					return currentRecords;
+						return result;
 				});
-
 
 				resolve(records)
 			})
