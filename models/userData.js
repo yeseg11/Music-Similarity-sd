@@ -38,6 +38,7 @@ var userDataSchema = new Schema({ //create when create a user .
                     score: Number,
                     guideScore: Number,
                     guideComment: String,
+                    language: String
                 }]
             }]
     }]
