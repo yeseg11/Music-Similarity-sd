@@ -139,14 +139,16 @@ try{
 				const songLimit = currentPl.songs;
 				const currentRecords = [];
 				currentRecords.name = x.name;
+				let firstSong = true;
 				while(currentRecords.length < songLimit) {
 					let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
 					record._doc.playlistName = x.name;
 					record._doc.score = 0;
 
-					// if(!currentRecords.filter(x=> currentRecords.mbId.toString() === record.mbId.toString()))
+					if((currentRecords.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)).length === 0 || firstSong === true){
 						currentRecords.push(record);
-
+						firstSong = false;
+					}
 				}
 				return currentRecords;
 			});
@@ -218,12 +220,9 @@ async function nonInitialSession(mapPlaylistData, userData) {
 						let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
 						record._doc.playlistName = x.name;
 						record._doc.score = 0;
-						let test = (result.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)).length;
-							if((result.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)) == 0)
-								result.push(record);
-							else {
-								continue;
-							}
+
+						if((result.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)) == 0)
+							result.push(record);
 					}
 						return result;
 				});
