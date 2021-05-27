@@ -218,8 +218,12 @@ async function nonInitialSession(mapPlaylistData, userData) {
 						let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
 						record._doc.playlistName = x.name;
 						record._doc.score = 0;
-						// if(!currentRecords.filter(x=> currentRecords.mbId.toString() === record.mbId.toString()))
-						result.push(record);
+						let test = (result.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)).length;
+							if((result.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)) == 0)
+								result.push(record);
+							else {
+								continue;
+							}
 					}
 						return result;
 				});
