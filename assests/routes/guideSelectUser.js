@@ -2,6 +2,7 @@ let selectedData;
 let sessionDate;
 let sessionAndResearch;
 let researchID;
+let tamaringaId;
 
 (($) => {
     $(document).ready(function () {
@@ -29,7 +30,7 @@ let researchID;
         init();
 
         $('#patientsIds').change(function() {
-            let tamId = $(this).val();
+            let tamaringaId = $(this).val();
             let UserName = $("#patientsIds option:selected").text();
 
             //------------getting the current sessions and putting them inside the select--------------
@@ -83,10 +84,11 @@ let researchID;
             function getUserData() {
                 return new Promise(function (resolve, reject) {
                     let userData = [];
-                    //console.log("tamID is: " + tamId);
-                    $.get('/userSessions' + tamId , function (data) {
+                    //console.log("tamID is: " + tamaringaId);
+                    $.get('/userSessions' + tamaringaId , function (data) {
                         if (!data || !data.items || !data.items.length) reject(Error("ERROR IN FIND LIST"));
                         userData = data.items;
+                        data.items.tamID = tamaringaId;
                         selectedData = data.items;
                         //console.log("data is" + data[0] + "data.items is:" + data.items);
 
@@ -98,7 +100,7 @@ let researchID;
 
 
 
-            console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamId);
+            console.log("UserName: " + UserName + "\nTamaringa ID is: " + tamaringaId);
         });
 
     });
