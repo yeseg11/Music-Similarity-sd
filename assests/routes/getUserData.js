@@ -122,7 +122,8 @@
 
 
 function f2(id, mbId, playlistName, score) {
-    var req =  $.post('selection/'+id, {mbId, playlistName, score});
+    const rateType = "user";
+    let req =  $.post('selection/'+id, {mbId, playlistName, score, rateType});
 
     req.done(function(){
         alert('Thanks we recived your score')

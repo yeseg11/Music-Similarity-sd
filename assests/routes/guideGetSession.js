@@ -18,11 +18,11 @@
         songBlock += '<br>SongName</br>';
         songBlock += 'SongYear</br></span></span></br>';
         songBlock += '<span class="class=label-input100" style="font-size: 150%"><b>Rate song:</b></br></span>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',1)" name="verySad" id ="verySad">😟</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',2)" name="Sad" id ="Sad">🙁</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',3)" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',4)" name="happy" id ="happy">🙂</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5)" name="Joyful" id ="Joyful">😀</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',1,\'::rateType::\')" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',2,\'::rateType::\')" name="Sad" id ="Sad">🙁</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',3,\'::rateType::\')" name="Indifferent" id ="Indifferent">😐</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',4,\'::rateType::\')" name="happy" id ="happy">🙂</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5,\'::rateType::\')" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
@@ -126,7 +126,8 @@
                         .replace("CommentFunc", "commentSong(" + r + ")")
                         .replace(new RegExp('::data::', 'g'), cleanMbid)
                         .replace(new RegExp('::playListName::', 'g'), playlistName)
-                        .replace(new RegExp('::userid::', 'g'), selectedData.tamID);
+                        .replace(new RegExp('::userid::', 'g'), selectedData.tamID)
+                        .replace(new RegExp('::rateType::', 'g'), currentSession);
 
 
                     sessionHtml +=  newBlock;
@@ -195,9 +196,8 @@ function commentSession() {
     alert("Current session comment is:" + SessionInputValue);
 }
 
-function rating(id, mbId, playlistName, score){
-
-    let req =  $.post('selection/'+id, {mbId, playlistName, score});
+function rating(id, mbId, playlistName, score, rateType){
+    let req =  $.post('selection/'+id, {mbId, playlistName, score, rateType});
 
     req.done(function(){
         alert('Thanks we recived your score')

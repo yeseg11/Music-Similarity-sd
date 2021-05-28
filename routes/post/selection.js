@@ -5,17 +5,22 @@ let GlobalRating = require('../../models/globalRating');
 
 module.exports = function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     const tamaringaId = req.params.userId;
-    const {mbId, playlistName, score} = req.body;
+    const {mbId, playlistName, score, rateType} = req.body;
     if(!tamaringaId) return next(new Error('Missing user Id'));
 
-    const checkKeys =['mbId', 'playlistName', 'score'].filter(key=>!req.body[key]).map(key=>`We are missing ${key}`);
+    const checkKeys =['mbId', 'playlistName', 'score', 'rateType'].filter(key=>!req.body[key]).map(key=>`We are missing ${key}`);
     if(checkKeys.length) return next(new Error(checkKeys.join(",")));
 
     return UserData.findOne({tamaringaId}).exec((err, user)=>{
         if(err || !user) return next(err || new Error('Invalid user Id!'));
 
-        const currentSessionIndex = user.researchList[0].sessionList.length -1;
-        const currentSession = user.researchList[0].sessionList[currentSessionIndex];
+        let currentSessionIndex = rateType;
+
+        if(currentSessionIndex === 'user') {
+            currentSessionIndex = user.researchList[0].sessionList.length -1;
+        }
+
+        const currentSession = user.researchList[0].sessionList[parseInt(currentSessionIndex)];
 
         currentSession.songs = currentSession.songs || [];
         const gradedSongAlready = currentSession.songs.find(x=>x.mbId==mbId);
@@ -31,8 +36,17 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
         }
 
         let update = {};
+        let updateGlobal = {};
+
+        // updateGlobal ['$set'] = {
+        //     'researchList.0.sessionList': user.researchList[0].sessionList
+        // }
 
         update['$set'] = {
+            'researchList.0.sessionList': user.researchList[0].sessionList
+        }
+
+        updateGlobal['$set'] = {
             'researchList.0.sessionList': user.researchList[0].sessionList
         }
 
