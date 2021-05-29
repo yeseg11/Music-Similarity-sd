@@ -1,6 +1,7 @@
 let PublicUsers = require('../../models/publicUsers.js');
 let UserData = require('../../models/userData.js');
 let PlayList = require('../../models/playlist.js');
+let GlobalRating = require('../../models/globalRating');
 
 //add test flag and test the first session
 //take the names from the Word document
@@ -131,6 +132,9 @@ try{
 			return playlist.name;
 		})
 		PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
+			if(err || !playLists.length)
+				reject(new Error('Error getting playlist'));
+
 			const records = playLists.map(x => {
 				const currentPl = mapPlaylistData.find(element => {
 					return element.name === x.name
@@ -178,7 +182,7 @@ async function nonInitialSession(mapPlaylistData, userData) {
 			o.push(v[i]);
 		}
 		return o;
-	}, []);
+	}, []).sort(() => Math.random() - 0.5);
 
 	// low rating songs
 	const mbidUnLiked = userData.researchList[0].sessionList.map(x=>{
@@ -214,8 +218,15 @@ async function nonInitialSession(mapPlaylistData, userData) {
 			const playlistNames = mapPlaylistData.map(function(playlist) {
 				return playlist.name;
 			})
+			// WRITE A NEW METHOD THAT RETURNS GLOBAL RATING PLAYLISTS
+			// GlobalRating.find({'playlists.name' : {$in : playlistNames}}).exec((err, globalRating) => {
+			// 	return globalRating._doc
+			// });
 
 			//get playlists names
+
+
+
 			PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
 
 				const records = playLists.map(x => {
@@ -255,7 +266,8 @@ async function nonInitialSession(mapPlaylistData, userData) {
 					}
 						return result;
 				});
-
+				
+				records.sort(() => Math.random() - 0.5);
 				resolve(records)
 			})
 		})
