@@ -2,8 +2,9 @@ let PlayList = require('../../models/playlist.js');
 let PublicUsers = require('../../models/publicUsers.js');
 let UserData = require('../../models/userData.js');
 let GlobalRating = require('../../models/globalRating');
+let Records = require('../../models/records.js');
 
-module.exports = function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     const tamaringaId = req.params.userId;
     const {mbId, playlistName, score, rateType} = req.body;
     if(!tamaringaId) return next(new Error('Missing user Id'));
@@ -11,11 +12,16 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
     const checkKeys =['mbId', 'playlistName', 'score', 'rateType'].filter(key=>!req.body[key]).map(key=>`We are missing ${key}`);
     if(checkKeys.length) return next(new Error(checkKeys.join(",")));
 
+
+    const currentRecord = await getRecord(mbId);
+    const rateGlobal = await globalRate(currentRecord, score, playlistName);
+
     return UserData.findOne({tamaringaId}).exec((err, user)=>{
         if(err || !user) return next(err || new Error('Invalid user Id!'));
 
         let currentSessionIndex = rateType;
 
+        //if it's a user, get the last session index. If it's a guide, the last session index is 'rateType'
         if(currentSessionIndex === 'user') {
             currentSessionIndex = user.researchList[0].sessionList.length -1;
         }
@@ -36,19 +42,12 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
         }
 
         let update = {};
-        let updateGlobal = {};
 
-        // updateGlobal ['$set'] = {
-        //     'researchList.0.sessionList': user.researchList[0].sessionList
-        // }
 
         update['$set'] = {
             'researchList.0.sessionList': user.researchList[0].sessionList
         }
 
-        updateGlobal['$set'] = {
-            'researchList.0.sessionList': user.researchList[0].sessionList
-        }
 
         UserData.findOneAndUpdate({_id:  user._id}, update).exec((err, result)=>{
             if(err) return next(err);
@@ -57,6 +56,93 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
 
 
     }); // end UserData.findOne
+
+
+}
+
+function getRecord(mbId){
+    return new Promise(function(resolve,reject) {
+        Records.find({mbId: mbId})
+            .exec(function (err, docs) {
+                if(err || !docs.length)
+                    reject(new Error('Error: No record available!'));
+                else{
+                    let record = docs["0"]._doc
+                    delete record.lyrics;
+                    delete record.genre;
+                    delete record.youtube;
+                    delete record.mbRaw;
+                    resolve(record);
+                    }
+            })
+    })
+}
+
+function globalRate(currentRecord, score, playlistName){
+    return new Promise(function(resolve,reject) {
+        GlobalRating.findOne({language: currentRecord.language})
+            .exec(function (err, docs) {
+                if(err)
+                    reject(new Error('Error: No record available!'));
+                else {
+                    let updateGlobal = {};
+                    if (!docs) {
+                        updateGlobal = {
+                            language: currentRecord.language,
+                            playlists: []
+                        };
+                    }
+                    else
+                        updateGlobal = docs._doc;
+
+                    let currentPlaylist = updateGlobal.playlists.find(function (playlist) {
+                        return playlist.name === playlistName;
+                    });
+
+                    if(typeof currentPlaylist === "undefined") {
+                        updateGlobal.playlists.push({
+                            name: playlistName,
+                            country: currentRecord.country,
+                            records: []
+                        })
+                    }
+
+                    let recordExist = false;
+
+                    updateGlobal.playlists.forEach(function (playlist) {
+                        if(playlist.name === playlistName){
+                            playlist.records.forEach(function(song){
+                                if (currentRecord.mbId === song.mbId) {
+                                    song.sumOfRatings += parseInt(score);
+                                    song.countOfRaters++;
+                                    song.ratingAvg = song.sumOfRatings/song.countOfRaters;
+                                    recordExist = true;
+                                }
+                            })
+                            if (!recordExist) {
+                                currentRecord.sumOfRatings = score;
+                                currentRecord.countOfRaters = 1;
+                                currentRecord.ratingAvg = score;
+                                playlist.records.push(currentRecord);
+                            }
+                        }
+                    });
+
+                    const options = {"upsert": true};
+                    GlobalRating.findOneAndUpdate({language: currentRecord.language}, updateGlobal, options)
+                            .exec(function (err, docs) {
+                                if(err)
+                                    reject(new Error('Error updating global rating!'));
+                                else
+                                    resolve(docs);
+                            })
+
+                    resolve(updateGlobal);
+                }
+            })
+    })
+
+}
 
 
 
@@ -145,4 +231,4 @@ module.exports = function (req, res, next) {    //call to getUserData.js , and r
         });
     });
      */
-}
+

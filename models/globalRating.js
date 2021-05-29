@@ -6,7 +6,6 @@ var globalRatingSchema = new Schema({
     language: String,
     playlists: [{
         name:String,
-        year:Number,
         country:String,
         records: [
             {
@@ -16,13 +15,14 @@ var globalRatingSchema = new Schema({
                 artistName: String,
                 language: String,
                 country: String,
-                SumOfRatings: Number,
-                CountOfRaters: Number
+                sumOfRatings: Number,
+                countOfRaters: Number,
+                ratingAvg: Number
             }]
     }]
 });
 
 
-var UserData = mongoose.model('GlobalRating', globalRatingSchema);
+var GlobalRating = mongoose.model('GlobalRating', globalRatingSchema);
 
-module.exports = UserData;
+module.exports = GlobalRating;
