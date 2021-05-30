@@ -8,7 +8,7 @@ let GlobalRating = require('../../models/globalRating');
 
 let NumSongsForLanguage = 12; //need to edit to support the new config file
 //let NumSongsForPlaylist
-let NumSongsForGenre = 3;//	"				"				"
+let NumSongsForGenre = 4;//	"				"				"
 let SESSIONSONGLIMIT = 20;
 const GLOBALRATINGAVG = 3;
 const TESTFIRSTSESSION = false;
