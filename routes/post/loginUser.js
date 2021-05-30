@@ -212,28 +212,22 @@ async function nonInitialSession(mapPlaylistData, userData) {
 
 	mbidLiked = mbidLiked.filter(songs => mbidUnLiked.indexOf(songs) === -1);
 	//firstArr.filter(el => secondArr.indexOf(el) === -1);
+	const playlistNames = mapPlaylistData.map(function(playlist) {
+		return playlist.name;
+	})
+
+	const globalSongs =  await getGlobalRatings(playlistNames);
 
 	try{
 		return new Promise(function (resolve, reject) {
-			const playlistNames = mapPlaylistData.map(function(playlist) {
-				return playlist.name;
-			})
-			// WRITE A NEW METHOD THAT RETURNS GLOBAL RATING PLAYLISTS
-			// GlobalRating.find({'playlists.name' : {$in : playlistNames}}).exec((err, globalRating) => {
-			// 	return globalRating._doc
-			// });
-
-			//get playlists names
-
-
-
 			PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
 
-				const records = playLists.map(x => {
+				let records = playLists.map(x => {
 					const currentPl = mapPlaylistData.find(element => {
 						return element.name === x.name;
 					});
 
+				const currentGlobalSongs = 	globalSongs
 					const songLimit = currentPl.songs;
 					let records = x._doc.records;
 					const playlistName = x._doc.name;
@@ -266,7 +260,7 @@ async function nonInitialSession(mapPlaylistData, userData) {
 					}
 						return result;
 				});
-				
+
 				records.sort(() => Math.random() - 0.5);
 				resolve(records)
 			})
@@ -277,6 +271,41 @@ async function nonInitialSession(mapPlaylistData, userData) {
 		return err;
 	}
 }
+
+function getGlobalRatings(playlistNames){
+	return new Promise(function(resolve,reject) {
+		GlobalRating.find({'playlists.name' : {$in : playlistNames}})
+			.lean().exec(function (err, songs) {
+				if(err || !songs)
+					reject(new Error('Problem getting global playlists'));
+				else if(songs === null)
+					reject(new Error('can\'t register enterace'));
+				else{
+					let flatSongs = songs.map(docs => {
+						return docs.playlists["0"].records;
+					}).flat().filter(song => song.ratingAvg >=3);
+
+					resolve(flatSongs);
+				}
+			})
+	})
+}
+
+
+
+// let mbidLiked = userData.researchList[0].sessionList.map(x=>{
+// 	return x.songs
+// 		.filter(s=>s.score >= 3 && s.score <= 5)
+// 		.map(s=> s.mbId)
+// }).reduce(function(o, v, i, arr){
+// 	for(let i=0; i < v.length; i++){
+// 		if(o.indexOf(v[i]) != -1) continue;
+// 		o.push(v[i]);
+// 	}
+// 	return o;
+// }, []).sort(() => Math.random() - 0.5);
+
+
 
 function updateUserData(session, firstLogin, userData) {
 	const sessionSongs = session.flat().map(x => {
@@ -314,3 +343,4 @@ function logEntrance(user){
 		})	
 	})
 }
+
