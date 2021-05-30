@@ -123,6 +123,7 @@ function globalRate(currentRecord, score, playlistName){
                                 currentRecord.sumOfRatings = score;
                                 currentRecord.countOfRaters = 1;
                                 currentRecord.ratingAvg = score;
+                                currentRecord.playlist = playlist.name;
                                 playlist.records.push(currentRecord);
                             }
                         }

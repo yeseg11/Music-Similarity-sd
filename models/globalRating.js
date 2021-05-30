@@ -11,10 +11,10 @@ var globalRatingSchema = new Schema({
             {
                 mbId: String,
                 title: String,
-                year: Number,
                 artistName: String,
                 language: String,
                 country: String,
+                playlist: String,
                 sumOfRatings: Number,
                 countOfRaters: Number,
                 ratingAvg: Number
