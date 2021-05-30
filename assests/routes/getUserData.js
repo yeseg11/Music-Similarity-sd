@@ -82,6 +82,7 @@
                         console.log(playlist.records[r])
                         const record = records[r];
                         const mbid = record.mbId ? record.mbId : '';
+                        const cleanMbid = mbid.replace(/([\/,"+'!?_])/g, "\\$1");
                         const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
                         const title = (record.title) ? record.title : '';
                         const artist = (record.artistName) ? record.artistName : '';
@@ -91,7 +92,7 @@
                                     .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)
                                     .replace(new RegExp('::link::', 'g'), videoId)
                                     .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
-                                    .replace(new RegExp('::data::', 'g'), mbid)
+                                    .replace(new RegExp('::data::', 'g'), cleanMbid)
                                     .replace(new RegExp('::playListName::', 'g'), playlistName);
 
                         html = html
@@ -121,7 +122,8 @@
 
 
 function f2(id, mbId, playlistName, score) {
-    var req =  $.post('selection/'+id, {mbId, playlistName, score});
+    const rateType = "user";
+    let req =  $.post('selection/'+id, {mbId, playlistName, score, rateType});
 
     req.done(function(){
         alert('Thanks we recived your score')

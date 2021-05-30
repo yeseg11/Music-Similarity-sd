@@ -18,11 +18,11 @@
         songBlock += '<br>SongName</br>';
         songBlock += 'SongYear</br></span></span></br>';
         songBlock += '<span class="class=label-input100" style="font-size: 150%"><b>Rate song:</b></br></span>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="verySad" id ="verySad">😟</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Sad" id ="Sad">🙁</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="happy" id ="happy">🙂</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Joyful" id ="Joyful">😀</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',1,\'::rateType::\')" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',2,\'::rateType::\')" name="Sad" id ="Sad">🙁</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',3,\'::rateType::\')" name="Indifferent" id ="Indifferent">😐</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',4,\'::rateType::\')" name="happy" id ="happy">🙂</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5,\'::rateType::\')" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
@@ -108,12 +108,14 @@
                     sessionHtml +=  emptyBlock;
                 }
                 for(let r = 0; r < songs.length; r++){
-                    let currentMbId = songs[r].mbId;
-                    let record = await getRecord(currentMbId);
-                    let recordArtist = record.items[0].artist[0].name;
-                    let recordTitle = record.items[0].title;
-                    let recordYear = record.items[0].year;
+                    const currentMbId = songs[r].mbId;
+                    const record = await getRecord(currentMbId);
+                    const cleanMbid = currentMbId.replace(/([\/,"+'!?_])/g, "\\$1");
+                    const recordArtist = record.items[0].artist[0].name;
+                    const recordTitle = record.items[0].title;
+                    const recordYear = record.items[0].year;
                     let commentWithIndex = "songComment" + r;
+                    const playlistName = songs[r].playlistName;
 
 
                     let newBlock = songBlock
@@ -121,7 +123,11 @@
                         .replace("SongName", recordTitle)
                         .replace("SongYear", recordYear)
                         .replace("songComment", commentWithIndex)
-                        .replace("CommentFunc", "commentSong(" + r + ")");
+                        .replace("CommentFunc", "commentSong(" + r + ")")
+                        .replace(new RegExp('::data::', 'g'), cleanMbid)
+                        .replace(new RegExp('::playListName::', 'g'), playlistName)
+                        .replace(new RegExp('::userid::', 'g'), selectedData.tamID)
+                        .replace(new RegExp('::rateType::', 'g'), currentSession);
 
 
                     sessionHtml +=  newBlock;
@@ -190,8 +196,12 @@ function commentSession() {
     alert("Current session comment is:" + SessionInputValue);
 }
 
-function rating(status){
+function rating(id, mbId, playlistName, score, rateType){
+    let req =  $.post('selection/'+id, {mbId, playlistName, score, rateType});
 
-    //call post here...
+    req.done(function(){
+        alert('Thanks we recived your score')
+    }).
+
     alert("Current rating is:" + status);
 }
