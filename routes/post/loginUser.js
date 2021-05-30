@@ -6,9 +6,11 @@ let GlobalRating = require('../../models/globalRating');
 //add test flag and test the first session
 //take the names from the Word document
 
-let NumSongsForLanguage = 3; //need to edit to support the new config file
-let NumSongsForGenre = 2;//	"				"				"
+let NumSongsForLanguage = 12; //need to edit to support the new config file
+//let NumSongsForPlaylist
+let NumSongsForGenre = 3;//	"				"				"
 let SESSIONSONGLIMIT = 20;
+const GLOBALRATINGAVG = 3;
 const TESTFIRSTSESSION = false;
 
 module.exports = async function (req, res, next) {  
@@ -105,21 +107,41 @@ function sessionChecker(userData){
 //define an object for each playlist with the name and number of songs
 function getPlaylistsNames(user){
 		let playlistData = user.playlists.firstLanguage.playlists;
+		const songPerPlaylist1 = Math.floor(NumSongsForLanguage / playlistData.length);
+
+		playlistData = playlistData.map(x => {
+			return {
+				name: x,
+				songs: songPerPlaylist1
+			}
+		});
+
 		if(user.playlists.secondLanguage.language !== null || user.playlists.secondLanguage.language !== "empty") {
-			playlistData = playlistData.concat(user.playlists.secondLanguage.playlists);
+			let playlistDataSec = user.playlists.secondLanguage.playlists;
+			const songPerPlaylistSec = Math.floor(NumSongsForLanguage / playlistDataSec.length);
+			playlistDataSec = playlistDataSec.map(x => {
+				return {
+					name: x,
+					songs: songPerPlaylistSec
+				}
+			});
+
+			playlistData = playlistData.concat(playlistDataSec);
 		}
 
 		if(user.playlists.genrePlaylists !== null) {
-			playlistData = playlistData.concat(user.playlists.genrePlaylists);
+			let playlistDataGen = user.playlists.genrePlaylists;
+			playlistDataGen = playlistDataGen.map(x => {
+				return {
+					name: x,
+					songs: NumSongsForGenre
+				}
+			});
+			playlistData = playlistData.concat(playlistDataGen);
 		}
 
 
-	return playlistData.map(x => {
-		return {
-			name: x,
-			songs: (x.length === 3) ? NumSongsForGenre : NumSongsForLanguage
-		}
-	});
+	return playlistData;
 }
 
 
@@ -174,7 +196,7 @@ async function nonInitialSession(mapPlaylistData, userData) {
 	//get songs from previous sessions with like score of 3-5
 	let mbidLiked = userData.researchList[0].sessionList.map(x=>{
 		return x.songs
-			.filter(s=>s.score >= 3 && s.score <= 5)
+			.filter(s=>s.score >= 4 && s.score <= 5)
 			.map(s=> s.mbId)
 	}).reduce(function(o, v, i, arr){
 		for(let i=0; i < v.length; i++){
@@ -288,28 +310,13 @@ function getGlobalRatings(playlistNames){
 				else{
 					let flatSongs = songs.map(docs => {
 						return docs.playlists["0"].records;
-					}).flat().filter(song => song.ratingAvg >=3);
+					}).flat().filter(song => song.ratingAvg >= GLOBALRATINGAVG);
 
 					resolve(flatSongs);
 				}
 			})
 	})
 }
-
-
-
-// let mbidLiked = userData.researchList[0].sessionList.map(x=>{
-// 	return x.songs
-// 		.filter(s=>s.score >= 3 && s.score <= 5)
-// 		.map(s=> s.mbId)
-// }).reduce(function(o, v, i, arr){
-// 	for(let i=0; i < v.length; i++){
-// 		if(o.indexOf(v[i]) != -1) continue;
-// 		o.push(v[i]);
-// 	}
-// 	return o;
-// }, []).sort(() => Math.random() - 0.5);
-
 
 
 function updateUserData(session, firstLogin, userData) {
@@ -334,7 +341,7 @@ function updateUserData(session, firstLogin, userData) {
 	return data;
 }
 	
-// if everything went well, log an entrace
+// if everything went well, log an entrance
 function logEntrance(user){
 	return new Promise(function(resolve,reject) {
 		PublicUsers.findOneAndUpdate({_id: user._id}, {$inc: {'entrance': 1}})
