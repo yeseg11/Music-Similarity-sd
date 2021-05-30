@@ -211,7 +211,6 @@ async function nonInitialSession(mapPlaylistData, userData) {
 	}, []);
 
 	mbidLiked = mbidLiked.filter(songs => mbidUnLiked.indexOf(songs) === -1);
-	//firstArr.filter(el => secondArr.indexOf(el) === -1);
 	const playlistNames = mapPlaylistData.map(function(playlist) {
 		return playlist.name;
 	})
@@ -227,14 +226,17 @@ async function nonInitialSession(mapPlaylistData, userData) {
 						return element.name === x.name;
 					});
 
-				const currentGlobalSongs = 	globalSongs
 					const songLimit = currentPl.songs;
 					let records = x._doc.records;
 					const playlistName = x._doc.name;
+					const currentGlobal = globalSongs.filter(song => song.playlist === playlistName).map(name => name.mbId);
 
-					//pushing the liked songs
+					//combine liked songs with global liked songs and randomize
+					const likedAndGlobal = mbidLiked.concat(currentGlobal.filter((item) => mbidLiked.indexOf(item) < 0)).sort(() => Math.random() - 0.5);
+
+					//pushing the liked and global songs
 					records = records.filter(function(element) {
-						return mbidLiked.includes(element._doc.mbId);
+						return likedAndGlobal.includes(element._doc.mbId);
 					});
 
 					let result = Array.from(records.flat(0));
@@ -242,6 +244,9 @@ async function nonInitialSession(mapPlaylistData, userData) {
 
 					//filling the blanks of the playlist's slots(up to playlist songLimit) with random new songs
 					for(let i = 0; i < x._doc.records.length; i++) {
+						if(result.length === songLimit)
+							break;
+
 						let record = x._doc.records[i]; //Math.floor(Math.random() * x._doc.records.length)
 						record._doc.playlistName = x.name;
 						record._doc.score = 0;
@@ -255,12 +260,12 @@ async function nonInitialSession(mapPlaylistData, userData) {
 
 						if(checkDup.length === 0 && removeUnliked === -1)
 							result.push(record);
-						if(result.length === songLimit)
-							break;
+
 					}
 						return result;
 				});
 
+				//randomize playlists
 				records.sort(() => Math.random() - 0.5);
 				resolve(records)
 			})
