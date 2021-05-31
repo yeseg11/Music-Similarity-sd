@@ -81,14 +81,49 @@
             var playlistNames = [];
             var recList = [];
 
-            for (var i = 0 ; i < postingData.decade.length ; i++){
+           // <option value="arame">ArabicME</option>
+            //<option value="arana">ArabicNA</option>
+            // <option value="spa">Spanish</option>
+
+            let numOfPlaylist = postingData.decade.length
+
+            for (var i = 0 ; i < numOfPlaylist ; i++){
                 var lang = postingData.langAtTwenty.toUpperCase();
 
-                if (postingData.langAtTwenty === "rus" || postingData.langAtTwenty === "lit" || postingData.langAtTwenty === "lav"){
+                if (postingData.langAtTwenty === "rus" || postingData.langAtTwenty === "lit" || postingData.lasngAtTwenty === "lav"){
                     lang = "RUS"
                 }
+               else if (postingData.langAtTwenty === "arame") {
+                    lang = "ARAME99DC"
+                    playlistNames.push(lang);
+                    break
+                }
+               else if (postingData.langAtTwenty === "arana")
+                {
+                        lang = "ARANA99DC"
 
-                playlistNames.push(lang + postingData.decade[i] + "DC");
+                        playlistNames.push(lang);
+                        break
+                }
+               else if (postingData.langAtTwenty === "spa")
+               {
+                         lang = "SPA99DC"
+
+                         playlistNames.push(lang);
+                         break
+               }
+                else
+                    {
+                        playlistNames.push(lang + postingData.decade[i] + "DC");
+                    }
+
+                // }else if(postingData.langAtTwenty === "arana")
+                //     {
+                //         lang = "ARAME99DC"
+                //         playlistNames.push(lang);
+                //     }
+
+                //playlistNames.push(lang + postingData.decade[i] + "DC");
             }
 
             var playlistData = {
