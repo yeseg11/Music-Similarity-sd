@@ -7,7 +7,11 @@ let Records = require('../../models/records.js');
 module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     const tamaringaId = req.params.userId;
     const {mbId, playlistName, score, rateType} = req.body;
+    let isUser = false;
     if(!tamaringaId) return next(new Error('Missing user Id'));
+
+    if(rateType === 'user')
+        isUser = true;
 
     const checkKeys =['mbId', 'playlistName', 'score', 'rateType'].filter(key=>!req.body[key]).map(key=>`We are missing ${key}`);
     if(checkKeys.length) return next(new Error(checkKeys.join(",")));
@@ -31,30 +35,22 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
         currentSession.songs = currentSession.songs || [];
         const gradedSongAlready = currentSession.songs.find(x=>x.mbId==mbId);
 
-        if(gradedSongAlready){
+        if((gradedSongAlready && isUser) || (gradedSongAlready && !isUser && gradedSongAlready.score === 0)){
             gradedSongAlready.score = score;
-        }else{
-            currentSession.songs.push({
-                playlistName: playlistName,
-                mbId: mbId,
-                score: score
+            let update = {};
+
+
+            update['$set'] = {
+                'researchList.0.sessionList': user.researchList[0].sessionList
+            }
+
+
+            UserData.findOneAndUpdate({_id:  user._id}, update).exec((err, result)=>{
+                if(err) return next(err);
+                res.status(200).json({err: false})
             })
         }
-
-        let update = {};
-
-
-        update['$set'] = {
-            'researchList.0.sessionList': user.researchList[0].sessionList
-        }
-
-
-        UserData.findOneAndUpdate({_id:  user._id}, update).exec((err, result)=>{
-            if(err) return next(err);
-            res.status(200).json({err: false})
-        })
-
-
+        res.status(200).json({err: false})
     }); // end UserData.findOne
 
 
