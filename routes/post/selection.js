@@ -47,7 +47,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
             UserData.findOneAndUpdate({_id:  user._id}, update).exec((err, result)=>{
                 if(err) return next(err);
-                res.status(200).json({err: false})
+                //res.status(200).json({err: false})
             })
         }
         res.status(200).json({err: false})
