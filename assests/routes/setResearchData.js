@@ -92,8 +92,9 @@
 
                 if (postingData.langAtTwenty === "rus" || postingData.langAtTwenty === "lit" || postingData.lasngAtTwenty === "lav"){
                     lang = "RUS"
+                    playlistNames.push(lang + postingData.decade[i] + "DC");
                 }
-               else if (postingData.langAtTwenty === "arame") {
+               else if (postingData.langAtTwenty === "arame"){
                     lang = "ARAME99DC"
                     playlistNames.push(lang);
                     break
@@ -101,7 +102,6 @@
                else if (postingData.langAtTwenty === "arana")
                 {
                         lang = "ARANA99DC"
-
                         playlistNames.push(lang);
                         break
                 }
@@ -115,6 +115,7 @@
                 else
                     {
                         playlistNames.push(lang + postingData.decade[i] + "DC");
+
                     }
 
                 // }else if(postingData.langAtTwenty === "arana")
