@@ -71,13 +71,31 @@
                 if(!user.playlists || !user.playlists.length) return alert("No playlist was defined for this user!");
 
                 var html = '';
-                //console.log("user.playlists: ",user.playlists);
+
+                let playlistFinal = [];
+                let itemsExist = true;
+
+                while(itemsExist) {
+                    for (let i = 0; i < user.playlists.length; i++) {
+                        user.playlists[i][0].records.forEach(song => {
+                            const songIndex = Math.floor(Math.random() * user.playlists[i][0].records.length);
+                            playlistFinal.push(user.playlists[i][0].records[songIndex]);
+                            user.playlists[i][0].records.splice(songIndex, 1);
+
+                            if (!user.playlists[i][0].records.length) {
+                                user.playlists.splice(i, 1);
+                            }
+                        })
+                    }
+                    if (!user.playlists.length) {
+                        itemsExist = false;
+                    }
+                }
+
                 for(var i = 0; i < user.playlists.length; i++){
                     const playlist = user.playlists[i][0];
-                    //console.log("user.playlists[i]",user.playlists);
                     const records = playlist.records;
-                    //console.log("records",records);
-                    //need to get data
+
                     for(var r = 0; r < records.length; r++){
                         console.log(playlist.records[r])
                         const record = records[r];
@@ -128,40 +146,6 @@ function f2(id, mbId, playlistName, score) {
     req.done(function(){
         alert('Thanks we recived your score')
     })
-        //.failed(function(){
-       // alert('oh no, we did not process your score');
-    //})
-
-    /*$.get('/user/' + id.toString(), function (data) {
-
-        if (n <= 0 || !n || n > 5)
-            n = 0;
-        if (!data.items) {
-            return Error;
-        }
-
-        var obj = {
-            tamaringaId: id.toString(),
-            group: data.items[0].group,
-            songs: JSON.stringify({
-                id: id.toString(),
-                mbid: mbid,
-                vote: n
-            })
-        };
-        var $form = $(this);
-        //console.log($form);
-        var url = $form.attr("action");
-        url = "selection/" + id.toString();
-        var posting = $.post(url, obj);
-        //console.log("url: "+url);
-        alert("vote add");
-        posting.done(function (data) {
-            //console.log("data:"+data);
-        });
-    });*/
-
-
 }
 
 /** ----------------------------------------------------------------------------------
@@ -173,7 +157,7 @@ function f2(id, mbId, playlistName, score) {
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {playList , userData}
  ---------------------------------------------------------------------------------- */
-function addEnterens(id, entrance) {
+function addEntrance(id, entrance) {
 
     $.get('/user/' + id, function (data) {
 
