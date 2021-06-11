@@ -6,7 +6,7 @@ let GlobalRating = require('../../models/globalRating');
 //add test flag and test the first session
 //take the names from the Word document
 
-let NumSongsForLanguage = 12; //need to edit to support the new config file
+let NumSongsForLanguage = 8; //need to edit to support the new config file
 //let NumSongsForPlaylist
 let NumSongsForGenre = 4;//	"				"				"
 let SESSIONSONGLIMIT = 20;
@@ -21,18 +21,11 @@ module.exports = async function (req, res, next) {
 	try{
 		const user = await getUser(req.body); // getting the user from PublicUsers collection ///// pass the body only
 		const userData = await getUserData(user); //getting the user data from UserDatas collection //pass only the user id, not the all user
-		const firstLogin = sessionChecker(userData); //return true for first session, reject if exceeded session limit //don't pass all of the user data, only the research array
+		const sessionCounter = sessionChecker(userData); //return true for first session, reject if exceeded session limit //don't pass all of the user data, only the research array
 		const mapPlaylistData = getPlaylistsNames(userData);
-
-		let session;
-		if (firstLogin || TESTFIRSTSESSION) {
-			session = await startFirstSession(mapPlaylistData);
-		}
-		else {
-				session = await nonInitialSession(mapPlaylistData, userData);
-		}
+		const session = await createSession(mapPlaylistData, userData);
 		const logAnEntrance = await logEntrance(user); // if everything went well, log an entrance
-		const newUserData = await updateUserData(session, firstLogin, userData);
+		const newUserData = await updateUserData(session, userData);
 		const userAndData = user;
 		user.data = userData;
 		user.playlists = session.map(x => {
@@ -146,52 +139,9 @@ function getPlaylistsNames(user){
 
 
 
-// at the first session, returning an array with random songs from all of the user's playlists
-async function startFirstSession(mapPlaylistData) {
-try{
-	return new Promise(function (resolve, reject) {
-		const playlistNames = mapPlaylistData.map(function(playlist) {
-			return playlist.name;
-		})
-		PlayList.find({name : {$in : playlistNames}}).exec((err, playLists) => {
-			if(err || !playLists.length)
-				reject(new Error('Error getting playlist'));
-
-			const records = playLists.map(x => {
-				const currentPl = mapPlaylistData.find(element => {
-					return element.name === x.name
-				});
-
-				const songLimit = currentPl.songs;
-				const currentRecords = [];
-				currentRecords.name = x.name;
-				let firstSong = true;
-				while(currentRecords.length < songLimit) {
-					let record = x._doc.records[Math.floor(Math.random() * x._doc.records.length)];
-					record._doc.playlistName = x.name;
-					record._doc.score = 0;
-
-					if((currentRecords.flat().filter(resultRec => record._doc.mbId === resultRec._doc.mbId)).length === 0 || firstSong === true){
-						currentRecords.push(record);
-						firstSong = false;
-					}
-				}
-				return currentRecords;
-			});
-
-
-			resolve(records)
-		})
-	})
-}
-
-catch(err){
-	return err;
-	}
-}
 
 //after the first session, this function will be used
-async function nonInitialSession(mapPlaylistData, userData) {
+async function createSession(mapPlaylistData, userData) {
 
 	//get songs from previous sessions with like score of 3-5
 	let mbidLiked = userData.researchList[0].sessionList.map(x=>{
@@ -319,7 +269,7 @@ function getGlobalRatings(playlistNames){
 }
 
 
-function updateUserData(session, firstLogin, userData) {
+function updateUserData(session, userData) {
 	const sessionSongs = session.flat().map(x => {
 		return x._doc;
 	});
