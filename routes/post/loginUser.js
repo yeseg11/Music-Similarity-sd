@@ -206,17 +206,21 @@ async function createSession(mapPlaylistData, userData) {
 					//combine liked songs with global liked songs and randomize
 					const likedAndGlobal = mbidLiked.concat(currentGlobal.filter((item) => mbidLiked.indexOf(item) < 0)).sort(() => Math.random() - 0.5);
 
-					//pushing the liked and global songs
+					//pushing the liked and global songs up to the song limit
 					records = records.filter(function(element) {
-						return likedAndGlobal.includes(element._doc.mbId);
-					});
+						if(this.count < songLimit){
+							this.count++;
+							return likedAndGlobal.includes(element._doc.mbId);
+						}
+					}, {count: 0});
+
 
 					let result = Array.from(records.flat(0));
 					result.name = playlistName;
 
 					//filling the blanks of the playlist's slots(up to playlist songLimit) with random new songs
 					for(let i = 0; i < x._doc.records.length; i++) {
-						if(result.length === songLimit)
+						if(result.length >= songLimit)
 							break;
 
 						let record = x._doc.records[i]; //Math.floor(Math.random() * x._doc.records.length)
