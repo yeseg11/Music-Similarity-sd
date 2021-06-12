@@ -77,15 +77,18 @@
 
                 while(itemsExist) {
                     for (let i = 0; i < user.playlists.length; i++) {
-                        user.playlists[i][0].records.forEach(song => {
-                            const songIndex = Math.floor(Math.random() * user.playlists[i][0].records.length);
-                            playlistFinal.push(user.playlists[i][0].records[songIndex]);
-                            user.playlists[i][0].records.splice(songIndex, 1);
+                        const songIndex = Math.floor(Math.random() * user.playlists[i][0].records.length);
+                        if(typeof user.playlists[i][0].records[songIndex].playlistName === "undefined") {
+                            user.playlists[i][0].records[songIndex].playlistName = user.playlists[i][0].name;
+                        }
 
-                            if (!user.playlists[i][0].records.length) {
-                                user.playlists.splice(i, 1);
-                            }
-                        })
+                        playlistFinal.push(user.playlists[i][0].records[songIndex]);
+                        user.playlists[i][0].records.splice(songIndex, 1);
+
+                        if (!user.playlists[i][0].records.length) {
+                            user.playlists.splice(i, 1);
+                        }
+
                     }
                     if (!user.playlists.length) {
                         itemsExist = false;
