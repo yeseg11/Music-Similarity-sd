@@ -92,32 +92,56 @@
                     }
                 }
 
-                for(var i = 0; i < user.playlists.length; i++){
-                    const playlist = user.playlists[i][0];
-                    const records = playlist.records;
 
-                    for(var r = 0; r < records.length; r++){
-                        console.log(playlist.records[r])
-                        const record = records[r];
-                        const mbid = record.mbId ? record.mbId : '';
-                        const cleanMbid = mbid.replace(/([\/,"+'!?_])/g, "\\$1");
-                        const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
-                        const title = (record.title) ? record.title : '';
-                        const artist = (record.artistName) ? record.artistName : '';
-                        const playlistName = playlist.name;
-                        html += template
-                                    .replace(new RegExp('::videoId::', 'g'), videoId)
-                                    .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)
-                                    .replace(new RegExp('::link::', 'g'), videoId)
-                                    .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
-                                    .replace(new RegExp('::data::', 'g'), cleanMbid)
-                                    .replace(new RegExp('::playListName::', 'g'), playlistName);
+                for(let r = 0; r < playlistFinal.length; r++){
+                    const record = playlistFinal[r];
+                    const mbid = record.mbId ? record.mbId : '';
+                    const cleanMbid = mbid.replace(/([\/,"+'!?_])/g, "\\$1");
+                    const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
+                    const title = (record.title) ? record.title : '';
+                    const artist = (record.artistName) ? record.artistName : '';
+                    const playlistName = record.playlistName;
+                    html += template
+                        .replace(new RegExp('::videoId::', 'g'), videoId)
+                        .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)
+                        .replace(new RegExp('::link::', 'g'), videoId)
+                        .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
+                        .replace(new RegExp('::data::', 'g'), cleanMbid)
+                        .replace(new RegExp('::playListName::', 'g'), playlistName);
 
-                        html = html
-                                .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
-                                .replace(new RegExp('::data::', 'g'), mbid);
-                    }
+                    html = html
+                        .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
+                        .replace(new RegExp('::data::', 'g'), mbid);
                 }
+
+
+
+                // for(var i = 0; i < user.playlists.length; i++){
+                //     const playlist = user.playlists[i][0];
+                //     const records = playlist.records;
+                //
+                //     for(var r = 0; r < records.length; r++){
+                //         console.log(playlist.records[r])
+                //         const record = records[r];
+                //         const mbid = record.mbId ? record.mbId : '';
+                //         const cleanMbid = mbid.replace(/([\/,"+'!?_])/g, "\\$1");
+                //         const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
+                //         const title = (record.title) ? record.title : '';
+                //         const artist = (record.artistName) ? record.artistName : '';
+                //         const playlistName = playlist.name;
+                //         html += template
+                //                     .replace(new RegExp('::videoId::', 'g'), videoId)
+                //                     .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)
+                //                     .replace(new RegExp('::link::', 'g'), videoId)
+                //                     .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
+                //                     .replace(new RegExp('::data::', 'g'), cleanMbid)
+                //                     .replace(new RegExp('::playListName::', 'g'), playlistName);
+                //
+                //         html = html
+                //                 .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
+                //                 .replace(new RegExp('::data::', 'g'), mbid);
+                //     }
+                // }
 
                 // $('#title').html("Your Music: " + year + ',' + country);
                 window.scrollBy(0, 500);
