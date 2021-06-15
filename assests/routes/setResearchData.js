@@ -390,7 +390,7 @@
                     // window.location.replace(pathname);
                 });
                 alert("Research Created '\n' The research Id is: " + researchId.val() +"\n Please wait a few seconds till the page will go back");
-                setTimeout(myFunction, 1000);
+                setTimeout(myFunction, 3000);
             });
         })
 
