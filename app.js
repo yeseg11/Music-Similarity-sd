@@ -252,10 +252,10 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
 
     //let langAtTwenty = req.body.langAtTwenty;
     console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
-    UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
-        let firstPlaylistDB = docs["0"]._doc.playlists.firstLanguage;
-        let secondPlaylistDB = docs["0"]._doc.playlists.secondLanguage;
-        let genrePlaylists = docs["0"]._doc.playlists.genrePlaylists;
+    UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).lean().exec(function (err, docs) {
+        let firstPlaylistDB = docs["0"].playlists.firstLanguage;
+        let secondPlaylistDB = docs["0"].playlists.secondLanguage;
+        let genrePlaylists = docs["0"].playlists.genrePlaylists;
         let langFlag = "";
 
         if (err) return next(err);
