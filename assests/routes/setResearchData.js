@@ -18,7 +18,6 @@
 
             getUsers().then(function (result) {
                 var selectElem = $('#patientsIds');
-                //console.log(result)
                 for (var i = 0; i < result.length; i++) {
                     selectElem.append("<option value='" + result[i].tamaringaId + "'>" + result[i].userName +' - '+ result[i].firstName + ' ' + result[i].lastName + "</option>");
                 }
@@ -77,13 +76,9 @@
 
 
         //this function will be call twice if the user has selected a second language.
-        function postPlaylistForLang(postingData) {
+        async function postPlaylistForLang(postingData) {
             var playlistNames = [];
             var recList = [];
-
-           // <option value="arame">ArabicME</option>
-            //<option value="arana">ArabicNA</option>
-            // <option value="spa">Spanish</option>
 
             let numOfPlaylist = postingData.decade.length
 
@@ -131,21 +126,18 @@
                 name: playlistNames
             };
 
-            console.log("Getting decade playlists...");
+
             var checkDecadePlaylistUrl = '/getDecadePlaylist';
+            setTimeout(myFunction, 3000);
             var checkDecadePlaylist = $.post(checkDecadePlaylistUrl, playlistData);
 
             checkDecadePlaylist.done(function (data) {
-                console.log("decade playlists done!  the data is: " + data);
-                //console.log("data",data);
                 if (data.err){
                     alert("Error in find data checkDecadePlaylist for " + postingData.langID)
                 }
 
                 if (!(data.items.length > 0)){
-                    console.log("decade playlists empty! creating playlist...");
                     var playlistName = postingData.countryAtTwenty + postingData.langAtTwenty + postingData.yearAtTwenty;
-                    console.log("playlistName is: " + playlistName);
 
                     var playlistData = {
                         name: playlistName,
@@ -154,18 +146,17 @@
                         language: postingData.langAtTwenty,
                         records: JSON.stringify(recList)
                     };
-                    console.log("playlist data is: " + JSON.stringify(playlistData));
-                    console.log("posting playlist data to /playList/createPlaylist...");
+                    //console.log("playlist data is: " + JSON.stringify(playlistData));
 
                     var createPlaylistUrl = '/playList/createPlaylist';
                     var postingCreatePlaylist = $.post(createPlaylistUrl, playlistData);
                     postingCreatePlaylist.done(function (data) {
-                        console.log("DONE! - posting playlist data. The data is: " + data);
+                        //console.log("DONE! - posting playlist data. The data is: " + data);
                     });
                     playlistNames =[playlistName]
-                    console.log("playlistNames for " + postingData.langID + " " + playlistNames);
+
                 }
-                console.log("language before userdata" + postingData.langAtTwenty);
+
                 var userData = {
                     tamaringaId: postingData.response.items[0].tamaringaId,
                     playlists: playlistNames,
@@ -174,7 +165,7 @@
                     maxSessionNum: postingData.numberOfWeeks.val() * postingData.meetingPerWeek.val(),
                     sessionList: null
                 };
-                console.log("userData for" + postingData.langID + " " + userData);
+
                 var getPlaylistLink = '/updateUserDataCollection';
                 var postingInsertResearch = $.post(getPlaylistLink, userData);
                 postingInsertResearch.done(function (data) {
@@ -189,13 +180,10 @@
         }
 
         $('#send').on("click", function (e) {
-            // console.log("here")
             var arr = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#department", "#numberOfWeeks", "#meetingPerWeek", "#lengthOfSession", "#algorithm"];
             var mustInput = ["#researchName", "#researchId", "#researchersIds", "#patientsIds", "#nursingHome", "#numberOfWeeks", "#meetingPerWeek", "#algorithm"];
 
             for (const element of mustInput) {
-                // console.log("element", element)
-                // console.log("element length", $(element).val().length)
                 if ($(element).val().length < 1) {
                     var element2 = element.substr(1);
                     alert("Please fill the missing details in " + element2);
@@ -228,16 +216,15 @@
             var group = "";
 
             var prom = new Promise(function (resolve, reject) {
-
-                Promise.all(patientsIds.map(patientsId=>{
-                    return new Promise((res, rej)=>{
+                for(let i = 0; i < patientsIds.length; i++){
+                    let patientsId = patientsIds[i];
+                    let prom = new Promise((res, rej) => {
                         // insert logic foreach id here on done return res()
-                        console.log(patientsId)
+                        console.log("patientsId: " + patientsId);
                         //run patient by patient
 
                         $.get('/user/' + patientsId, function (data) {
                             let items = data.items[0];
-                            //console.log("data: ",data);
 
                             tamaringaId = items.tamaringaId;
                             yearAtTwenty = items.yearAtTwenty;
@@ -250,58 +237,44 @@
                             group = items.group;
 
                         }).then(function (response) {
-                            console.log("response1:",response);
                             yearAtTwenty = response.items[0].yearAtTwenty;
                             firstLangAtTwenty = response.items[0].firstLangAtTwenty;
                             secondLangAtTwenty = response.items[0].secondLangAtTwenty;
                             birthYear = response.items[0].birthYear;
-                            // console.log("birthYear:",birthYear);
-                            // console.log("yearAtTwenty:",yearAtTwenty);
-                            // console.log("languageAtTwenty:",languageAtTwenty);
                             // return;
                             //var recList = [];
                             //********** check if we have a playlist for the user
                             var decade = [];
-                            if (parseInt(birthYear) >1920 && parseInt(birthYear) <= 1940){ //50's
+                            if (parseInt(birthYear) > 1920 && parseInt(birthYear) <= 1940) { //50's
                                 //decade = "40";
-                                decade = ["30","40","50","60"];
-                                console.log("decade:",decade);
-                            }
-                            else if (parseInt(birthYear) <1950 && parseInt(birthYear) >= 1940){ //50's
+                                decade = ["30", "40", "50", "60"];
+                            } else if (parseInt(birthYear) < 1950 && parseInt(birthYear) >= 1940) { //50's
                                 //decade = "40";
-                                decade = ["40","50","60"];
-                                console.log("decade:",decade);
-                            }
-                            else if (parseInt(birthYear) <1960 && parseInt(birthYear) >= 1950){ //50's
+                                decade = ["40", "50", "60"];
+                            } else if (parseInt(birthYear) < 1960 && parseInt(birthYear) >= 1950) { //50's
                                 //decade = "50";
-                                decade = ["50","60","70"];
-                                console.log("decade:",decade);
-                            }
-                            else if (parseInt(birthYear) <1970 && parseInt(birthYear) >= 1960){
+                                decade = ["50", "60", "70"];
+                            } else if (parseInt(birthYear) < 1970 && parseInt(birthYear) >= 1960) {
                                 // decade = "60";
-                                decade = ["60","70","80"];
-                                console.log("decade:",decade);
+                                decade = ["60", "70", "80"];
                             }//60's
-                            else if (parseInt(birthYear) <1980 && parseInt(birthYear) >= 1970){
+                            else if (parseInt(birthYear) < 1980 && parseInt(birthYear) >= 1970) {
                                 // decade = "70";
-                                decade = ["70","80","90"];
-                                console.log("decade:",decade);
+                                decade = ["70", "80", "90"];
                             }//70's
-                            else if (parseInt(birthYear) <1990 && parseInt(birthYear) >= 1980){
+                            else if (parseInt(birthYear) < 1990 && parseInt(birthYear) >= 1980) {
                                 // decade = "80";
-                                decade = ["80","90"];
-                                console.log("decade:",decade);
+                                decade = ["80", "90"];
                             }//80's
-                            else if (parseInt(birthYear) <2000 && parseInt(birthYear) >= 1990){
+                            else if (parseInt(birthYear) < 2000 && parseInt(birthYear) >= 1990) {
                                 // decade = "90";
-                                decade = ["90","00"];
-                                console.log("decade:",decade);
+                                decade = ["90", "00"];
                             }//90's
-                            else if (parseInt(birthYear) <2010 && parseInt(birthYear) >= 2000){
+                            else if (parseInt(birthYear) < 2010 && parseInt(birthYear) >= 2000) {
                                 // decade = "00";
-                                decade = ["00","10"];
+                                decade = ["00", "10"];
                             }//00's
-                            else if (parseInt(birthYear) <2020 && parseInt(birthYear) >= 2010){
+                            else if (parseInt(birthYear) < 2020 && parseInt(birthYear) >= 2010) {
                                 // decade = "10";
                                 decade = ["10"];
                             }//10's
@@ -310,7 +283,7 @@
                             }
 
                             let onlyOneLang = false;
-                            if(firstLangAtTwenty.toUpperCase() === secondLangAtTwenty.toUpperCase() || secondLangAtTwenty === "empty")
+                            if (firstLangAtTwenty.toUpperCase() === secondLangAtTwenty.toUpperCase() || secondLangAtTwenty === "empty")
                                 onlyOneLang = true;
 
 
@@ -343,13 +316,18 @@
 
 
                             async function createPl() {
+                                setTimeout(myFunction, 4000);
                                 try {
-                                    const res = await postPlaylistForLang(postingData);
-                                    if(!onlyOneLang){
-                                        const res2 = await postPlaylistForLang(postingData2);
+                                    let res = await postPlaylistForLang(postingData);
+                                    console.log("Creating Playlist for ID:  ", postingData.tamaringaId);
+                                    console.log("createPl data for first: ", postingData);
+                                    if (!onlyOneLang) {
+                                        console.log("Creating Playlist for ID:  ", postingData2.tamaringaId);
+                                        console.log("createPl data for second: ", postingData2);
+                                        let res2 = await postPlaylistForLang(postingData2);
                                     }
 
-                                } catch(err) {
+                                } catch (err) {
                                     console.log(err);
                                 }
                             }
@@ -357,13 +335,13 @@
                             const res = createPl();
                         });
                         res();
-                    })
-                }))
-                    .then(()=>{
-                        // continue logic, done all the patients run
-                        alert("Creating User data... Please wait for 5-10 seconds and press OK")
-                    })
-                    .catch(e=>console.log(e))
+                    }).catch(e=>console.log(e))
+                }
+                    // .then(()=>{
+                    //     // continue logic, done all the patients run
+                    //     //alert("Creating User data... Please wait for 5-10 seconds and press OK")
+                    // })
+
 
                 var researchData = {
                     researchName: researchName.val(),
@@ -384,13 +362,13 @@
                 var insertResearchUrl = '/insertResearch';
                 var postingInsertResearch = $.post(insertResearchUrl, researchData);
                 postingInsertResearch.done(function (data) {
-                    //console.log("create a research...");
                     alert("Research Created '\n' The research Id is: " + researchId.val());
                     // var pathname = "/researchGroupMainPage"
                     // window.location.replace(pathname);
                 });
                 alert("Research Created '\n' The research Id is: " + researchId.val() +"\n Please wait a few seconds till the page will go back");
-                setTimeout(myFunction, 3000);
+                setTimeout(myFunction, 2000);
+
             });
         })
 
