@@ -145,8 +145,9 @@
                 //                 .replace(new RegExp('::data::', 'g'), mbid);
                 //     }
                 // }
-
-                // $('#title').html("Your Music: " + year + ',' + country);
+//"שלום שם! מספר מפגש :מספר
+                //
+                $('#title').html(data.items[0].entrance + " :מספר מפגש" +  "  !" + data.items[0].data.firstName.toString()  + " " + data.items[0].data.lastName +" שלום");
                 window.scrollBy(0, 500);
                 musicWrapper.html(html);});
         })
