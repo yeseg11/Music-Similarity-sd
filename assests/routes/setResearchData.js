@@ -80,8 +80,58 @@
         function postPlaylistForLang(postingData) {
             let firstPlaylistNames = [];
             let secondPlaylistNames = [];
+            let onePlaylistLang1 = false;
+            let onePlaylistLang2 = false;
 
-            let numOfPlaylist = postingData.decade.length
+
+         if (postingData.firstLangAtTwenty === "arame"){
+                lang1 = "ARAME99DC";
+                if(firstPlaylistNames.indexOf(lang1) === -1){
+                    firstPlaylistNames.push(lang1);
+                    onePlaylistLang1 = true;
+                }
+            }
+
+            else if (postingData.secondLangAtTwenty === "arame"){
+                lang2 = "ARAME99DC";
+                if(secondPlaylistNames.indexOf(lang2) === -1) {
+                    secondPlaylistNames.push(lang2);
+                    onePlaylistLang2 = false;
+                }
+            }
+
+            else if (postingData.firstLangAtTwenty === "arana") {
+                lang1 = "ARANA99DC"
+                if(firstPlaylistNames.indexOf(lang1) === -1){
+                    firstPlaylistNames.push(lang1);
+                    onePlaylistLang1 = true;
+                }
+            }
+
+            else if (postingData.secondLangAtTwenty === "arana") {
+                lang2 = "ARANA99DC"
+                if(secondPlaylistNames.indexOf(lang2) === -1) {
+                    secondPlaylistNames.push(lang2);
+                    onePlaylistLang2 = true;
+                }
+            }
+
+            else if (postingData.firstLangAtTwenty === "spa") {
+                lang1 = "SPA99DC"
+                if(firstPlaylistNames.indexOf(lang1) === -1){
+                    firstPlaylistNames.push(lang1);
+                    onePlaylistLang1 = true;
+                }
+            }
+
+            else if (postingData.secondLangAtTwenty === "spa") {
+                lang2 = "SPA99DC"
+                if(secondPlaylistNames.indexOf(lang2) === -1) {
+                    secondPlaylistNames.push(lang2);
+                    onePlaylistLang2 = true;
+                }
+            }
+            let numOfPlaylist = postingData.decade.length;
 
             for (let i = 0 ; i < numOfPlaylist ; i++){
                 let lang1 = postingData.firstLangAtTwenty.toUpperCase();
@@ -96,49 +146,14 @@
                     secondPlaylistNames.push(lang2 + postingData.decade[i] + "DC");
                 }
 
-                else if (postingData.firstLangAtTwenty === "arame"){
-                    lang1 = "ARAME99DC";
-                    if(firstPlaylistNames.indexOf(lang1) === -1){
-                        firstPlaylistNames.push(lang1);
-                    }
+
+                if((firstPlaylistNames.indexOf(lang1 + postingData.decade[i] + "DC") === -1) && !onePlaylistLang1) {
+                    firstPlaylistNames.push(lang1 + postingData.decade[i] + "DC");
                 }
 
-                else if (postingData.secondLangAtTwenty === "arame"){
-                    lang2 = "ARAME99DC";
-                    if(secondPlaylistNames.indexOf(lang2) === -1) {
-                        secondPlaylistNames.push(lang2);
-                    }
+                if((secondPlaylistNames.indexOf(lang2 + postingData.decade[i] + "DC") === -1) && !onePlaylistLang2 && lang2 !== "EMPTY") {
+                    secondPlaylistNames.push(lang2 + postingData.decade[i] + "DC");
                 }
-
-                else if (postingData.firstLangAtTwenty === "arana") {
-                    lang1 = "ARANA99DC"
-                    if(firstPlaylistNames.indexOf(lang1) === -1){
-                        firstPlaylistNames.push(lang1);
-                    }
-                }
-
-                else if (postingData.secondLangAtTwenty === "arana") {
-                    lang2 = "ARANA99DC"
-                    if(secondPlaylistNames.indexOf(lang2) === -1) {
-                        secondPlaylistNames.push(lang2);
-                    }
-                }
-
-                else if (postingData.firstLangAtTwenty === "spa") {
-                    lang1 = "SPA99DC"
-                    if(firstPlaylistNames.indexOf(lang1) === -1){
-                        firstPlaylistNames.push(lang1);
-                    }
-                }
-
-                else if (postingData.secondLangAtTwenty === "spa") {
-                    lang2 = "SPA99DC"
-                    if(secondPlaylistNames.indexOf(lang2) === -1) {
-                        secondPlaylistNames.push(lang2);
-                    }
-                }
-
-                firstPlaylistNames.push(lang1 + postingData.decade[i] + "DC");
 
             }
 
@@ -195,6 +210,7 @@
                 //     console.log("playlistNames for " + postingData.langID + " " + firstPlaylistNames);
                 // }
                 //console.log("language before userdata" + postingData.langAtTwenty);
+
 
                 let userData = {
                     tamaringaId: postingData.response.items[0].tamaringaId,

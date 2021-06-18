@@ -245,7 +245,8 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
     if (req.body.tamaringaId === undefined) {
         return next(err);
     }
-    let playlist = [];
+    let playlist1 = [];
+    let playlist2 = [];
     let langAtTwenty = req.body.langAtTwenty;
     let researchList = [];
 
@@ -253,86 +254,66 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
     //let langAtTwenty = req.body.langAtTwenty;
     console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
     UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).lean().exec(function (err, docs) {
-        let firstPlaylistDB = docs["0"].playlists.firstLanguage;
-        let secondPlaylistDB = docs["0"].playlists.secondLanguage;
-        let genrePlaylists = docs["0"].playlists.genrePlaylists;
-        let langFlag = "";
+        let firstPlaylistDB = docs[0].playlists.firstLanguage;
+        let secondPlaylistDB = docs[0].playlists.secondLanguage;
+        let genrePlaylists = docs[0].playlists.genrePlaylists;
 
         if (err) return next(err);
         try {
-            if (firstPlaylistDB.language === langAtTwenty){
-                playlist = firstPlaylistDB.playlists;
-                langFlag = "first";
-            }
-
-            if (secondPlaylistDB.language === langAtTwenty){
-                playlist = secondPlaylistDB.playlists;
-                langFlag = "second";
-            }
             if (docs[0].researchList != null){
                 researchList = docs[0].researchList;
             }
-
-            // let researchListData = {};
 
             let researchListData = {
                 researchId : req.body.researchId,
                 maxSessionNum: req.body.maxSessionNum,
                 sessionList: []
             };
-            // console.log("researchListData ",researchListData);
-            // console.log("req.body['playlists[]'] ",req.body['playlists[]']);
-            // console.log("Array.isArray(req.body['playlists[]'])",Array.isArray(req.body['playlists[]']));
-            //docs["0"]._doc.playlists.firstLanguage.playlists
-            if (req.body.tamaringaId && req.body['playlists[]']) {
-                if (Array.isArray(req.body['playlists[]'])){
-                    for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
-                        playlist.push(req.body['playlists[]'][i]);
+
+            if(typeof req.body['secondPlaylists[]'] === "undefined")
+                req.body['secondPlaylists[]'] = [];
+
+            if (req.body.tamaringaId && req.body['firstPlaylists[]']) {
+                if (Array.isArray(req.body['firstPlaylists[]'])){
+                    for (let i = 0 ; i < req.body['firstPlaylists[]'].length ; i++){
+                        playlist1.push(req.body['firstPlaylists[]'][i]);
                     }
                 }
+
                 else {
-                    playlist.push(req.body['playlists[]']);
+                    playlist1.push(req.body['firstPlaylists[]']);
                 }
+
+                if (Array.isArray(req.body['secondPlaylists[]'])){
+                    for (let i = 0 ; i < req.body['secondPlaylists[]'].length ; i++){
+                        playlist2.push(req.body['secondPlaylists[]'][i]);
+                    }
+                }
+
+                else {
+                    playlist2.push(req.body['secondPlaylists[]']);
+                }
+
                 // playlist.push(req.body.playlists)
+
                 researchList.push(researchListData)
 
                 let userData;
-                if(langFlag === "first") {
                     userData = {
                         tamaringaId: req.body.tamaringaId.toString(),
                         playlists: {
                             firstLanguage: {
-                                language: req.body.langAtTwenty,
-                                playlists: playlist
+                                language: req.body.firstLangAtTwenty,
+                                playlists: playlist1
                             },
                             secondLanguage: {
-                                language: secondPlaylistDB.language,
-                                playlists: secondPlaylistDB.playlists
+                                language: req.body.secondLangAtTwenty,
+                                playlists: playlist2
                             },
                             genrePlaylists: genrePlaylists
                         },
                         researchList: researchList,
                     };
-                }
-
-                else {
-                    userData = {
-                        tamaringaId: req.body.tamaringaId.toString(),
-                        playlists: {
-                            firstLanguage: {
-                                language: firstPlaylistDB.language,
-                                playlists: firstPlaylistDB.playlists
-                            },
-
-                            secondLanguage: {
-                                language: req.body.langAtTwenty,
-                                playlists: playlist
-                            },
-                            genrePlaylists: genrePlaylists
-                        },
-                        researchList: researchList,
-                    };
-                }
 
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};
