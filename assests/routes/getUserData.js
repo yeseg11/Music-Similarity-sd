@@ -42,7 +42,7 @@
         experienceShow += '</div>';
 
         let commentStart = '<div class="wrap-input100 validate-input">';
-        commentStart += '<input id=\'startString\' class="input100" type="text" name=\'sessionComment\' placeholder="מדריך\\מדריכה, אנא מלאו מצב בכניסה למפגש">';
+        commentStart += '<textarea id=\'startString\' class="input100" style="text-align:right" name="Text1" cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש"></textarea>'
         commentStart += '</div>';
         commentStart += '<div class="container-contact100-form-btn">';
         commentStart += '<div class="wrap-contact100-form-btn">';
@@ -57,7 +57,7 @@
         commentStart += '</div>';
 
         let commentEnd = '<div class="wrap-input100 validate-input">';
-        commentEnd += '<input id=\'endString\' class="input100" type="text" name=\'sessionComment\' placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש">';
+        commentEnd += '<textarea id=\'endString\' class="input100" style="text-align:right" name=\'sessionComment\' cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש"></textarea>'
         commentEnd += '</div>';
         commentEnd += '<div class="container-contact100-form-btn">';
         commentEnd += '<div class="wrap-contact100-form-btn">';
