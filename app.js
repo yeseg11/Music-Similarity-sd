@@ -1224,6 +1224,20 @@ app.get('/selection/:id/:playlist', function (req, res, next) {
  ----------------------------------------------------------------------------------*/
 app.post('/selection/:userId', routes.post.userRateSong);
 
+
+/** ----------------------------------------------------------------------------------
+ * Post guides comment on start and end of the session
+ *
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} comment: user's comment
+ * @PARAM {String} type: the start or the end comment
+ *
+ * @RESPONSE-SAMPLE {{}}
+ ----------------------------------------------------------------------------------*/
+app.post('/sessionComments/:userId', routes.post.sessionComments);
+
+
 /** ----------------------------------------------------------------------------------
  * Return and update the user best song, the recommended user best songs and the unseen user song.
  *
