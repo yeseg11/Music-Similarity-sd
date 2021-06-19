@@ -278,17 +278,16 @@ function updateUserData(session, userData) {
 		return x._doc;
 	});
 
+	const lastResearch = userData.researchList.length-1;
 
 	let data = {};
-	data['$push'] = {
-		'researchList.0.sessionList': {
-			sessionNumber: (!userData.researchList[0].sessionList.length) ? 1 : userData.researchList[0].sessionList.length + 1,
+	userData.researchList[lastResearch].sessionList.push({
+			sessionNumber: (!userData.researchList[lastResearch].sessionList.length) ? 1 : userData.researchList[lastResearch].sessionList.length + 1,
 			sessionDate: new Date(),
 			songs: sessionSongs
-		}
-	}
+		});
 
-	UserData.findOneAndUpdate({_id:  userData._id}, data).exec((err, result)=>{ //edit
+	UserData.findOneAndUpdate({_id:  userData._id}, userData).exec((err, result)=>{ //edit
 		if(err) return next(err);
 	})
 
