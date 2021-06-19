@@ -247,7 +247,6 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
     }
     let playlist1 = [];
     let playlist2 = [];
-    let langAtTwenty = req.body.langAtTwenty;
     let researchList = [];
 
 
@@ -294,8 +293,6 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
                     playlist2.push(req.body['secondPlaylists[]']);
                 }
 
-                // playlist.push(req.body.playlists)
-
                 researchList.push(researchListData)
 
                 let userData;
@@ -317,8 +314,6 @@ app.post('/updateUserDataCollection', function (req, res, next) {    //call to g
 
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};
-                //const setuserData = "\"{$set:\"" + userData + "}";
-                //{ $set: { "local.userName": "whatsup" }
 
                 UserData.updateOne(query, userData , options)
                     .then(result => {
@@ -1204,6 +1199,20 @@ app.get('/selection/:id/:playlist', function (req, res, next) {
  * @RESPONSE-SAMPLE {{}}
  ----------------------------------------------------------------------------------*/
 app.post('/selection/:userId', routes.post.userRateSong);
+
+
+/** ----------------------------------------------------------------------------------
+ * Post guides comment on start and end of the session
+ *
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} comment: user's comment
+ * @PARAM {String} type: the start or the end comment
+ *
+ * @RESPONSE-SAMPLE {{}}
+ ----------------------------------------------------------------------------------*/
+app.post('/sessionComments/:userId', routes.post.sessionComments);
+
 
 /** ----------------------------------------------------------------------------------
  * Return and update the user best song, the recommended user best songs and the unseen user song.

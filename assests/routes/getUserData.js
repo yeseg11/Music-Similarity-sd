@@ -1,3 +1,5 @@
+
+
 (function ($) {
     $(document).ready(function () {
         const SONGSDISPLAYED = 10;
@@ -10,6 +12,7 @@
         var template = '<div class="wrap-input100 input100-select">';
         template += '<span id="::videoId:::" class="label-input100"></span>';
         template += '<div id="demo"></div>';
+
         template += '<span class="focus-input100">::name::</span>';
         template += '<iframe width="1024" height="600" src="http://www.youtube.com/embed/::link::"></iframe>';
         template += '<div id = "buttons">';
@@ -38,6 +41,35 @@
         experienceShow += '</div>';
         experienceShow += '</div>';
 
+        let commentStart = '<div class="wrap-input100 validate-input">';
+        commentStart += '<textarea id=\'startString\' class="input100" style="text-align:right" name="Text1" cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש"></textarea>'
+        commentStart += '</div>';
+        commentStart += '<div class="container-contact100-form-btn">';
+        commentStart += '<div class="wrap-contact100-form-btn">';
+        commentStart += '<div class="contact100-form-bgbtn"></div>';
+        commentStart += '<button type="button" id=\'startComment\' onclick="postComment(\'::userid::\',\'start\')" class="contact100-form-btn">';
+        commentStart += '<span>';
+        commentStart += 'שמור';
+        commentStart += '</span>';
+        commentStart += '</button>';
+        commentStart += '</div>';
+        commentStart += '&nbsp;&nbsp;';
+        commentStart += '</div>';
+
+        let commentEnd = '<div class="wrap-input100 validate-input">';
+        commentEnd += '<textarea id=\'endString\' class="input100" style="text-align:right" name=\'sessionComment\' cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש"></textarea>'
+        commentEnd += '</div>';
+        commentEnd += '<div class="container-contact100-form-btn">';
+        commentEnd += '<div class="wrap-contact100-form-btn">';
+        commentEnd += '<div class="contact100-form-bgbtn"></div>';
+        commentEnd += '<button type="button" id=\'endComment\' onclick="postComment(\'::userid::\',\'end\')" class="contact100-form-btn">';
+        commentEnd += '<span>';
+        commentEnd += 'שמור';
+        commentEnd += '</span>';
+        commentEnd += '</button>';
+        commentEnd += '</div>';
+        commentEnd += '&nbsp;&nbsp;';
+        commentEnd += '</div>';
 
         // onclick="location.href='researches'
         $('#login').on("click", function (e) {
@@ -95,6 +127,7 @@
                     }
                 }
 
+                html += commentStart.replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
 
                 for(let r = 0; r < playlistFinal.length; r++){
                     const record = playlistFinal[r];
@@ -117,49 +150,53 @@
                         .replace(new RegExp('::data::', 'g'), mbid);
                 }
 
+                html += commentEnd.replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString());
 
-
-                // for(var i = 0; i < user.playlists.length; i++){
-                //     const playlist = user.playlists[i][0];
-                //     const records = playlist.records;
-                //
-                //     for(var r = 0; r < records.length; r++){
-                //         console.log(playlist.records[r])
-                //         const record = records[r];
-                //         const mbid = record.mbId ? record.mbId : '';
-                //         const cleanMbid = mbid.replace(/([\/,"+'!?_])/g, "\\$1");
-                //         const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
-                //         const title = (record.title) ? record.title : '';
-                //         const artist = (record.artistName) ? record.artistName : '';
-                //         const playlistName = playlist.name;
-                //         html += template
-                //                     .replace(new RegExp('::videoId::', 'g'), videoId)
-                //                     .replace(new RegExp('::name::', 'g'), title + ' - ' + artist)
-                //                     .replace(new RegExp('::link::', 'g'), videoId)
-                //                     .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
-                //                     .replace(new RegExp('::data::', 'g'), cleanMbid)
-                //                     .replace(new RegExp('::playListName::', 'g'), playlistName);
-                //
-                //         html = html
-                //                 .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
-                //                 .replace(new RegExp('::data::', 'g'), mbid);
-                //     }
-                // }
-//"שלום שם! מספר מפגש :מספר
-                //
                 $('#title').html(data.items[0].entrance + " :מספר מפגש" +  "  !" + data.items[0].data.firstName.toString()  + " " + data.items[0].data.lastName +" שלום");
                 window.scrollBy(0, 500);
                 musicWrapper.html(html);});
-        })
+        });
+
+
     });
 })(jQuery);
+
+/** ----------------------------------------------------------------------------------
+ * Post entrance comment and end of session comment
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} comment: Given song mbid
+ * @PARAM {String} type: user or guide rating
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {userData}
+ ---------------------------------------------------------------------------------- */
+
+
+function postComment(id, type) {
+        let comment = "";
+        if(type === "start"){
+            comment += document.getElementById("startString").value;
+        }
+        else if(type === "end"){
+            comment += document.getElementById("endString").value;
+        }
+    alert("comment is: " + comment + " type: " + type);
+    let req =  $.post('sessionComments/'+id, {type, comment});
+
+    req.done(function(){
+        alert('Comment Received');
+    })
+}
+
 
 /** ----------------------------------------------------------------------------------
  * Update or Add the vote number.
  *
  * @PARAM {String*} id: Given user id
  * @PARAM {String} mbid: Given song mbid
- * @PARAM {Number} n: vote number
+ * @PARAM {Number} playlistName: The song playlist
+ * @PARAM {String} rateType: user or guide rating
+ * @PARAM {Number} score: vote number
 
  *
  * @RESPONSE {json}
