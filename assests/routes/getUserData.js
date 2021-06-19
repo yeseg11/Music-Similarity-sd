@@ -180,11 +180,11 @@ function postComment(id, type) {
         else if(type === "end"){
             comment += document.getElementById("endString").value;
         }
-    alert("comment is: " + comment + " type: " + type);
+    //alert("comment is: " + comment + " type: " + type);
     let req =  $.post('sessionComments/'+id, {type, comment});
 
     req.done(function(){
-        alert('Comment Received');
+        alert('התגובה נשמרה בהצלחה!');
     })
 }
 
