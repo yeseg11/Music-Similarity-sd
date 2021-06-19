@@ -133,7 +133,7 @@
             var users = $.post('/users', {patientsIds}, async function (usersData){
                 console.log(usersData);
                 usersData = usersData.items;
-                for(let i = 0; i < usersData.length; i ++) {
+                for(let i = 0; i < usersData.length; i++) {
                     tamaringaId = usersData[i].tamaringaId;
                     yearAtTwenty = usersData[i].yearAtTwenty;
                     countryAtTwenty = usersData[i].countryAtTwenty;
