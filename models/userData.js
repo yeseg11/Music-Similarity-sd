@@ -34,6 +34,7 @@ var userDataSchema = new Schema({ //create when create a user .
                 guideGeneralScore: String,
                 guideCommentStart: String,
                 guideCommentEnd: String,
+                guideSessionRate: Number,
 
                 songs: [{
                     playlistName: String,
