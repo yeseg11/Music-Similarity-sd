@@ -54,7 +54,20 @@
         emptyBlock += '</div>';
         emptyBlock += '</div>';
 
-
+        let commentStart = '<div class="wrap-input100 validate-input">';
+        commentStart += '<textarea id=\'startString\' class="input100" style="text-align:right" name="Text1" cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בתחילת המפגש"></textarea>'
+        commentStart += '</div>';
+        commentStart += '<div class="container-contact100-form-btn">';
+        commentStart += '<div class="wrap-contact100-form-btn">';
+        commentStart += '<div class="contact100-form-bgbtn"></div>';
+        commentStart += '<button type="button" id=\'startComment\' onclick="postComment(\'::userid::\',\'start\')" class="contact100-form-btn">';
+        commentStart += '<span>';
+        commentStart += 'Save';
+        commentStart += '</span>';
+        commentStart += '</button>';
+        commentStart += '</div>';
+        commentStart += '&nbsp;&nbsp;';
+        commentStart += '</div>';
 
 
         // FOR GENERAL SESSION RATING AT THE END TOF THE SESSION
@@ -69,24 +82,25 @@
         footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😀</button>';
         footer += '</div>';
         footer += '</br>';
-        footer += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
-        footer += '<input id=\'sessionComment\' class="input100" type="text" name=\'sessionComment\' placeholder="Session comment">';
+
+        footer += '<div class="wrap-input100 validate-input">';
+        footer += '<textarea id=\'endString\' class="input100" style="text-align:right" name=\'sessionComment\' cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש"></textarea>'
         footer += '</div>';
         footer += '<div class="container-contact100-form-btn">';
         footer += '<div class="wrap-contact100-form-btn">';
         footer += '<div class="contact100-form-bgbtn"></div>';
-        footer += '<button type="button" id=\'commentSessionButton\' onclick="commentSession()" class="contact100-form-btn">';
+        footer += '<button type="button" id=\'endComment\' onclick="postComment(\'::userid::\',\'end\')" class="contact100-form-btn">';
         footer += '<span>';
-        footer += 'Save';
+        footer += 'שמור';
         footer += '</span>';
         footer += '</button>';
         footer += '</div>';
+        footer += '&nbsp;&nbsp;';
         footer += '</div>';
-        footer += '</div>';
-        //footer += '</div>';
-        footer += '<div class="container-contact100-back-btn">';
-        footer += '<div class="wrap-contact100-back-btn">';
-        footer += '</div>';
+
+
+
+
 
 
 
@@ -96,7 +110,7 @@
             let sessionHtml = title
                 + '\xa0' + selectedData[0].firstName
                 + endTitle + sessionDate + '</span>';
-
+            sessionHtml += commentStart;
             (async function(){
                 let currentResearch = sessionAndResearch.split('R')[1];
                 let currentSession = sessionAndResearch.split('R')[0];
@@ -204,4 +218,20 @@ function rating(id, mbId, playlistName, score, rateType){
     }).
 
     alert("Current rating is:" + status);
+}
+
+function postComment(id, type) {
+    let comment = "";
+    if(type === "start"){
+        comment += document.getElementById("startString").value;
+    }
+    else if(type === "end"){
+        comment += document.getElementById("endString").value;
+    }
+    //alert("comment is: " + comment + " type: " + type);
+    let req =  $.post('sessionComments/'+id, {type, comment});
+
+    req.done(function(){
+        alert('התגובה נשמרה בהצלחה!');
+    })
 }
