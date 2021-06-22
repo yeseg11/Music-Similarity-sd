@@ -15,12 +15,12 @@
 
         template += '<span class="focus-input100">::name::</span>';
         template += '<iframe width="1024" height="600" src="http://www.youtube.com/embed/::link::"></iframe>';
-        template += '<div id = "buttons">';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',1)" name="like" id ="like" ><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',2)" name="like" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',3)" name="like" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',4)" name="like" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
-        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',5)" name="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
+        template += '<div id = "buttons" style="text-align:center;">';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',1)" name="Angry" id ="like" ><p style="font-size:100px" name="like" title="Angry">😠</p></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',2)" name="Sad" id ="like"><p style="font-size:100px" name="like" title="Sad" >🙁</p></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',3)" name="Indifferent" id ="like"><p style="font-size:100px" name="like" title="Indifferent" >😐</p></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',4)" name="Relaxed" id ="like"><p style="font-size:100px" name="like" title="Relaxed" >🙂</p></button>';
+        template += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',\'::playListName::\',5)" name="Joyful" id ="like"><p style="font-size:100px" name="like" title="Joyful" >😀</p></button>';
         template += '';
         template += '</div>';
         template += '</div>';
@@ -32,11 +32,11 @@
         experienceShow += '<span class="focus-input100">::name::</span>';
         experienceShow += '<iframe width="1000" height="1000" src="http://www.youtube.com/embed/::link::"></iframe>';
         experienceShow += '<div id = "buttons">';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="like" id ="like"><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="like" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="like" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="like" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
-        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" name="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',1)" name="Angry" id ="like"><img  src="../images/btn/Angry.png" name="like" title="Angry" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',2)" name="Sad" id ="like"><img src="../images/btn/Sad.png" name="like" title="Sad" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',3)" name="Indifferent" id ="like"><img src="../images/btn/Indifferent.png" name="like" title="Indifferent" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',4)" name="Relaxed" id ="like"><img src="../images/btn/Relaxed.png" name="like" title="Relaxed" /></button>';
+        experienceShow += '<button class="buttonDes" type="button" onclick="f2(\'::userid::\',\'::data::\',5)" Joyful="like" id ="like"><img src="../images/btn/Joyful.png" name="like" title="Joyful" /></button>';
         experienceShow += '';
         experienceShow += '</div>';
         experienceShow += '</div>';
