@@ -42,7 +42,7 @@
         experienceShow += '</div>';
 
         let commentStart = '<div class="wrap-input100 validate-input">';
-        commentStart += '<textarea id=\'startString\' class="input100" style="text-align:right" name="Text1" cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש"></textarea>'
+        commentStart += '<textarea id=\'startString\' class="input100" style="text-align:right" name="Text1" cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בתחילת המפגש"></textarea>'
         commentStart += '</div>';
         commentStart += '<div class="container-contact100-form-btn">';
         commentStart += '<div class="wrap-contact100-form-btn">';
