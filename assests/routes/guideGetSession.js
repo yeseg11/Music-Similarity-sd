@@ -18,11 +18,11 @@
         songBlock += '<br>SongName</br>';
         songBlock += 'SongYear</br></span></span></br>';
         songBlock += '<span class="class=label-input100" style="font-size: 150%"><b>Rate song:</b></br></span>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',1,\'::rateType::\')" name="verySad" id ="verySad">😟</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',2,\'::rateType::\')" name="Sad" id ="Sad">🙁</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',3,\'::rateType::\')" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',4,\'::rateType::\')" name="happy" id ="happy">🙂</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5,\'::rateType::\')" name="Joyful" id ="Joyful">😀</button>';
+        songBlock += '<button style="font-size: 180%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',1,\'::rateType::\')" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<button style="font-size: 180%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',2,\'::rateType::\')" name="Sad" id ="Sad">🙁</button>';
+        songBlock += '<button style="font-size: 180%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',3,\'::rateType::\')" name="Indifferent" id ="Indifferent">😐</button>';
+        songBlock += '<button style="font-size: 180%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',4,\'::rateType::\')" name="happy" id ="happy">🙂</button>';
+        songBlock += '<button style="font-size: 180%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5,\'::rateType::\')" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
