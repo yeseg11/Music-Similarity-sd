@@ -25,12 +25,12 @@
         songBlock += '<button style="font-size: 180%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5,\'::rateType::\')" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
-        songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
+        songBlock += '<input id=\'::songComment::\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
         songBlock += '</div>';
         songBlock += '<div class="container-contact100-form-btn">';
         songBlock += '<div class="wrap-contact100-form-btn">';
         songBlock += '<div class="contact100-form-bgbtn"></div>';
-        songBlock += '<button type="button" id=\'send\' onclick="CommentFunc" class="contact100-form-btn">';
+        songBlock += '<button type="button" id=\'send\' onclick="postComment(\'::userid::\',\'::mbid::\')" class="contact100-form-btn">';
         songBlock += '<span>';
         songBlock += 'Save';
         songBlock += '<i class="fa m-l-7" aria-hidden="true"></i>';
@@ -134,15 +134,14 @@
                     const recordArtist = record.items[0].artist[0].name;
                     const recordTitle = record.items[0].title;
                     const recordYear = record.items[0].year;
-                    let commentWithIndex = "songComment" + r;
                     const playlistName = songs[r].playlistName;
 
                     let newBlock = songBlock
                         .replace("ArtistName", recordArtist)
                         .replace("SongName", recordTitle)
                         .replace("SongYear", recordYear)
-                        .replace("songComment", commentWithIndex)
-                        .replace("CommentFunc", "commentSong(" + r + ")")
+                        .replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp('::mbid::', 'g'),cleanMbid)
+                        .replace(new RegExp('::songComment::', 'g'), cleanMbid)
                         .replace(new RegExp('::data::', 'g'), cleanMbid)
                         .replace(new RegExp('::playListName::', 'g'), playlistName)
                         .replace(new RegExp('::userid::', 'g'), selectedData.tamID)
@@ -179,33 +178,12 @@
             }
         }
 
-
-
-
-
-
     });
 })
 
 (jQuery);
 
-function commentSong(index) {
 
-    let commentID = "songComment" + index;
-    let inputValue = "";
-    inputValue += document.getElementById(commentID).value;
-
-    //call post here...
-    alert("Current song comment is:" + inputValue);
-}
-
-function commentSession() {
-    let SessionInputValue = "";
-    SessionInputValue += document.getElementById("sessionComment").value;
-
-    //call post here...
-    alert("Current session comment is:" + SessionInputValue);
-}
 
 function rating(id, mbId, playlistName, score, rateType){
     let req =  $.post('selection/'+id, {mbId, playlistName, score, rateType});
@@ -224,6 +202,10 @@ function postComment(id, type) {
     }
     else if(type === "end"){
         comment += document.getElementById("endString").value;
+    }
+
+    else{
+        comment += document.getElementById(type).value;
     }
     //alert("comment is: " + comment + " type: " + type);
     let req =  $.post('sessionComments/'+id, {type, comment});
