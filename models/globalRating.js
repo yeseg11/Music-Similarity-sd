@@ -6,23 +6,23 @@ var globalRatingSchema = new Schema({
     language: String,
     playlists: [{
         name:String,
-        year:Number,
         country:String,
         records: [
             {
                 mbId: String,
                 title: String,
-                year: Number,
                 artistName: String,
                 language: String,
                 country: String,
-                SumOfRatings: Number,
-                CountOfRaters: Number
+                playlist: String,
+                sumOfRatings: Number,
+                countOfRaters: Number,
+                ratingAvg: Number
             }]
     }]
 });
 
 
-var UserData = mongoose.model('GlobalRating', globalRatingSchema);
+var GlobalRating = mongoose.model('GlobalRating', globalRatingSchema);
 
-module.exports = UserData;
+module.exports = GlobalRating;

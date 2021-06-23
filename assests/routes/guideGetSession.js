@@ -18,11 +18,11 @@
         songBlock += '<br>SongName</br>';
         songBlock += 'SongYear</br></span></span></br>';
         songBlock += '<span class="class=label-input100" style="font-size: 150%"><b>Rate song:</b></br></span>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="verySad" id ="verySad">😟</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Sad" id ="Sad">🙁</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Indifferent" id ="Indifferent">😐</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="happy" id ="happy">🙂</button>';
-        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(this.name)" name="Joyful" id ="Joyful">😀</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',1,\'::rateType::\')" name="verySad" id ="verySad">😟</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',2,\'::rateType::\')" name="Sad" id ="Sad">🙁</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',3,\'::rateType::\')" name="Indifferent" id ="Indifferent">😐</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',4,\'::rateType::\')" name="happy" id ="happy">🙂</button>';
+        songBlock += '<button style="font-size: 200%; text-align: center;" class="buttonDes" type="button" onclick="rating(\'::userid::\',\'::data::\',\'::playListName::\',5,\'::rateType::\')" name="Joyful" id ="Joyful">😀</button>';
         songBlock += '</div>';
         songBlock += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
         songBlock += '<input id=\'songComment\' class="input100" type="text" name=\'songComment\' placeholder="Song comment">';
@@ -54,7 +54,20 @@
         emptyBlock += '</div>';
         emptyBlock += '</div>';
 
-
+        let commentStart = '<div class="wrap-input100 validate-input">';
+        commentStart += '<textarea id=\'startString\' class="input100" style="text-align:right" name="Text1" cols="40" rows="2"  placeholder="מדריך\\מדריכה, אנא מלאו מצב בתחילת המפגש">value</textarea>'
+        commentStart += '</div>';
+        commentStart += '<div class="container-contact100-form-btn">';
+        commentStart += '<div class="wrap-contact100-form-btn">';
+        commentStart += '<div class="contact100-form-bgbtn"></div>';
+        commentStart += '<button type="button" id=\'startComment\' onclick="postComment(\'::userid::\',\'start\')" class="contact100-form-btn">';
+        commentStart += '<span>';
+        commentStart += 'Save';
+        commentStart += '</span>';
+        commentStart += '</button>';
+        commentStart += '</div>';
+        commentStart += '&nbsp;&nbsp;';
+        commentStart += '</div>';
 
 
         // FOR GENERAL SESSION RATING AT THE END TOF THE SESSION
@@ -69,26 +82,21 @@
         footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😀</button>';
         footer += '</div>';
         footer += '</br>';
-        footer += '<div class="wrap-input100 validate-input" data-validate="Name is required">';
-        footer += '<input id=\'sessionComment\' class="input100" type="text" name=\'sessionComment\' placeholder="Session comment">';
+
+        footer += '<div class="wrap-input100 validate-input">';
+        footer += '<textarea id=\'endString\' class="input100" style="text-align:right" name=\'sessionComment\' cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש">value</textarea>'
         footer += '</div>';
         footer += '<div class="container-contact100-form-btn">';
         footer += '<div class="wrap-contact100-form-btn">';
         footer += '<div class="contact100-form-bgbtn"></div>';
-        footer += '<button type="button" id=\'commentSessionButton\' onclick="commentSession()" class="contact100-form-btn">';
+        footer += '<button type="button" id=\'endComment\' onclick="postComment(\'::userid::\',\'end\')" class="contact100-form-btn">';
         footer += '<span>';
-        footer += 'Save';
+        footer += 'שמור';
         footer += '</span>';
         footer += '</button>';
         footer += '</div>';
+        footer += '&nbsp;&nbsp;';
         footer += '</div>';
-        footer += '</div>';
-        //footer += '</div>';
-        footer += '<div class="container-contact100-back-btn">';
-        footer += '<div class="wrap-contact100-back-btn">';
-        footer += '</div>';
-
-
 
         $('#enterSession').on("click", function (e) {
             $('#guideTitle').remove(); //remove user and session selection before injecting
@@ -96,7 +104,6 @@
             let sessionHtml = title
                 + '\xa0' + selectedData[0].firstName
                 + endTitle + sessionDate + '</span>';
-
             (async function(){
                 let currentResearch = sessionAndResearch.split('R')[1];
                 let currentSession = sessionAndResearch.split('R')[0];
@@ -107,40 +114,50 @@
                 if(songs.length === 0) {
                     sessionHtml +=  emptyBlock;
                 }
-                for(let r = 0; r < songs.length; r++){
-                    let currentMbId = songs[r].mbId;
-                    let record = await getRecord(currentMbId);
-                    let recordArtist = record.items[0].artist[0].name;
-                    let recordTitle = record.items[0].title;
-                    let recordYear = record.items[0].year;
-                    let commentWithIndex = "songComment" + r;
+                let startCom = selectedData[0]
+                    .researchList[currentResearch]
+                    .sessionList[currentSession].guideCommentStart
+                let endCom = selectedData[0]
+                    .researchList[currentResearch]
+                    .sessionList[currentSession].guideCommentEnd
+                //
+                if(startCom){
+                sessionHtml += commentStart.replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp("value", 'g'),startCom);
+                }
+                else
+                    sessionHtml += commentStart.replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp(value, 'g'),"");
 
+                for(let r = 0; r < songs.length; r++){
+                    const currentMbId = songs[r].mbId;
+                    const record = await getRecord(currentMbId);
+                    const cleanMbid = currentMbId.replace(/([\/,"+'!?_])/g, "\\$1");
+                    const recordArtist = record.items[0].artist[0].name;
+                    const recordTitle = record.items[0].title;
+                    const recordYear = record.items[0].year;
+                    let commentWithIndex = "songComment" + r;
+                    const playlistName = songs[r].playlistName;
 
                     let newBlock = songBlock
                         .replace("ArtistName", recordArtist)
                         .replace("SongName", recordTitle)
                         .replace("SongYear", recordYear)
                         .replace("songComment", commentWithIndex)
-                        .replace("CommentFunc", "commentSong(" + r + ")");
-
+                        .replace("CommentFunc", "commentSong(" + r + ")")
+                        .replace(new RegExp('::data::', 'g'), cleanMbid)
+                        .replace(new RegExp('::playListName::', 'g'), playlistName)
+                        .replace(new RegExp('::userid::', 'g'), selectedData.tamID)
+                        .replace(new RegExp('::rateType::', 'g'), currentSession);
 
                     sessionHtml +=  newBlock;
-
-
-                    // console.log("loop: currentMbId: " + currentMbId1);
-                    // console.log("record1 is:" + record1.items[0]);
-                    // console.log(record);
-                    // console.log("artists = " + recordArtist);
-                    // console.log("title = " + recordTitle);
-                    // console.log("artists = " + recordArtist1);
-                    // console.log("title = " + recordTitle1);
-
                 }
 
                 if(songs.length !== 0) {
-                    sessionHtml += footer;
+                    if(endCom) {
+                        sessionHtml += footer.replace(new RegExp('::userid::', 'g'), selectedData.tamID.toString()).replace(new RegExp("value", 'g'),endCom);
+                    }
+                    else
+                        sessionHtml += footer.replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp("value", 'g'),"");
                 }
-
                 $('#selectedSession').html(sessionHtml).ready(function(){
                     $("html, body").animate({ scrollTop: 0 });
                     //console.log("Session and research are: " + sessionAndResearch);
@@ -190,8 +207,28 @@ function commentSession() {
     alert("Current session comment is:" + SessionInputValue);
 }
 
-function rating(status){
+function rating(id, mbId, playlistName, score, rateType){
+    let req =  $.post('selection/'+id, {mbId, playlistName, score, rateType});
 
-    //call post here...
+    req.done(function(){
+        alert('Thanks we recived your score')
+    }).
+
     alert("Current rating is:" + status);
+}
+
+function postComment(id, type) {
+    let comment = "";
+    if(type === "start"){
+        comment += document.getElementById("startString").value;
+    }
+    else if(type === "end"){
+        comment += document.getElementById("endString").value;
+    }
+    //alert("comment is: " + comment + " type: " + type);
+    let req =  $.post('sessionComments/'+id, {type, comment});
+
+    req.done(function(){
+        alert('התגובה נשמרה בהצלחה!');
+    })
 }

@@ -242,107 +242,83 @@ app.post('/updateUserData', function (req, res, next) {
 app.post('/updateUserDataCollection', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     if (!req.body) return res.sendStatus(400);
-    if (req.body.tamaringaId === undefined) {
+    if (req.body["playlistData[tamaringaId]"] === undefined) {
         return next(err);
     }
-    let playlist = [];
-    let langAtTwenty = req.body.langAtTwenty;
+    let playlist1 = [];
+    let playlist2 = [];
     let researchList = [];
 
 
     //let langAtTwenty = req.body.langAtTwenty;
-    console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
-    UserData.find({tamaringaId: req.body.tamaringaId}).limit(1).exec(function (err, docs) {
-        let firstPlaylistDB = docs["0"]._doc.playlists.firstLanguage;
-        let secondPlaylistDB = docs["0"]._doc.playlists.secondLanguage;
-        let genrePlaylists = docs["0"]._doc.playlists.genrePlaylists;
-        let langFlag = "";
+    //console.log("updateUserDataCollection req.body.tamaringaId ",req.body.tamaringaId);
+    UserData.find({tamaringaId: req.body["playlistData[tamaringaId]"]}).limit(1).lean().exec(function (err, docs) {
+        let firstPlaylistDB = docs[0].playlists.firstLanguage;
+        let secondPlaylistDB = docs[0].playlists.secondLanguage;
+        let genrePlaylists = docs[0].playlists.genrePlaylists;
 
         if (err) return next(err);
         try {
-            if (firstPlaylistDB.language === langAtTwenty){
-                playlist = firstPlaylistDB.playlists;
-                langFlag = "first";
-            }
-
-            if (secondPlaylistDB.language === langAtTwenty){
-                playlist = secondPlaylistDB.playlists;
-                langFlag = "second";
-            }
             if (docs[0].researchList != null){
                 researchList = docs[0].researchList;
             }
 
-            // let researchListData = {};
-
             let researchListData = {
-                researchId : req.body.researchId,
-                maxSessionNum: req.body.maxSessionNum,
+                researchId : req.body["playlistData[researchId]"],
+                maxSessionNum: req.body["playlistData[maxSessionNum]"],
                 sessionList: []
             };
-            // console.log("researchListData ",researchListData);
-            // console.log("req.body['playlists[]'] ",req.body['playlists[]']);
-            // console.log("Array.isArray(req.body['playlists[]'])",Array.isArray(req.body['playlists[]']));
-            //docs["0"]._doc.playlists.firstLanguage.playlists
-            if (req.body.tamaringaId && req.body['playlists[]']) {
-                if (Array.isArray(req.body['playlists[]'])){
-                    for (var i = 0 ; i < req.body['playlists[]'].length ; i++){
-                        playlist.push(req.body['playlists[]'][i]);
+
+            if(typeof req.body['playlistData[secondPlaylists][]'] === "undefined")
+                req.body['playlistData[secondPlaylists][]'] = [];
+
+            if (req.body["playlistData[tamaringaId]"] && req.body["playlistData[firstPlaylists][]"]) {
+                if (Array.isArray(req.body["playlistData[firstPlaylists][]"])){
+                    for (let i = 0 ; i < req.body["playlistData[firstPlaylists][]"].length ; i++){
+                        playlist1.push(req.body["playlistData[firstPlaylists][]"][i]);
                     }
                 }
+
                 else {
-                    playlist.push(req.body['playlists[]']);
+                    playlist1.push(req.body["playlistData[firstPlaylists][]"]);
                 }
-                // playlist.push(req.body.playlists)
+
+                if (Array.isArray(req.body["playlistData[secondPlaylists][]"])){
+                    for (let i = 0 ; i <  req.body["playlistData[secondPlaylists][]"].length ; i++){
+                        playlist2.push( req.body["playlistData[secondPlaylists][]"][i]);
+                    }
+                }
+
+                else {
+                    playlist2.push(req.body["playlistData[secondPlaylists][]"]);
+                }
+
                 researchList.push(researchListData)
 
                 let userData;
-                if(langFlag === "first") {
                     userData = {
-                        tamaringaId: req.body.tamaringaId.toString(),
+                        tamaringaId: req.body["playlistData[tamaringaId]"].toString(),
                         playlists: {
                             firstLanguage: {
-                                language: req.body.langAtTwenty,
-                                playlists: playlist
+                                language: req.body["playlistData[firstLangAtTwenty]"],
+                                playlists: playlist1
                             },
                             secondLanguage: {
-                                language: secondPlaylistDB.language,
-                                playlists: secondPlaylistDB.playlists
+                                language: req.body["playlistData[secondLangAtTwenty]"],
+                                playlists: playlist2
                             },
                             genrePlaylists: genrePlaylists
                         },
                         researchList: researchList,
                     };
-                }
-
-                else {
-                    userData = {
-                        tamaringaId: req.body.tamaringaId.toString(),
-                        playlists: {
-                            firstLanguage: {
-                                language: firstPlaylistDB.language,
-                                playlists: firstPlaylistDB.playlists
-                            },
-
-                            secondLanguage: {
-                                language: req.body.langAtTwenty,
-                                playlists: playlist
-                            },
-                            genrePlaylists: genrePlaylists
-                        },
-                        researchList: researchList,
-                    };
-                }
 
                 const query = {"tamaringaId": userData.tamaringaId};
                 const options = {"upsert": true};
-                //const setuserData = "\"{$set:\"" + userData + "}";
-                //{ $set: { "local.userName": "whatsup" }
 
                 UserData.updateOne(query, userData , options)
                     .then(result => {
-                        const {matchedCount, modifiedCount} = result;
-                        if (matchedCount && modifiedCount) {
+                        const {ok, nModified} = result;
+                        if (ok && nModified) {
                             console.log(`Successfully added a new User Data.`);
                             res.send(200);
                         }
@@ -1012,13 +988,30 @@ app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , a
 
 
 /** ----------------------------------------------------------------------------------
+ * Return several users Data from DB
+ *
+ * @PARAM {Array*} id: Given user id
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/users', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    // console.log(req.params.id);
+    PublicUsers.find({tamaringaId: req.body["patientsIds[]"]}).lean().exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** ----------------------------------------------------------------------------------
  * Return the Research by id
  *
  * @RESPONSE {json}
  * @RESPONSE-SAMPLE {docs: []}
  ----------------------------------------------------------------------------------*/
-
-
 app.get('/research/:id', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
     console.log(req.params.id.toString());
@@ -1057,7 +1050,7 @@ app.post('/loginUser', routes.post.loginUser);
 
 app.post('/getDecadePlaylist', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req) return res.sendStatus(400);
-    PlayList.find({name: { $in:req.body['name[]']}}).exec(function (err, docs) {
+    PlayList.find({name: { $in:req.body['playlistData[name][]']}}).exec(function (err, docs) {
         if (err) return next(err);
         res.status(200).json({err: false, items: docs});
         //res.status(200).json({err: false, items: [].concat(docs)});
@@ -1223,6 +1216,20 @@ app.get('/selection/:id/:playlist', function (req, res, next) {
  * @RESPONSE-SAMPLE {{}}
  ----------------------------------------------------------------------------------*/
 app.post('/selection/:userId', routes.post.userRateSong);
+
+
+/** ----------------------------------------------------------------------------------
+ * Post guides comment on start and end of the session
+ *
+ *
+ * @PARAM {String*} id: Given user id
+ * @PARAM {String} comment: user's comment
+ * @PARAM {String} type: the start or the end comment
+ *
+ * @RESPONSE-SAMPLE {{}}
+ ----------------------------------------------------------------------------------*/
+app.post('/sessionComments/:userId', routes.post.sessionComments);
+
 
 /** ----------------------------------------------------------------------------------
  * Return and update the user best song, the recommended user best songs and the unseen user song.
@@ -1522,18 +1529,18 @@ app.post('/insertResearch', function (req, res, next) {
     if (!req.body) return res.sendStatus(400, "Error to add user");
     // console.log("Try to post the research");
     const researchData = {
-        researchName: req.body.researchName,
-        researchId: req.body.researchId,
-        researchersIds: req.body['researchersIds[]'],
-        description: req.body.description,
-        researchGroupId: req.body.researchGroupId,
-        patientsIds: req.body['patientsIds[]'],
-        nursingHome: req.body.nursingHome,
-        department: req.body.department,
-        numberOfWeeks: req.body.numberOfWeeks,
-        meetingPerWeek: req.body.meetingPerWeek,
-        lengthOfSession: req.body.lengthOfSession,
-        algorithm: req.body.algorithm,
+        researchName: req.body["playlistData[researchName]"],
+        researchId: req.body["playlistData[researchId]"],
+        researchersIds: req.body["playlistData[researchersIds][]"],
+        description: req.body["playlistData[description]"],
+        researchGroupId: req.body["playlistData[researchGroupId]"],
+        patientsIds: req.body["playlistData[patientsIds][]"],
+        nursingHome: req.body["playlistData[nursingHome]"],
+        department: req.body["playlistData[department]"],
+        numberOfWeeks: req.body["playlistData[numberOfWeeks]"],
+        meetingPerWeek: req.body["playlistData[meetingPerWeek]"],
+        lengthOfSession: req.body["playlistData[lengthOfSession]"],
+        algorithm: req.body["playlistData[algorithm]"],
         // created: req.body.created
     };
     // var bulk = Research.collection.initializeOrderedBulkOp();
@@ -1546,9 +1553,10 @@ app.post('/insertResearch', function (req, res, next) {
     const options = {"upsert": true};
     Research.updateOne(query, researchData, options)
         .then(result => {
-            const {matchedCount, modifiedCount} = result;
-            if (matchedCount && modifiedCount) {
-                console.log(`Successfully added a private user.`)
+            const {ok} = result;
+            if (ok) {
+                console.log(`Successfully added a research`)
+                return res.status(200).json({});
             }
         })
         .catch(err => console.error(`Failed to add review: ${err}`))
