@@ -125,7 +125,7 @@
                 sessionHtml += commentStart.replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp("value", 'g'),startCom);
                 }
                 else
-                    sessionHtml += commentStart.replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp(value, 'g'),"");
+                    sessionHtml += commentStart.replace(new RegExp('::userid::', 'g'),selectedData.tamID.toString()).replace(new RegExp("value", 'g'),"");
 
                 for(let r = 0; r < songs.length; r++){
                     const currentMbId = songs[r].mbId;
