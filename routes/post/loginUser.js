@@ -2,15 +2,15 @@ let PublicUsers = require('../../models/publicUsers.js');
 let UserData = require('../../models/userData.js');
 let PlayList = require('../../models/playlist.js');
 let GlobalRating = require('../../models/globalRating');
+let configFile = require('../../assests/config.json');
+
 
 //add test flag and test the first session
-//take the names from the Word document
+let NumSongsForLanguage = configFile.Sizes.NumSongsForLanguage; //need to edit to support the new config file
 
-let NumSongsForLanguage = 8; //need to edit to support the new config file
-//let NumSongsForPlaylist
-let NumSongsForGenre = 4;//	"				"				"
-let SESSIONSONGLIMIT = 20;
-const GLOBALRATINGAVG = 3;
+let NumSongsForGenre = configFile.Sizes.NumSongsForGenre;//	"				"				"
+let SESSIONSONGLIMIT = configFile.Sizes.SESSIONSONGLIMIT;
+const GLOBALRATINGAVG = configFile.Sizes.GLOBALRATINGAVG;
 const TESTFIRSTSESSION = false;
 
 module.exports = async function (req, res, next) {  
