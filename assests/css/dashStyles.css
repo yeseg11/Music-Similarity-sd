@@ -828,25 +828,11 @@ a {
     color: #2196f3 !important
 }
 
-.rsStyle-hover-text-light-blue:hover, .rsStyle-text-light-blue {
-    color: #87ceeb !important
-}
-
-.rsStyle-hover-text-blue-grey:hover, .rsStyle-text-blue-grey {
-    color: #607d8b !important
-}
 
 .rsStyle-hover-text-green:hover, .rsStyle-text-green {
     color: #4caf50 !important
 }
 
-.rsStyle-hover-text-light-green:hover, .rsStyle-text-light-green {
-    color: #8bc34a !important
-}
-
-.rsStyle-hover-text-orange:hover, .rsStyle-text-orange {
-    color: #ff9800 !important
-}
 
 .rsStyle-hover-text-red:hover, .rsStyle-text-red {
     color: #f44336 !important
@@ -856,65 +842,6 @@ a {
     color: #d2be0e !important
 }
 
-.rsStyle-hover-text-white:hover, .rsStyle-text-white {
-    color: #fff !important
-}
-
-.rsStyle-hover-text-black:hover, .rsStyle-text-black {
-    color: #000 !important
-}
-
-.rsStyle-hover-text-grey:hover, .rsStyle-text-grey {
-    color: #757575 !important
-}
-
-.rsStyle-hover-text-light-grey:hover, .rsStyle-text-light-grey {
-    color: #f1f1f1 !important
-}
-
-.rsStyle-hover-text-dark-grey:hover, .rsStyle-text-dark-grey {
-    color: #3a3a3a !important
-}
-
-.rsStyle-border-blue, .rsStyle-hover-border-blue:hover {
-    border-color: #2196f3 !important
-}
-
-.rsStyle-border-light-blue, .rsStyle-hover-border-light-blue:hover {
-    border-color: #87ceeb !important
-}
-
-.rsStyle-border-blue-grey, .rsStyle-hover-border-blue-grey:hover {
-    border-color: #607d8b !important
-}
-
-.rsStyle-border-green, .rsStyle-hover-border-green:hover {
-    border-color: #4caf50 !important
-}
-
-.rsStyle-border-light-green, .rsStyle-hover-border-light-green:hover {
-    border-color: #8bc34a !important
-}
-
-.rsStyle-border-orange, .rsStyle-hover-border-orange:hover {
-    border-color: #ff9800 !important
-}
-
-.rsStyle-border-red, .rsStyle-hover-border-red:hover {
-    border-color: #f44336 !important
-}
-
-.rsStyle-border-yellow, .rsStyle-hover-border-yellow:hover {
-    border-color: #ffeb3b !important
-}
-
-.rsStyle-border-white, .rsStyle-hover-border-white:hover {
-    border-color: #fff !important
-}
-
-.rsStyle-border-black, .rsStyle-hover-border-black:hover {
-    border-color: #000 !important
-}
 
 .rsStyle-grad-red, .rsStyle-hover-border-black:hover {
     background: -webkit-linear-gradient(left, #712415, #712415, #878183);
@@ -928,16 +855,4 @@ a {
     background: -o-linear-gradient(left, #85735f, #878183, #85735f, #878183);
     background: -moz-linear-gradient(left, #85735f, #878183, #85735f, #878183);
     background: linear-gradient(left, #85735f, #878183, #85735f, #878183);
-}
-
-.rsStyle-border-grey, .rsStyle-hover-border-grey:hover {
-    border-color: #9e9e9e !important
-}
-
-.rsStyle-border-light-grey, .rsStyle-hover-border-light-grey:hover {
-    border-color: #f1f1f1 !important
-}
-
-.rsStyle-border-dark-grey, .rsStyle-hover-border-dark-grey:hover {
-    border-color: #616161 !important
 }
