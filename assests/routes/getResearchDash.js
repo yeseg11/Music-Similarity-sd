@@ -19,6 +19,13 @@
                 let users = $.post('/usersData', {patientsIds}, async function (usersData){
                     usersData = usersData.items;
 
+                    researchData = usersData.map(item =>{
+                        return item.researchList.find(research => {
+                            return research.researchId = researchId;
+                        })
+                    });
+
+                    console.log(researchData);
                     // 1. NumberOfSongs = count number of song with rating != 0
                     // 2. NumberOfPlaylists = count the number of playlists
                     // 3. NumberOfLikedSongs = count the number of songs with score >= 4
