@@ -19,18 +19,41 @@
                 let users = $.post('/usersData', {patientsIds}, async function (usersData){
                     usersData = usersData.items;
 
+                    //every array item of researchData represent a user
                     const researchData = usersData.map(item =>{
                         return item.researchList.find(research => {
                             return research.researchId = researchId;
                         })
                     });
 
+
                     const songsAndScores = researchData.map(patient => {
                         return patient.sessionList.map(session => {
                             return session.songs;
                         })
                     }).flat(2);
-                        //[0].sessionList[0].songs
+
+
+                    let statistics = {};
+
+                    songsAndScores.forEach(function (value) {
+                        if(!statistics[value.mbId]) {
+                            statistics[value.mbId] = {
+                                sumScore: 0,
+                                average: 0,
+                                occurrences: 0,
+                                language: value.language,
+                                playlistName: value.playlistName
+                            }
+                        }
+                        statistics[value.mbId].occurrences++;
+                        statistics[value.mbId].sumScore += value.score || 0;
+                        statistics[value.mbId].language = value.language,
+                        statistics[value.mbId].playlistName = value.playlistName,
+                        statistics[value.mbId].average = statistics[value.mbId].sumScore / statistics[value.mbId].occurrences;
+                    });
+
+                    console.log(statistics);
 
                     console.log(researchData);
                     // 1. NumberOfSongs = count number of song with rating != 0
