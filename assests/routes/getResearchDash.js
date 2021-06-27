@@ -27,18 +27,19 @@
                     });
 
 
-                    const songsAndScores = researchData.map(patient => {
+                    const allUsersSongs = researchData.map(patient => {
                         return patient.sessionList.map(session => {
                             return session.songs;
                         })
                     }).flat(2);
 
 
-                    let statistics = {};
+                    let SongStatistics = {};
 
-                    songsAndScores.forEach(function (value) {
-                        if(!statistics[value.mbId]) {
-                            statistics[value.mbId] = {
+                    // Create an array with the research songs, songs occurrences and average rating
+                    allUsersSongs.forEach(function (value) {
+                        if(!SongStatistics[value.mbId]) {
+                            SongStatistics[value.mbId] = {
                                 sumScore: 0,
                                 average: 0,
                                 occurrences: 0,
@@ -46,15 +47,17 @@
                                 playlistName: value.playlistName
                             }
                         }
-                        statistics[value.mbId].occurrences++;
-                        statistics[value.mbId].sumScore += value.score || 0;
-                        statistics[value.mbId].language = value.language,
-                        statistics[value.mbId].playlistName = value.playlistName,
-                        statistics[value.mbId].average = statistics[value.mbId].sumScore / statistics[value.mbId].occurrences;
+                        SongStatistics[value.mbId].occurrences++;
+                        SongStatistics[value.mbId].sumScore += value.score || 0;
+                        SongStatistics[value.mbId].language = value.language;
+                        SongStatistics[value.mbId].playlistName = value.playlistName;
+                        SongStatistics[value.mbId].average = SongStatistics[value.mbId].sumScore / SongStatistics[value.mbId].occurrences;
                     });
 
-                    console.log(statistics);
-
+                    const songsSortedByAvg = Object.entries(SongStatistics).sort( (a,b) => {
+                        return b[1].average-a[1].average
+                    });
+                    
                     console.log(researchData);
                     // 1. NumberOfSongs = count number of song with rating != 0
                     // 2. NumberOfPlaylists = count the number of playlists
