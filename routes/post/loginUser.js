@@ -209,6 +209,8 @@ async function createSession(mapPlaylistData, userData) {
 					//pushing the liked and global songs up to the song limit
 					records = records.filter(function(element) {
 						if(this.count < songLimit){
+							element._doc.score = 0;
+							element._doc.playlistName = playlistName;
 							this.count++;
 							return likedAndGlobal.includes(element._doc.mbId);
 						}
