@@ -21,20 +21,17 @@
 
     <div class="rsStyle-col s8 rsStyle-bar">
       <br>
-      <span>Welcome, <strong>User</strong></span><br>
+      <span>Welcome, <strong>Test Researcher</strong></span><br>
     </div>
   </div>
   <hr>
   <div class="rsStyle-container">
-    <h5>Sessions</h5>
+    <h3>Researches</h3>
   </div>
   <div class="rsStyle-bar-block">
     <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding-16 rsStyle-hide-large rsStyle-dark-grey rsStyle-hover-black" onclick="" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding rsStyle-grad-menu"><i class="fa fa-bullseye fa-fw"></i>  Session 1</a>
-    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding"><i class="fa fa-bullseye fa-fw"></i>  Session 2</a>
-    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding"><i class="fa fa-bullseye fa-fw"></i>  Session 3</a>
-    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding"><i class="fa fa-bullseye fa-fw"></i>  Session 4</a>
-    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding"><i class="fa fa-bullseye fa-fw"></i>  Session 9</a><br><br>
+    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding rsStyle-grad-menu"><i class="fa fa-bullseye fa-fw"></i>Research 1 - Test Research</a>
+    <a href="#" class="rsStyle-bar-item rsStyle-button rsStyle-padding"><i class="fa fa-bullseye fa-fw"></i>Research 2 - Pilot Research</a><br><br>
   </div>
 </nav>
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -43,112 +40,96 @@
 <div class="rsStyle-main" style="margin-left:300px;margin-top:43px;">
   <!-- Header -->
   <header class="rsStyle-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+    <h2><b><i class="fa fa-dashboard"></i>Test Research Dashboard</b></h2>
   </header>
   <div class="rsStyle-row-padding rsStyle-margin-bottom">
   <div class="rsStyle-panel">
     <div class="rsStyle-row-padding" style="margin:0 -16px">
       <div class="rsStyle-twothird">
-        <h5>Sessions Info</h5>
-        <div class="rsStyle-49">
+        <h4>General research info</h4>
+        <div class="rsStyle-100">
           <table class="rsStyle-table rsStyle-striped rsStyle-white">
             <tr>
               <td><i class="fa fa-user rsStyle-text-blue rsStyle-large"></i></td>
-              <td>Number of Songs.</td>
-              <td><i>10</i></td>
+              <td><b>Number of Research Songs:</b></td>
+              <td><i>194</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-bell rsStyle-text-red rsStyle-large"></i></td>
-              <td>Number of Playlists.</td>
+              <td><b>Number of Playlists:<b></td>
               <td><i>15</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-users rsStyle-text-yellow rsStyle-large"></i></td>
-              <td>Most Rated Songs</td>
-              <td><i>abc</i></td>
+              <td><b>Most Rated Song:<b></td>
+              <td><i>Edith Piaf - Mon Dieu</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-comment rsStyle-text-red rsStyle-large"></i></td>
-              <td>Most Rated Playlists</td>
-              <td><i>def</i></td>
+              <td><b>Most Rated Playlist:<b></td>
+              <td><i>FRA60DC</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-bookmark rsStyle-text-blue rsStyle-large"></i></td>
-              <td>Lowest Rated Song.</td>
-              <td><i>hij</i></td>
+              <td><b>Lowest Rated Song:<b></td>
+              <td><i>Yehoram Gaon - hameleh nimrod </i></td>
             </tr>
             <tr>
               <td><i class="fa fa-laptop rsStyle-text-red rsStyle-large"></i></td>
-              <td>Lowest Rated Song.</td>
-              <td><i>klm</i></td>
+              <td><b>Lowest Rated playlist:<b></td>
+              <td><i>lad</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
-              <td>Most Rated Language.</td>
-              <td><i>nop</i></td>
+              <td><b>Most Rated Language:<b></td>
+              <td><i>fra</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
-              <td>Least Rated Language.</td>
-              <td><i>qrs</i></td>
+              <td><b>Least Rated Language:<b></td>
+              <td><i>heb</i></td>
             </tr>
           </table>
         </div>
-        <div class="rsStyle-twothird">
-          <canvas id="pie-chart" width="400" height="400" ></canvas>
-        </div>
       </div>
-      <div class="rsStyle-49">
-        <h5>Progress</h5>
-        <canvas id="myChart" width="800" height="250" ></canvas>
-        <br>
-        <canvas id="myChart2" width="800" height="250" ></canvas>
+	          <h4>Songs per Language</h4>
+      <div class=".rsStyle-right" style="margin-top:10px">
+        <canvas id="pie-chart" width="350" height="350" ></canvas>
       </div>
     </div>
   </div>
+  </div>
   <hr>
 
-    <div class="rsStyle-container">
-      <h5>General Stats</h5>
-      <table class="rsStyle-table rsStyle-striped rsStyle-bordered rsStyle-border rsStyle-hoverable rsStyle-white">
-        <tr>
-          <th>Most Rated Songs</th>
-          <th>Most Rated Playlists</th>
-          <th>Average Score</th>
-        </tr>
-        <tr>
-          <td>Song 1</td>
-          <td>Playlist 1</td>
-          <td>93%</td>
-        </tr>
-        <tr>
-          <td>Song 2</td>
-          <td>Playlist 2</td>
-          <td>83%</td>
-        </tr>
-        <tr>
-          <td>Song 3</td>
-          <td>Playlist 3</td>
-          <td>72%</td>
-        </tr>
-        <tr>
-          <td>Song 4</td>
-          <td>Playlist 4</td>
-          <td>60%</td>
-        </tr>
-        <tr>
-          <td>Song 5</td>
-          <td>Playlist 5</td>
-          <td>55%</td>
-        </tr>
-        <tr>
-          <td>Song 6</td>
-          <td>Playlist 6</td>
-          <td>40%</td>
-        </tr>
-      </table><br>
+  <div width = 100%> 
+  <h4 style="margin-left:20px;"><b>Liked Songs/Session By Users</b></h4>
+  <canvas id="myChart" width="800" height="250"  style="margin-left:20px; margin-right:20px;"></canvas>
+  <br>
+  <br>
+  <h4 style="margin-left:20px;"><b>Unliked Songs/Session By Users</b></h4>
+  <canvas id="myChart2" width="800" height="250" style="margin-left:20px; margin-right:20px;"></canvas>
+  <br>
+  <br>
+  <h4 style="margin-left:20px;"><b>Indifferent Songs/Session By Users</b></h4>
+  <canvas id="myChart3" width="800" height="250" style="margin-left:20px; margin-right:20px;"></canvas>
+    <br>
+  <br>
+  <h4 style="margin-left:20px;"><b>Liked Songs/Session By Playlists and Genres</b></h4>
+  <canvas id="myChart4" width="800" height="250" style="margin-left:20px; margin-right:20px;"></canvas>
+    <br>
+  <br>
+  <h4 style="margin-left:20px;"><b>Unliked Songs/Session By Playlists and Genres</b></h4>
+  <canvas id="myChart5" width="800" height="250" style="margin-left:20px; margin-right:20px;"></canvas>
+  <br>
+  <br>
+  <h4 style="margin-left:20px;"><b>Indifferent Songs/Session By Playlists and Genres</b></h4>
+  <canvas id="myChart6" width="800" height="250" style="margin-left:20px; margin-right:20px;"></canvas>
+  <br>
+  <br>
+  <h4 style="margin-left:20px;"><b>Avarage Songs/Playlist</b></h4>
+  <canvas id="myChart7" width="800" height="250" style="margin-left:20px; margin-right:20px;"></canvas>
+  </div>
 
-    </div>
     <hr>
     <div class="rsStyle-container">
       <h5>Top 5 Songs</h5>

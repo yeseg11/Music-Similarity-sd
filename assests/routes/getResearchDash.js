@@ -57,7 +57,7 @@
                     const songsSortedByAvg = Object.entries(SongStatistics).sort( (a,b) => {
                         return b[1].average-a[1].average
                     });
-                    
+
                     console.log(researchData);
                     // 1. NumberOfSongs = count number of song with rating != 0
                     // 2. NumberOfPlaylists = count the number of playlists
