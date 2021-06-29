@@ -15,6 +15,8 @@
                 const numberOfWeek = researchData[0].numberOfWeeks;
                 const meetingPerWeeks = researchData[0].meetingPerWeek;
                 const lengthOfSession = researchData[0].lengthOfSession;
+                let NumberOfSongs = 0;
+                let NumberOfRatedSongs = 0;
 
                 let users = $.post('/usersData', {patientsIds}, async function (usersData){
                     usersData = usersData.items;
@@ -34,12 +36,13 @@
                     }).flat(2);
 
 
-                    let SongStatistics = {};
+                    let songStatistics = {};
+                    let playlistNames = {};
 
                     // Create an array with the research songs, songs occurrences and average rating
                     allUsersSongs.forEach(function (value) {
-                        if(!SongStatistics[value.mbId]) {
-                            SongStatistics[value.mbId] = {
+                        if(!songStatistics[value.mbId]) {
+                            songStatistics[value.mbId] = { //add songs to songStatistics if he isn't there already
                                 sumScore: 0,
                                 average: 0,
                                 occurrences: 0,
@@ -48,23 +51,35 @@
                                 playlistName: value.playlistName,
                                 counted: false
                             }
+                            NumberOfSongs++;
                         }
-                        SongStatistics[value.mbId].occurrences++;
-                        SongStatistics[value.mbId].sumScore += value.score || 0;
-                        SongStatistics[value.mbId].language = value.language;
-                        SongStatistics[value.mbId].playlistName = value.playlistName;
+                        if(!playlistNames[value.playlistName]){
+                            playlistNames[value.playlistName] = {
+                                language: value.language,
+                                playlistName: value.playlistName,
+                            }
+                        }
+
+                        songStatistics[value.mbId].occurrences++;
+                        songStatistics[value.mbId].sumScore += value.score || 0;
+                        songStatistics[value.mbId].language = value.language;
+                        songStatistics[value.mbId].playlistName = value.playlistName;
                         if(value.score > 0){
-                            SongStatistics[value.mbId].sumOfRaters++;
-                            SongStatistics[value.mbId].average = SongStatistics[value.mbId].sumScore / SongStatistics[value.mbId].sumOfRaters;
+                            songStatistics[value.mbId].sumOfRaters++;
+                            songStatistics[value.mbId].average = songStatistics[value.mbId].sumScore / songStatistics[value.mbId].sumOfRaters;
+                            if(songStatistics[value.mbId].sumOfRaters === 1) { // count songs that rated when it a song has at least one rater
+                                NumberOfRatedSongs++;
+                            }
                         }
                     });
 
-                    const songsSortedByAvg = Object.entries(SongStatistics).sort( (a,b) => {
+
+
+                    const songsSortedByAvg = Object.entries(songStatistics).sort( (a,b) => {
                         return b[1].average-a[1].average
                     });
 
                     console.log(researchData);
-                    // 1. NumberOfSongs = count number of song with rating != 0
                     // 2. NumberOfPlaylists = count the number of playlists
                     // 3. NumberOfLikedSongs = count the number of songs with score >= 4
                     // 4. DislikedSongs = count the number of songs with score <=3
