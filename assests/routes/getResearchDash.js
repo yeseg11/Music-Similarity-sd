@@ -43,15 +43,20 @@
                                 sumScore: 0,
                                 average: 0,
                                 occurrences: 0,
+                                sumOfRaters: 0,
                                 language: value.language,
-                                playlistName: value.playlistName
+                                playlistName: value.playlistName,
+                                counted: false
                             }
                         }
                         SongStatistics[value.mbId].occurrences++;
                         SongStatistics[value.mbId].sumScore += value.score || 0;
                         SongStatistics[value.mbId].language = value.language;
                         SongStatistics[value.mbId].playlistName = value.playlistName;
-                        SongStatistics[value.mbId].average = SongStatistics[value.mbId].sumScore / SongStatistics[value.mbId].occurrences;
+                        if(value.score > 0){
+                            SongStatistics[value.mbId].sumOfRaters++;
+                            SongStatistics[value.mbId].average = SongStatistics[value.mbId].sumScore / SongStatistics[value.mbId].sumOfRaters;
+                        }
                     });
 
                     const songsSortedByAvg = Object.entries(SongStatistics).sort( (a,b) => {
