@@ -99,7 +99,7 @@ app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'asse
 app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
 //TEST! REMOVE WHEN DONE TESTING
-app.get('/testDash', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/dashTester.html'), {}, () => res.end())); // login form
+app.get('/researcherDash', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/researcherMainDash.html'), {}, () => res.end())); // login form
 
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base

@@ -73,8 +73,8 @@
                         }
                     });
 
+                    $("#numberOfSongs").html(numberOfSongs.toString());
 
-                    document.getElementById('output').innerHTML = numberOfSongs.toString();
                     const songsSortedByAvg = Object.entries(songStatistics).sort( (a,b) => {
                         return b[1].average-a[1].average
                     });
@@ -93,7 +93,7 @@
                 return err;
             });
         }
-
+        initResearchData();
         function getResearchData() {
             return new Promise(function (resolve, reject) {
                 $.get('/research/' + researchId, function (data) {
