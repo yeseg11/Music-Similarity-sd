@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <title>Research Dashboard</title>
 <meta charset="UTF-8">`
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="js/rsDashCode.js"></script>
+
+
 <link rel="stylesheet" href="css/dashStyles.css">
 <script src="../node_modules/chart.js/dist/chart.js"></script>
 
@@ -56,37 +57,37 @@
             </tr>
             <tr>
               <td><i class="fa fa-bell rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Number of Playlists:<b></td>
+              <td><b>Number of Playlists:</b></td>
               <td><i>15</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-users rsStyle-text-yellow rsStyle-large"></i></td>
-              <td><b>Most Rated Song:<b></td>
+              <td><b>Most Rated Song:</b></td>
               <td><i>Edith Piaf - Mon Dieu</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-comment rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Most Rated Playlist:<b></td>
+              <td><b>Most Rated Playlist:</b></td>
               <td><i>FRA60DC</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-bookmark rsStyle-text-blue rsStyle-large"></i></td>
-              <td><b>Lowest Rated Song:<b></td>
+              <td><b>Lowest Rated Song:</b></td>
               <td><i>Yehoram Gaon - hameleh nimrod </i></td>
             </tr>
             <tr>
               <td><i class="fa fa-laptop rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Lowest Rated playlist:<b></td>
+              <td><b>Lowest Rated playlist:</b></td>
               <td><i>lad</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
-              <td><b>Most Rated Language:<b></td>
+              <td><b>Most Rated Language:</b></td>
               <td><i>fra</i></td>
             </tr>
             <tr>
               <td><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
-              <td><b>Least Rated Language:<b></td>
+              <td><b>Least Rated Language:</b></td>
               <td><i>heb</i></td>
             </tr>
           </table>
@@ -101,7 +102,7 @@
   </div>
   <hr>
 
-  <div width = 100%> 
+  <div>
   <h4 style="margin-left:20px;"><b>Liked Songs/Session By Users</b></h4>
   <canvas id="myChart" width="800" height="250"  style="margin-left:20px; margin-right:20px;"></canvas>
   <br>
@@ -182,7 +183,8 @@
   <!-- End page content -->
 </div>
 
-</div>
 <script src="js/rsDashCode.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="routes/getResearchDash.js"></script>
 </body>
 </html>

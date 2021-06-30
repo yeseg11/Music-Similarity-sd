@@ -15,7 +15,7 @@
                 const numberOfWeek = researchData[0].numberOfWeeks;
                 const meetingPerWeeks = researchData[0].meetingPerWeek;
                 const lengthOfSession = researchData[0].lengthOfSession;
-                let NumberOfSongs = 0;
+                let numberOfSongs = 0;
                 let NumberOfRatedSongs = 0;
 
                 let users = $.post('/usersData', {patientsIds}, async function (usersData){
@@ -51,7 +51,7 @@
                                 playlistName: value.playlistName,
                                 counted: false
                             }
-                            NumberOfSongs++;
+                            numberOfSongs++;
                         }
                         if(!playlistNames[value.playlistName]){
                             playlistNames[value.playlistName] = {
@@ -74,7 +74,7 @@
                     });
 
 
-
+                    document.getElementById('output').innerHTML = numberOfSongs.toString();
                     const songsSortedByAvg = Object.entries(songStatistics).sort( (a,b) => {
                         return b[1].average-a[1].average
                     });
