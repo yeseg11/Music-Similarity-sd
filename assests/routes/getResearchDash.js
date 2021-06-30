@@ -43,59 +43,11 @@
                     let songStatistics = {};
                     let playlistsData = [];
                     let languageData = [];
-
-                    // let genreData = [
-                    //     {
-                    //         playlistName: "Classical/Traditional",
-                    //         value: "cla",
-                    //         sumOfRaters: 0,
-                    //         sumScore: 0,
-                    //         average: 0,
-                    //     },
-                    //     {
-                    //         playlistName: "Yiddish",
-                    //         value: "yid",
-                    //         sumOfRaters: 0,
-                    //         sumScore: 0,
-                    //         average: 0,
-                    //     },
-                    //     {
-                    //         playlistName: "Arabic",
-                    //         value: "ara",
-                    //         sumOfRaters: 0,
-                    //         sumScore: 0,
-                    //         average: 0,
-                    //     },
-                    //     {
-                    //         playlistName: "Ladino",
-                    //         value: "lad",
-                    //         sumOfRaters: 0,
-                    //         sumScore: 0,
-                    //         average: 0,
-                    //     },
-                    //     {
-                    //         playlistName: "Prayer Songs (Piyutim)",
-                    //         value: "pra",
-                    //         sumOfRaters: 0,
-                    //         sumScore: 0,
-                    //         average: 0,
-                    //     },
-                    //     {
-                    //         playlistName: "Middle Eastern music",
-                    //         value: "mid",
-                    //         sumOfRaters: 0,
-                    //         sumScore: 0,
-                    //         average: 0,
-                    //     },
-                    // ];
-
-
                     let genreData = [];
 
 
                     // Create an array with the research songs, songs occurrences and average rating
                     allUsersSongs.forEach(function (value) {
-                        let isGenre = false;
                         if(!songStatistics[value.mbId]) {
                             songStatistics[value.mbId] = { //add songs to songStatistics if he isn't there already
                                 sumScore: 0,
@@ -108,6 +60,21 @@
                             numberOfSongs++;
                         }
 
+                        songStatistics[value.mbId].occurrences++;
+                        songStatistics[value.mbId].sumScore += value.score || 0;
+                        songStatistics[value.mbId].language = value.language;
+                        songStatistics[value.mbId].playlistName = value.playlistName;
+                        if(value.score > 0){
+                            songStatistics[value.mbId].sumOfRaters++;
+                            songStatistics[value.mbId].average = songStatistics[value.mbId].sumScore / songStatistics[value.mbId].sumOfRaters;
+                            if(songStatistics[value.mbId].sumOfRaters === 1) { // count songs that rated when it a song has at least one rater
+                                NumberOfRatedSongs++;
+                            }
+                        }
+                    });
+                    console.log("check");
+                    Object.values(songStatistics).forEach(value => {
+                        let isGenre = false;
                         if(value.playlistName.localeCompare("cla") === 0
                             || value.playlistName.localeCompare("yid") === 0
                             || value.playlistName.localeCompare("lad") === 0
@@ -136,28 +103,17 @@
                             playlistsData.length++;
                         }
 
-
-                        songStatistics[value.mbId].occurrences++;
-                        songStatistics[value.mbId].sumScore += value.score || 0;
-                        songStatistics[value.mbId].language = value.language;
-                        songStatistics[value.mbId].playlistName = value.playlistName;
-                        if(value.score > 0){
+                        if(value.average > 0){
                             if(!isGenre) {
-                                playlistsData[value.playlistName].sumScore += value.score;
+                                playlistsData[value.playlistName].sumScore += value.average;
                                 playlistsData[value.playlistName].sumOfRaters++;
                                 playlistsData[value.playlistName].average = playlistsData[value.playlistName].sumScore / playlistsData[value.playlistName].sumOfRaters;
                             }
 
                             if(isGenre) {
-                                genreData[value.playlistName].sumScore += value.score;
+                                genreData[value.playlistName].sumScore += value.average;
                                 genreData[value.playlistName].sumOfRaters++;
                                 genreData[value.playlistName].average = genreData[value.playlistName].sumScore / genreData[value.playlistName].sumOfRaters;
-                            }
-
-                            songStatistics[value.mbId].sumOfRaters++;
-                            songStatistics[value.mbId].average = songStatistics[value.mbId].sumScore / songStatistics[value.mbId].sumOfRaters;
-                            if(songStatistics[value.mbId].sumOfRaters === 1) { // count songs that rated when it a song has at least one rater
-                                NumberOfRatedSongs++;
                             }
                         }
                     });
