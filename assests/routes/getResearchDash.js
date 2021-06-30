@@ -116,7 +116,7 @@
                             isGenre = true;
                         }
 
-                        if(!playlistsData[value.playlistName] && isGenre){
+                        if(!genreData[value.playlistName] && isGenre){
                             genreData[value.playlistName] = {
                                 playlistName: value.playlistName,
                                 sumOfRaters: 0,
