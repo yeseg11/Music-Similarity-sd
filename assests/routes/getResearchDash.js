@@ -37,7 +37,8 @@
 
 
                     let songStatistics = {};
-                    let playlistNames = {};
+                    let playlistsData = [];
+                    let languageData = [];
 
                     // Create an array with the research songs, songs occurrences and average rating
                     allUsersSongs.forEach(function (value) {
@@ -49,22 +50,29 @@
                                 sumOfRaters: 0,
                                 language: value.language,
                                 playlistName: value.playlistName,
-                                counted: false
                             }
                             numberOfSongs++;
                         }
-                        if(!playlistNames[value.playlistName]){
-                            playlistNames[value.playlistName] = {
-                                language: value.language,
+                        if(!playlistsData[value.playlistName]){
+                            playlistsData[value.playlistName] = {
                                 playlistName: value.playlistName,
+                                sumOfRaters: 0,
+                                sumScore: 0,
+                                average: 0,
                             }
+                            playlistsData.length++;
                         }
+
 
                         songStatistics[value.mbId].occurrences++;
                         songStatistics[value.mbId].sumScore += value.score || 0;
                         songStatistics[value.mbId].language = value.language;
                         songStatistics[value.mbId].playlistName = value.playlistName;
                         if(value.score > 0){
+                            playlistsData[value.playlistName].sumScore += value.score;
+                            playlistsData[value.playlistName].sumOfRaters++;
+                            playlistsData[value.playlistName].average = playlistsData[value.playlistName].sumScore / playlistsData[value.playlistName].sumOfRaters;
+
                             songStatistics[value.mbId].sumOfRaters++;
                             songStatistics[value.mbId].average = songStatistics[value.mbId].sumScore / songStatistics[value.mbId].sumOfRaters;
                             if(songStatistics[value.mbId].sumOfRaters === 1) { // count songs that rated when it a song has at least one rater
@@ -73,11 +81,17 @@
                         }
                     });
 
-                    $("#numberOfSongs").html(numberOfSongs.toString());
-
                     const songsSortedByAvg = Object.entries(songStatistics).sort( (a,b) => {
                         return b[1].average-a[1].average
                     });
+
+                    //set html general research data
+                    $("#numberOfSongs").html(numberOfSongs.toString());
+                    $("#numberOfRatedSongs").html(NumberOfRatedSongs.toString());
+                    $("#numberOfPlaylists").html(playlistsData.length.toString());
+                    $("#mostRatedSong").html(songsSortedByAvg[0][0]);
+                    $("#lowestRatedSong").html(songsSortedByAvg[songsSortedByAvg.length-1][0]);
+
 
                     console.log(researchData);
                     // 2. NumberOfPlaylists = count the number of playlists
