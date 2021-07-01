@@ -3,8 +3,29 @@
         //let researchId = $('#researchId').val;
         researchId = 3;
 
+
+
+
+
         function initResearchData() {
             getResearchData().then(function (researchData) {
+                const playlistsKeys = {
+                    arame: "ArabicME",
+                    arana: "ArabicNA",
+                    heb: "Hebrew",
+                    fra: "French",
+                    spa: "Spanish",
+                    rus: "Russian",
+                    eng: "English",
+                    Eng: "English",
+                    yid: "Yiddish",
+                    lad: "Ladino",
+                    ara: "Arabic",
+                    pra: "Prayer Songs (Piyutim)",
+                    mid: "Middle Eastern music",
+                    cla: "Classical/Traditional"
+                };
+
                 const researchName = researchData[0].researchName;
                 const researchId = researchData[0].researchId;
                 const researchGroup = researchData[0].researchGroupId;
@@ -17,10 +38,6 @@
                 const lengthOfSession = researchData[0].lengthOfSession;
                 let numberOfSongs = 0;
                 let NumberOfRatedSongs = 0;
-
-
-
-
 
                 let users = $.post('/usersData', {patientsIds}, async function (usersData){
                     usersData = usersData.items;
@@ -44,7 +61,6 @@
                     let playlistsData = [];
                     let languageData = [];
                     let genreData = [];
-
 
                     // Create an array with the research songs, songs occurrences and average rating
                     allUsersSongs.forEach(function (value) {
@@ -86,6 +102,7 @@
                         if(!genreData[value.playlistName] && isGenre){
                             genreData[value.playlistName] = {
                                 playlistName: value.playlistName,
+                                languageStr: playlistsKeys[value.playlistName],
                                 sumOfRaters: 0,
                                 sumScore: 0,
                                 average: 0,
@@ -96,6 +113,8 @@
                         if(!languageData[value.language] && !isGenre){
                             languageData[value.language] = {
                                 language: value.language,
+                                languageStr: playlistsKeys[value.language],
+                                songsCount: 0,
                                 sumOfRaters: 0,
                                 sumScore: 0,
                                 average: 0,
@@ -106,11 +125,16 @@
                         if(!playlistsData[value.playlistName] && !isGenre){
                             playlistsData[value.playlistName] = {
                                 playlistName: value.playlistName,
+                                languageStr: playlistsKeys[value.language],
                                 sumOfRaters: 0,
                                 sumScore: 0,
                                 average: 0,
                             }
                             playlistsData.length++;
+                        }
+
+                        if(!isGenre) {
+                            languageData[value.language].songsCount++;
                         }
 
                         if(value.average > 0){
