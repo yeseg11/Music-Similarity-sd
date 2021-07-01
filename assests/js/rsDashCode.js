@@ -1,26 +1,3 @@
-// Get the Sidebar
-var mySidebar = document.getElementById("mySidebar");
-
-// Get the DIV with overlay effect
-var overlayBg = document.getElementById("myOverlay");
-
-// Toggle between showing and hiding the sidebar, and add overlay effect
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-    overlayBg.style.display = "none";
-  } else {
-    mySidebar.style.display = 'block';
-    overlayBg.style.display = "block";
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-  mySidebar.style.display = "none";
-  overlayBg.style.display = "none";
-}
-
 var btx = document.getElementById("myChart").getContext("2d");
 var btx2 = document.getElementById("myChart2").getContext("2d");
 var btx3 = document.getElementById("myChart3").getContext("2d");
@@ -29,6 +6,7 @@ var ctx = document.getElementById("myChart4").getContext("2d");
 var ctx2 = document.getElementById("myChart5").getContext("2d");
 var ctx3 = document.getElementById("myChart6").getContext("2d");
 var dtx = document.getElementById("myChart7").getContext("2d");
+
 
 
  new Chart(btx, {
@@ -719,31 +697,3 @@ var dtx = document.getElementById("myChart7").getContext("2d");
 });
 
 
-
-
-
-
-var pieChart = document.getElementById("pie-chart").getContext("2d");
-
-
-new Chart(pieChart, {
-  type: 'pie',
-  data: {
-    labels: ["France", "English", "Arabic", "Hebrew", "Yiddish"],
-
-    datasets: [{
-      label: "Languages",
-	  display: true,
-      backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-      data: [52,73,19,33,17]
-    }]
-  },
-  options: {
-    responsive:false,
-    title: {
-      display: true,
-      text: ''
-    }
-  }
-  
-});

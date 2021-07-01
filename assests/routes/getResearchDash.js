@@ -1,3 +1,5 @@
+
+
 (function ($) {
     $(document).ready(function () {
         //let researchId = $('#researchId').val;
@@ -38,6 +40,10 @@
                 const lengthOfSession = researchData[0].lengthOfSession;
                 let numberOfSongs = 0;
                 let NumberOfRatedSongs = 0;
+
+                //for pie chart
+                let pieLables = [];
+                let pieData= [];
 
                 let users = $.post('/usersData', {patientsIds}, async function (usersData){
                     usersData = usersData.items;
@@ -167,6 +173,36 @@
                     $("#mostRatedSong").html(songsSortedByAvg[0][0]);
                     $("#lowestRatedSong").html(songsSortedByAvg[songsSortedByAvg.length-1][0]);
 
+
+                    Object.values(languageData).forEach(function (language)
+                    {
+                        pieLables.push(language.languageStr);
+                        pieData.push(language.sumOfRaters);
+                    });
+
+                    var pieChart = document.getElementById("pie-chart").getContext("2d");
+
+                    new Chart(pieChart, {
+                        type: 'pie',
+                        data: {
+                            labels: pieLables,
+                            datasets: [{
+                                label: "Languages",
+                                display: true,
+                                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850", "#4ab5b6", "#158a7d"],
+                                data: pieData
+                            }]
+                        },
+                        options: {
+                            responsive:false,
+                            title: {
+                                display: true,
+                                text: 'songs'
+                            },
+                            hoverBorderColor: "black"
+                        }
+
+                    });
 
                     console.log(researchData);
                     // 2. NumberOfPlaylists = count the number of playlists
