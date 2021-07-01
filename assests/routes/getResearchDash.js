@@ -93,6 +93,16 @@
                             genreData.length++;
                         }
 
+                        if(!languageData[value.language] && !isGenre){
+                            languageData[value.language] = {
+                                language: value.language,
+                                sumOfRaters: 0,
+                                sumScore: 0,
+                                average: 0,
+                            }
+                            languageData.length++;
+                        }
+
                         if(!playlistsData[value.playlistName] && !isGenre){
                             playlistsData[value.playlistName] = {
                                 playlistName: value.playlistName,
@@ -108,6 +118,10 @@
                                 playlistsData[value.playlistName].sumScore += value.average;
                                 playlistsData[value.playlistName].sumOfRaters++;
                                 playlistsData[value.playlistName].average = playlistsData[value.playlistName].sumScore / playlistsData[value.playlistName].sumOfRaters;
+
+                                languageData[value.language].sumScore += value.average;
+                                languageData[value.language].sumOfRaters++;
+                                languageData[value.language].average = languageData[value.language].sumScore / languageData[value.language].sumOfRaters;
                             }
 
                             if(isGenre) {
