@@ -99,7 +99,7 @@ app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'asse
 app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
 //TEST! REMOVE WHEN DONE TESTING
-app.get('/researcherDash', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/researcherMainDash.html'), {}, () => res.end())); // login form
+app.get('/researcherPortal', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/researcherMainPortal.html'), {}, () => res.end())); // login form
 
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base
@@ -1249,6 +1249,19 @@ app.post('/selection/:userId', routes.post.userRateSong);
  * @RESPONSE-SAMPLE {{}}
  ----------------------------------------------------------------------------------*/
 app.post('/sessionComments/:userId', routes.post.sessionComments);
+
+
+
+/** ----------------------------------------------------------------------------------
+ * Post a research ID and get research details
+ *
+ *
+ * @PARAM {String*} researchId: Given research id
+ *
+ * @RESPONSE-SAMPLE {{obj}}
+ ----------------------------------------------------------------------------------*/
+app.post('/researchPortalData/:researchId', routes.post.researchPortalData);
+
 
 
 /** ----------------------------------------------------------------------------------
