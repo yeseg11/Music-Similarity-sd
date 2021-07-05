@@ -1,5 +1,5 @@
 # Music-Similarity
-## Secound Degree project. 
+## Second Degree project 2014-2018
 
 
 <img src="https://github.com/yeseg11/Music-Similarity-sd/blob/master/pic/music-colour-splash.jpg" height="300" width="400">
@@ -22,9 +22,6 @@ Avi Cohen
 <img src="https://avatars0.githubusercontent.com/u/26030890?v=3&s=460" alt="Douglas Crockford" width="100" height="100">
 Sagi Marciano
 <img src="https://avatars3.githubusercontent.com/u/16443118?v=3&s=460" alt="Linus Torvalds" width="100" height="100">
-
-
-
 
 * Acedamic advisor
   DR. Miriam Allalouf
@@ -55,3 +52,35 @@ Sagi Marciano
 * [Iteration 2 alpa](https://github.com/yeseg11/Music-Similarity-sd/Music-Similarity/wiki/Iteration-2-alpha)
 * [Iteration 3 beta](https://github.com/yeseg11/Music-Similarity-sd/wiki/Iteration-3-beta)
 * [Iteration 4 final](https://github.com/yeseg11/Music-Similarity-sd/wiki/Iteration-4-final)
+
+
+
+# Project Expansion - First Degree project 2020-2021
+## Overview
+* This project has been expanded as a final project in B.sc in Software Engineering program at Azrieli College of Engineering Jerusalem.
+*  The following features have been added:
+	* The project is now using a new learning algorithm for song recommendations.
+    * Guide screens - Allows the guide to support the users listening meeting using a mobile GUI.
+    * Research portal - Displays research data and graphs.
+
+### Developer and repository master
+Liran Alboher
+<img src="https://avatars.githubusercontent.com/u/37271751?s=400&u=d916e15b800a9d095464eedc2559eaec98e3639d&v=4" alt="Douglas Crockford" width="100" height="100">
+
+* Acedamic advisor
+  DR. Miriam Allalouf
+  
+  
+## Software Design
+**Architecture**
+* [System](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/System%20Architecture.jpg)
+* [Guide](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/Guide%20-%20Architecture.png) 
+* [Researcher](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/Researcher%20Architecture.png)
+* [Learning Algorithm](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/Learning%20Algorithm.png)
+
+**Use Cases**
+* [Guide](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/Guide%20-%20Use%20Cases.jpg) 
+* [Researcher](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/Researcher%20User%20Cases.jpg)
+
+**Flow Chart**
+* [Researcher Flow Chart](https://github.com/yeseg11/Music-Similarity-sd/blob/develop/docs/Docs_Liran/Diagrams/Researcher%20Flow%20Chart%20Diagram.jpg)
