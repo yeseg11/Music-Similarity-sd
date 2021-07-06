@@ -40,7 +40,6 @@ var userDataSchema = new Schema({ //create when create a user .
                     playlistName: String,
                     mbId: String,
                     score: Number,
-                    guideScore: Number,
                     guideComment: String,
                     language: String
                 }]
