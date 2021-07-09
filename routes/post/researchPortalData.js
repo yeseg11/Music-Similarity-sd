@@ -1,6 +1,44 @@
 let UserData = require('../../models/userData.js');
 let Records = require('../../models/records.js');
 let Research = require('../../models/research.js');
+let Playlists = require('../../models/playlist.js');
+
+function getRecord(songs){
+
+    return new Promise(function(resolve,reject) {
+        Playlists.find({"records.mbId":{$in:songs}}, "records" ).lean()
+            .exec(function (err, docs) {
+                if(err || !docs.length)
+                    reject(new Error('Error: No record available!'));
+                else{
+                    let songsObject = docs.map(playlist => {
+                        return playlist.records.filter(songObj => {
+                            if(songs.indexOf(songObj.mbId) !== -1)
+                                return songObj;
+                        })
+
+                    }).flat();
+
+                    let sortedNames = [];
+
+                    songs.forEach(function(key) {
+                        let found = false;
+                        songsObject = songsObject.filter(function(songObj) {
+                            if(!found && songObj.mbId == key) {
+
+                                sortedNames.push(songObj.artistName + " - " + songObj.title + " (" + songObj.year + ")");
+                                found = true;
+                                return false;
+                            } else
+                                return true;
+                        })
+                    })
+
+                    resolve(sortedNames)
+                }
+            })
+    })
+}
 
 module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req.body) return res.sendStatus(400);
@@ -13,7 +51,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
         if (err) return next(err);
 
 
-        UserData.find({tamaringaId: researchDoc["0"].patientsIds}).lean().exec(function (err, UserDatadocs) {
+        UserData.find({tamaringaId: researchDoc["0"].patientsIds}).lean().exec(async function (err, UserDatadocs) {
             if (err) return next(err);
 
             const playlistsKeys = {
@@ -33,6 +71,9 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 cla: "Classical/Traditional"
             };
 
+            var leastRatedSong = "";
+            var leastRatedScore = 5;
+
             let portalData = {
                 researchName: researchDoc["0"].researchName,
                 researchId: researchDoc["0"].researchId,
@@ -45,12 +86,14 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 meetingPerWeeks: researchDoc["0"].meetingPerWeek,
                 lengthOfSession: researchDoc["0"].lengthOfSession,
                 mostRatedSongsNum: 0,
-                numberOfPlaylistsNum: 0,
+                mostRatedSong: "",
                 numberOfSongs: 0,
+                numberOfPlaylists: 0,
+                languageData: {length: 0},
+                genreData: {length: 0},
                 NumberOfRatedSongs: 0,
                 pieLables: [],
                 pieData: [],
-
             };
 
             //every array item of researchData represent a user
@@ -70,8 +113,6 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
             let songStatistics = {};
             let playlistsData = [];
-            let languageData = [];
-            let genreData = [];
 
 
             // Create an array with the research songs, songs occurrences and average rating
@@ -93,6 +134,11 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 songStatistics[value.mbId].language = value.language;
                 songStatistics[value.mbId].playlistName = value.playlistName;
                 if(value.score > 0){
+                    if(leastRatedScore > value.score){
+                        leastRatedScore = value.score;
+                        leastRatedSong = value.mbId;
+                    }
+
                     songStatistics[value.mbId].sumOfRaters++;
                     songStatistics[value.mbId].average = songStatistics[value.mbId].sumScore / songStatistics[value.mbId].sumOfRaters;
                     if(songStatistics[value.mbId].sumOfRaters === 1) { // count songs that rated when it a song has at least one rater
@@ -111,19 +157,19 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                     isGenre = true;
                 }
 
-                if(!genreData[value.playlistName] && isGenre){
-                    genreData[value.playlistName] = {
+                if(!portalData.genreData[value.playlistName] && isGenre){
+                    portalData.genreData[value.playlistName] = {
                         playlistName: value.playlistName,
                         languageStr: playlistsKeys[value.playlistName],
                         sumOfRaters: 0,
                         sumScore: 0,
                         average: 0,
                     }
-                    genreData.length++;
+                    portalData.genreData.length++;
                 }
 
-                if(!languageData[value.language] && !isGenre){
-                    languageData[value.language] = {
+                if(!portalData.languageData[value.language] && !isGenre){
+                    portalData.languageData[value.language] = {
                         language: value.language,
                         languageStr: playlistsKeys[value.language],
                         songsCount: 0,
@@ -131,7 +177,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                         sumScore: 0,
                         average: 0,
                     }
-                    languageData.length++;
+                    portalData.languageData.length++;
                 }
 
                 if(!playlistsData[value.playlistName] && !isGenre){
@@ -146,7 +192,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 }
 
                 if(!isGenre) {
-                    languageData[value.language].songsCount++;
+                    portalData.languageData[value.language].songsCount++;
                 }
 
                 if(value.average > 0){
@@ -155,68 +201,42 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                         playlistsData[value.playlistName].sumOfRaters++;
                         playlistsData[value.playlistName].average = playlistsData[value.playlistName].sumScore / playlistsData[value.playlistName].sumOfRaters;
 
-                        languageData[value.language].sumScore += value.average;
-                        languageData[value.language].sumOfRaters++;
-                        languageData[value.language].average = languageData[value.language].sumScore / languageData[value.language].sumOfRaters;
+                        portalData.languageData[value.language].sumScore += value.average;
+                        portalData.languageData[value.language].sumOfRaters++;
+                        portalData.languageData[value.language].average = portalData.languageData[value.language].sumScore / portalData.languageData[value.language].sumOfRaters;
                     }
 
                     if(isGenre) {
-                        genreData[value.playlistName].sumScore += value.average;
-                        genreData[value.playlistName].sumOfRaters++;
-                        genreData[value.playlistName].average = genreData[value.playlistName].sumScore / genreData[value.playlistName].sumOfRaters;
+                        portalData.genreData[value.playlistName].sumScore += value.average;
+                        portalData.genreData[value.playlistName].sumOfRaters++;
+                        portalData.genreData[value.playlistName].average = portalData.genreData[value.playlistName].sumScore / portalData.genreData[value.playlistName].sumOfRaters;
                     }
                 }
             });
 
-            const mostRatedSongs = Object.entries(songStatistics).sort( (a,b) => {
-                return b[1].average-a[1].average
+            portalData.numberOfPlaylists = playlistsData.length;
+            portalData.numberOfGenres = portalData.genreData.length;
+            let mostRatedSongs = Object.entries(songStatistics).sort( (a,b) => {
+                    return b[1].average-a[1].average
             });
 
-
-            Object.values(languageData).forEach(function (language)
+            Object.values(portalData.languageData).forEach(function (language)
             {
-                portalData.pieLables.push(language.languageStr);
+                if(language.languageStr)
+                    portalData.pieLables.push(language.languageStr);
+                if(language.sumOfRaters)
                 portalData.pieData.push(language.sumOfRaters);
             });
+
+
+            var songsforStrings = mostRatedSongs.slice(0, 5).flat().filter(e => typeof e === 'string');
+            songsforStrings.push(leastRatedSong);
+
+            //portalData.mostRatedSong = await getRecord(portalData.momostRatedSongs[0][0]);
+            portalData.mostRatedSongs = await getRecord(songsforStrings);
 
             res.status(200).json({err: false, items: portalData});
         });
 
     });
-
-
-
-
-    // return UserData.findOne({tamaringaId}).exec((err, user)=>{
-    //     if(err || !user) return next(err || new Error('Invalid user Id!'));
-    //
-    //     const currentSessionIndex = user.researchList[0].sessionList.length -1;
-    //     let currentSession = user.researchList[0].sessionList[parseInt(currentSessionIndex)];
-    //
-    //     if(stringType === 'start') {
-    //         console.log("post start");
-    //         currentSession.guideCommentStart = commentString;
-    //     }
-    //
-    //     if(stringType === 'end') {
-    //         currentSession.guideCommentEnd = commentString;
-    //     }
-    //
-    //     let update = {};
-    //
-    //     const options = {"upsert": true};
-    //     update['$set'] = {
-    //         'researchList.0.sessionList': user.researchList[0].sessionList
-    //     }
-    //
-    //
-    //     UserData.findOneAndUpdate({_id:  user._id}, update, options).exec((err, result)=>{
-    //         if(err) return next(err);
-    //         //res.status(200).json({err: false})
-    //     })
-    //
-    //     res.status(200).json({err: false})
-    // });
-
-
 }

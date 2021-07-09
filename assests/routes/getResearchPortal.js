@@ -25,9 +25,19 @@
 
                 $("#numberOfSongs").html(researchData.numberOfSongs.toString());
                 $("#numberOfRatedSongs").html(researchData.NumberOfRatedSongs.toString());
-                //$("#numberOfPlaylists").html(researchData.numberOfPlaylistsNum.toString());
-                //$("#mostRatedSong").html(researchData.songsSortedByAvg[0][0]);
-                //$("#lowestRatedSong").html(researchData.songsSortedByAvg[songsSortedByAvg.length-1][0]);
+                $("#numberOfPlaylists").html(researchData.numberOfPlaylists.toString());
+                $("#numberOfGenres").html(researchData.numberOfGenres.toString());
+                $("#mostRatedSong").html(researchData.mostRatedSongs[0]);
+                $("#lowestRatedSong").html(researchData.mostRatedSongs[researchData.mostRatedSongs.length-1]);
+
+
+                //Top 5 songs
+                $("#topFirst").html("1. " + researchData.mostRatedSongs[0]);
+                $("#topSecond").html("1. " + researchData.mostRatedSongs[1]);
+                $("#topThird").html("1. " + researchData.mostRatedSongs[2]);
+                $("#topFourth").html("1. " + researchData.mostRatedSongs[3]);
+                $("#topFifth").html("1. " + researchData.mostRatedSongs[4]);
+
 
                 let pieChart = document.getElementById("pie-chart").getContext("2d");
 
