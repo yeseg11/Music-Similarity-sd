@@ -33,6 +33,16 @@
                 $("#researchName").html(researchData.researchName);
                 $("#researcher").html("Researcher " + researchData.researchId);
                 $("#researchHeader").html(researchData.researchName + " Portal");
+                $("#mostRatedPlaylist").html(researchData.playlistsData[1][0]);
+                $("#lowestRatedPlaylist").html(researchData.playlistsData[researchData.playlistsData.length-1][0]);
+
+                $("#mostRatedGenre").html(researchData.genreData[1][1].languageStr);
+                $("#lowestRatedGenre").html(researchData.genreData[researchData.genreData.length-1][1].languageStr);
+
+                $("#mostRatedLang").html(researchData.languageData[1][1].languageStr);
+                $("#lowestRatedLang").html(researchData.languageData[researchData.languageData.length-1][1].languageStr);
+
+
 
                 //Top 5 songs
                 $("#topFirst").html("1. " + researchData.mostRatedSongs[0]);

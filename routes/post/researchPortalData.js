@@ -91,8 +91,10 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 numberOfPlaylists: 0,
                 languageData: {length: 0},
                 genreData: {length: 0},
+                playlistsData: {length: 0},
                 NumberOfRatedSongs: 0,
                 pieLables: [],
+
                 pieData: [],
             };
 
@@ -112,7 +114,6 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
 
             let songStatistics = {};
-            let playlistsData = [];
 
 
             // Create an array with the research songs, songs occurrences and average rating
@@ -180,15 +181,15 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                     portalData.languageData.length++;
                 }
 
-                if(!playlistsData[value.playlistName] && !isGenre){
-                    playlistsData[value.playlistName] = {
+                if(!portalData.playlistsData[value.playlistName] && !isGenre){
+                    portalData.playlistsData[value.playlistName] = {
                         playlistName: value.playlistName,
                         languageStr: playlistsKeys[value.language],
                         sumOfRaters: 0,
                         sumScore: 0,
                         average: 0,
                     }
-                    playlistsData.length++;
+                    portalData.playlistsData.length++;
                 }
 
                 if(!isGenre) {
@@ -197,9 +198,9 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
                 if(value.average > 0){
                     if(!isGenre) {
-                        playlistsData[value.playlistName].sumScore += value.average;
-                        playlistsData[value.playlistName].sumOfRaters++;
-                        playlistsData[value.playlistName].average = playlistsData[value.playlistName].sumScore / playlistsData[value.playlistName].sumOfRaters;
+                        portalData.playlistsData[value.playlistName].sumScore += value.average;
+                        portalData.playlistsData[value.playlistName].sumOfRaters++;
+                        portalData.playlistsData[value.playlistName].average = portalData.playlistsData[value.playlistName].sumScore / portalData.playlistsData[value.playlistName].sumOfRaters;
 
                         portalData.languageData[value.language].sumScore += value.average;
                         portalData.languageData[value.language].sumOfRaters++;
@@ -214,7 +215,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 }
             });
 
-            portalData.numberOfPlaylists = playlistsData.length;
+            portalData.numberOfPlaylists = portalData.playlistsData.length;
             portalData.numberOfGenres = portalData.genreData.length;
             let mostRatedSongs = Object.entries(songStatistics).sort( (a,b) => {
                     return b[1].average-a[1].average
@@ -230,6 +231,18 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 portalData.pieData.push(language.sumOfRaters);
             });
 
+            portalData.languageData = Object.entries(portalData.languageData).sort( (a,b) => {
+                return b[1].average-a[1].average
+            });
+
+            portalData.playlistsData = Object.entries(portalData.playlistsData).sort( (a,b) => {
+                return b[1].average-a[1].average
+            });
+
+            portalData.genreData = Object.entries(portalData.genreData).sort( (a,b) => {
+                return b[1].average-a[1].average
+            });
+            //portalData.languageData
 
             var songsforStrings = mostRatedSongs.slice(0, 5).flat().filter(e => typeof e === 'string');
             songsforStrings.push(leastRatedSong);
