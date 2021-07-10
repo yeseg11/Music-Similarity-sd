@@ -220,6 +220,8 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                     return b[1].average-a[1].average
             });
 
+
+
             Object.values(portalData.languageData).forEach(function (language)
             {
                 if(language.languageStr)
