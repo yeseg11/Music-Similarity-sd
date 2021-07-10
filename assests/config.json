@@ -1,12 +1,8 @@
 {
-  "Text": {
-    "Font_color": "red",
-    "Font_Size" : "18px"
-  },
-  "Size":{
-    "playlistSize": 20
-  },
-  "Display": {
-
+  "Sizes":{
+    "SESSIONSONGLIMIT": 20,
+    "GLOBALRATINGAVG": 3,
+	"NumSongsForLanguage": 8,
+	"NumSongsForGenre": 4
   }
 }

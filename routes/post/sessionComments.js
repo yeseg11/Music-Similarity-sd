@@ -24,6 +24,11 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             currentSession.guideCommentEnd = commentString;
         }
 
+        else{
+            let songForComment = currentSession.songs.find(x=>x.mbId === stringType);
+            songForComment.guideComment = commentString;
+        }
+
         let update = {};
 
         const options = {"upsert": true};

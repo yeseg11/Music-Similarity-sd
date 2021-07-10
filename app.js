@@ -98,7 +98,8 @@ app.get('/createGuide', (req, res) => res.sendFile(path.join(__dirname, 'assests
 app.get('/guideLoginPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideLoginPage.html'), {}, () => res.end()));
 app.get('/guideMainPage', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/guideMainPage.html'), {}, () => res.end()));/*6 buttons*/
 
-
+//TEST! REMOVE WHEN DONE TESTING
+app.get('/researcherPortal', (req, res) => res.sendFile(path.join(__dirname, 'assests', '/researcherMainPortal.html'), {}, () => res.end())); // login form
 
 /** ----------------------------------------------------------------------------------
  * Add the playlist to Data base
@@ -988,7 +989,7 @@ app.get('/user/:id', function (req, res, next) {    //call to getUserData.js , a
 
 
 /** ----------------------------------------------------------------------------------
- * Return several users Data from DB
+ * Return several users public Data from DB
  *
  * @PARAM {Array*} id: Given user id
  *
@@ -999,6 +1000,25 @@ app.post('/users', function (req, res, next) {    //call to getUserData.js , and
     if (!req) return res.sendStatus(400);
     // console.log(req.params.id);
     PublicUsers.find({tamaringaId: req.body["patientsIds[]"]}).lean().exec(function (err, docs) {
+        if (err) return next(err);
+        // console.log(docs);
+        res.status(200).json({err: false, items: [].concat(docs)});
+    });
+});
+
+
+/** ----------------------------------------------------------------------------------
+ * Return several users Datas from UserDatas collection
+ *
+ * @PARAM {Array*} id: Given user id
+ *
+ * @RESPONSE {json}
+ * @RESPONSE-SAMPLE {docs: []}
+ ----------------------------------------------------------------------------------*/
+app.post('/usersData', function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
+    if (!req) return res.sendStatus(400);
+    // console.log(req.params.id);
+    UserData.find({tamaringaId: req.body["patientsIds[]"]}).lean().exec(function (err, docs) {
         if (err) return next(err);
         // console.log(docs);
         res.status(200).json({err: false, items: [].concat(docs)});
@@ -1229,6 +1249,19 @@ app.post('/selection/:userId', routes.post.userRateSong);
  * @RESPONSE-SAMPLE {{}}
  ----------------------------------------------------------------------------------*/
 app.post('/sessionComments/:userId', routes.post.sessionComments);
+
+
+
+/** ----------------------------------------------------------------------------------
+ * Post a research ID and get research details
+ *
+ *
+ * @PARAM {String*} researchId: Given research id
+ *
+ * @RESPONSE-SAMPLE {{obj}}
+ ----------------------------------------------------------------------------------*/
+app.post('/researchPortalData/:researchId', routes.post.researchPortalData);
+
 
 
 /** ----------------------------------------------------------------------------------
