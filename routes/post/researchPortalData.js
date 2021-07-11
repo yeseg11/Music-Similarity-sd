@@ -40,6 +40,14 @@ function getRecord(songs){
     })
 }
 
+function sortArrays(array){
+    array = Object.entries(array).sort( (a,b) => {
+        return b[1].average-a[1].average
+    });
+
+    return array;
+}
+
 module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req.body) return res.sendStatus(400);
     const researchID = req.params.researchId;
@@ -231,18 +239,9 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 portalData.pieData.push(language.sumOfRaters);
             });
 
-            portalData.languageData = Object.entries(portalData.languageData).sort( (a,b) => {
-                return b[1].average-a[1].average
-            });
-
-            portalData.playlistsData = Object.entries(portalData.playlistsData).sort( (a,b) => {
-                return b[1].average-a[1].average
-            });
-
-            portalData.genreData = Object.entries(portalData.genreData).sort( (a,b) => {
-                return b[1].average-a[1].average
-            });
-            //portalData.languageData
+            portalData.languageData = sortArrays(portalData.languageData);
+            portalData.playlistsData = sortArrays(portalData.playlistsData);
+            portalData.genreData = sortArrays(portalData.genreData);
 
             var songsforStrings = mostRatedSongs.slice(0, 5).flat().filter(e => typeof e === 'string');
             songsforStrings.push(leastRatedSong);
