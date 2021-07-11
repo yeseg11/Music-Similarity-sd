@@ -31,8 +31,9 @@
                 $("#mostRatedSong").html(researchData.mostRatedSongs[0]);
                 $("#lowestRatedSong").html(researchData.mostRatedSongs[researchData.mostRatedSongs.length-1]);
                 $("#researchName").html(researchData.researchName);
-                $("#researcher").html("Researcher " + researchData.researchId);
-                $("#researchHeader").html(researchData.researchName + " Portal");
+
+                $("#researcher").html(researchData.researcherName + "<br>" +"ID: " + researchData.researcherId);
+                $("#researchHeader").html(researchData.researchName);
                 $("#mostRatedPlaylist").html(researchData.playlistsData[1][0]);
                 $("#lowestRatedPlaylist").html(researchData.playlistsData[researchData.playlistsData.length-1][0]);
 

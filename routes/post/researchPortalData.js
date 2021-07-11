@@ -1,10 +1,9 @@
 let UserData = require('../../models/userData.js');
-let Records = require('../../models/records.js');
+let Researchers = require('../../models/researchers.js');
 let Research = require('../../models/research.js');
 let Playlists = require('../../models/playlist.js');
 
 function getRecord(songs){
-
     return new Promise(function(resolve,reject) {
         Playlists.find({"records.mbId":{$in:songs}}, "records" ).lean()
             .exec(function (err, docs) {
@@ -48,16 +47,26 @@ function sortArrays(array){
     return array;
 }
 
+function getResearcher(researchId) {
+    return new Promise(function(resolve,reject) {
+        Researchers.find({"researcherId": researchId.toString()} ).lean()
+            .exec(function (err, docs) {
+                if(err || !docs.length)
+                    reject(new Error('Error: No record available!'));
+                else{
+                    resolve(docs["0"].researcherName)
+                }
+            })
+    })
+}
+
 module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req.body) return res.sendStatus(400);
     const researchID = req.params.researchId;
-
     if(!researchID) return next(new Error('No research found'));
-
 
     Research.find({researchId: researchID.toString()}).lean().exec(function (err, researchDoc) {
         if (err) return next(err);
-
 
         UserData.find({tamaringaId: researchDoc["0"].patientsIds}).lean().exec(async function (err, UserDatadocs) {
             if (err) return next(err);
@@ -85,6 +94,8 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             let portalData = {
                 researchName: researchDoc["0"].researchName,
                 researchId: researchDoc["0"].researchId,
+                researcherId: researchDoc["0"].researchersIds["0"],
+                researcherName: "",
                 researchGroup: researchDoc["0"].researchGroupId,
                 nursingHome: researchDoc["0"].nursingHome,
                 department: researchDoc["0"].department,
@@ -155,7 +166,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                     }
                 }
             });
-            console.log("check");
+
             Object.values(songStatistics).forEach(value => {
                 let isGenre = false;
                 if(value.playlistName.localeCompare("cla") === 0
@@ -248,6 +259,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
             //portalData.mostRatedSong = await getRecord(portalData.momostRatedSongs[0][0]);
             portalData.mostRatedSongs = await getRecord(songsforStrings);
+            portalData.researcherName = await getResearcher(portalData.researcherId);
 
             res.status(200).json({err: false, items: portalData});
         });
