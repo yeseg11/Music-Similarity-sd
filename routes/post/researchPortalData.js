@@ -105,6 +105,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 meetingPerWeeks: researchDoc["0"].meetingPerWeek,
                 lengthOfSession: researchDoc["0"].lengthOfSession,
                 mostRatedSongsNum: 0,
+                userStatistics: {},
                 mostRatedSong: "",
                 numberOfSongs: 0,
                 numberOfPlaylists: 0,
@@ -113,16 +114,61 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 playlistsData: {length: 0},
                 NumberOfRatedSongs: 0,
                 pieLables: [],
-
                 pieData: [],
             };
 
             //every array item of researchData represent a user
-            const researchData = UserDatadocs.map(item =>{
+            let researchData = UserDatadocs.map(item =>{
+                let tamId = item.tamaringaId;
+                let plalistName = item.playlists.firstLanguage.playlists + item.playlists.secondLanguage.playlists;
                 return item.researchList.find(research => {
+                    research.tamaringaId = tamId;
                     return research.researchId = portalData.researchId;
                 })
             });
+
+
+            // for each user's session and playlist, count liked, unliked and indifferent song rating
+            UserDatadocs.forEach(user => {
+                if(!portalData.userStatistics[user.tamaringaId]){
+                    portalData.userStatistics[user.tamaringaId] = {
+                        sessions: {},
+                        playlists: {}
+                    };
+
+                    user.researchList[researchID-1].sessionList.forEach(session => {
+                        portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber] = {
+                            liked: 0,
+                            indifferent :0,
+                            unliked: 0,
+                        }
+
+                        session.songs.forEach(song => {
+                            if(!portalData.userStatistics[user.tamaringaId].playlists[song.playlistName]){
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName] = {
+                                    liked: 0,
+                                    indifferent :0,
+                                    unliked: 0,
+                                }
+                            }
+
+                            if(song.score > 0 && song.score < 3) {
+                                portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber].unliked++;
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].unliked++;
+                            }
+
+                            if(song.score === 3) {
+                                portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber].indifferent++;
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].indifferent++
+                            }
+                            if(song.score > 3) {
+                                portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber].liked++;
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].liked++;
+                            }
+                        })
+                    })
+                }
+            })
 
 
             const allUsersSongs = researchData.map(patient => {
