@@ -60,6 +60,11 @@ function getResearcher(researchId) {
     })
 }
 
+function random_rgba() {
+    let o = Math.round, r = Math.random, s = 255;
+    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+}
+
 module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req.body) return res.sendStatus(400);
     const researchID = req.params.researchId;
@@ -127,45 +132,76 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 })
             });
 
-
+            // usersLikedData.push(                        {
+            //     dataLiked: [],
+            //     dataUnLiked: [],
+            //     dataInd: [],
+            //     label: "User" tamaringaId",
+            //     borderColor: "/"" + random_rgba() +"/"",
+            //     fill: false
+            // })
             // for each user's session and playlist, count liked, unliked and indifferent song rating
             UserDatadocs.forEach(user => {
+                portalData.userStatistics.maxSessionLength = 0;
+
                 if(!portalData.userStatistics[user.tamaringaId]){
                     portalData.userStatistics[user.tamaringaId] = {
-                        sessions: {},
-                        playlists: {}
+                        sessions: {
+                            liked: [],
+                            indifferent : [],
+                            unliked: []
+                        },
+                         playlists: {}
+
                     };
 
+                    if(user.researchList[researchID-1].sessionList.length > portalData.userStatistics.maxSessionLength)
+                         portalData.userStatistics.maxSessionLength = user.researchList[researchID-1].sessionList.length;
+
+                    let sessionNum = 0;
                     user.researchList[researchID-1].sessionList.forEach(session => {
-                        portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber] = {
-                            liked: 0,
-                            indifferent :0,
-                            unliked: 0,
-                        }
+                        portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum] = 0;
+                        portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum] = 0;
+                        portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum] = 0;
 
                         session.songs.forEach(song => {
                             if(!portalData.userStatistics[user.tamaringaId].playlists[song.playlistName]){
                                 portalData.userStatistics[user.tamaringaId].playlists[song.playlistName] = {
-                                    liked: 0,
-                                    indifferent :0,
-                                    unliked: 0,
+                                    playlistName: song.playlistName,
+                                    liked: Array(sessionNum+1).fill(0),
+                                    indifferent : Array(sessionNum+1).fill(0),
+                                    unliked: Array(sessionNum+1).fill(0)
                                 }
                             }
 
+
                             if(song.score > 0 && song.score < 3) {
-                                portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber].unliked++;
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].unliked++;
+                                portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum]++;
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].unliked[sessionNum]++;
                             }
 
                             if(song.score === 3) {
-                                portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber].indifferent++;
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].indifferent++
+                                portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum]++;
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].indifferent[sessionNum]++;
                             }
                             if(song.score > 3) {
-                                portalData.userStatistics[user.tamaringaId].sessions[session.sessionNumber].liked++;
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].liked++;
+                                portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum]++;
+                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].liked[sessionNum]++;
                             }
+
+                            Object.values(portalData.userStatistics[user.tamaringaId].playlists).forEach(playlist => {
+                                if(playlist.playlistName !== song.playlistName) {
+                                    if(!playlist.liked[sessionNum])
+                                        playlist.liked[sessionNum] = 0;
+                                    if(!playlist.unliked[sessionNum])
+                                        playlist.unliked[sessionNum] = 0;
+                                    if(!playlist.indifferent[sessionNum])
+                                        playlist.indifferent[sessionNum] = 0;
+                                }
+                            })
+
                         })
+                        sessionNum++;
                     })
                 }
             })
