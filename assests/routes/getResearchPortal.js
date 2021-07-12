@@ -74,7 +74,40 @@
                         },
                         hoverBorderColor: "black"
                     }
+                });
 
+                let usersLikedData = [];
+                let i = 0;
+                Object.values(researchData.userStatistics).forEach(user => {
+                    i++;
+                    if (user.sessions) {
+                        usersLikedData.push({
+                            data: user.sessions.liked,
+                            label: "User " + i,
+                            borderColor: random_rgba() ,
+                            fill: false
+                        })
+                }
+                })
+
+
+
+                let userData = {
+                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                    datasets: usersLikedData
+                };
+
+                var btx = document.getElementById("myChart").getContext("2d");
+
+                new Chart(btx, {
+                    type: 'line',
+                    data: userData,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'ss'
+                        }
+                    }
                 });
 
                 console.log(researchData);
@@ -86,7 +119,10 @@
 
                 //set html general research data
 
-
+                function random_rgba() {
+                    let o = Math.round, r = Math.random, s = 255;
+                    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+                }
 
 
             }).catch(function (err) {

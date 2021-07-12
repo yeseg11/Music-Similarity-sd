@@ -60,11 +60,6 @@ function getResearcher(researchId) {
     })
 }
 
-function random_rgba() {
-    let o = Math.round, r = Math.random, s = 255;
-    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
-}
-
 module.exports = async function (req, res, next) {    //call to getUserData.js , and request all the relevant data from DB
     if (!req.body) return res.sendStatus(400);
     const researchID = req.params.researchId;
@@ -168,9 +163,9 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                             if(!portalData.userStatistics[user.tamaringaId].playlists[song.playlistName]){
                                 portalData.userStatistics[user.tamaringaId].playlists[song.playlistName] = {
                                     playlistName: song.playlistName,
-                                    liked: Array(sessionNum+1).fill(0),
-                                    indifferent : Array(sessionNum+1).fill(0),
-                                    unliked: Array(sessionNum+1).fill(0)
+                                    liked: Array(sessionNum + 1).fill(0),
+                                    indifferent : Array(sessionNum + 1).fill(0),
+                                    unliked: Array(sessionNum + 1).fill(0)
                                 }
                             }
 
