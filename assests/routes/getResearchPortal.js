@@ -77,6 +77,9 @@
                 });
 
                 let usersLikedData = [];
+                let usersUnLikedData = [];
+                let usersIndiffData = [];
+
                 let i = 0;
                 Object.values(researchData.userStatistics).forEach(user => {
                     i++;
@@ -84,31 +87,83 @@
                         usersLikedData.push({
                             data: user.sessions.liked,
                             label: "User " + i,
-                            borderColor: random_rgba() ,
+                            borderColor: randomDarkRgbColor(),
                             fill: false
-                        })
+                        });
+                        usersUnLikedData.push({
+                            data: user.sessions.unliked,
+                            label: "User " + i,
+                            borderColor: randomDarkRgbColor(),
+                            fill: false
+                        });
+
+                        usersIndiffData.push({
+                            data: user.sessions.indifferent,
+                            label: "User " + i,
+                            borderColor: randomDarkRgbColor(),
+                            fill: false
+                        });
                 }
                 })
 
 
 
-                let userData = {
+
+                let usersLikedGraph = {
                     labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
                     datasets: usersLikedData
                 };
 
-                var btx = document.getElementById("myChart").getContext("2d");
+                let usersUnlikedGraph = {
+                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                    datasets: usersUnLikedData
+                };
+
+                let usersIndiffGraph = {
+                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                    datasets: usersIndiffData
+                };
+
+
+                let btx = document.getElementById("myChart").getContext("2d");
+                let btx2 = document.getElementById("myChart2").getContext("2d");
+                let btx3 = document.getElementById("myChart3").getContext("2d");
 
                 new Chart(btx, {
                     type: 'line',
-                    data: userData,
+                    data: usersLikedGraph,
                     options: {
                         title: {
                             display: true,
-                            text: 'ss'
+                            text: 'liked Graph'
                         }
                     }
                 });
+
+                new Chart(btx2, {
+                    type: 'line',
+                    data: usersUnlikedGraph,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'unliked Graph'
+                        }
+                    }
+                });
+
+                new Chart(btx3, {
+                    type: 'line',
+                    data: usersIndiffGraph,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Indifferent Graph'
+                        }
+                    }
+                });
+
+
+
 
                 console.log(researchData);
                 // 2. NumberOfPlaylists = count the number of playlists
@@ -119,9 +174,11 @@
 
                 //set html general research data
 
-                function random_rgba() {
-                    let o = Math.round, r = Math.random, s = 255;
-                    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+                function randomDarkRgbColor() {
+                    const red = Math.floor(Math.random() * 256/2);
+                    const green = Math.floor(Math.random() * 256/2);
+                    const blue = Math.floor(Math.random() * 256/2);
+                    return "rgb(" + red + ", " + green + ", " + blue + ")";
                 }
 
 
@@ -148,7 +205,7 @@
 
 
 
-        var sessionMenuItem = '<div class="rsStyle-bar-block" id=\'sessionMenuItem\'>';
+        let sessionMenuItem = '<div class="rsStyle-bar-block" id=\'sessionMenuItem\'>';
         sessionMenuItem += '<a href="#" className="rsStyle-bar-item rsStyle-button rsStyle-padding rsStyle-grad-menu"><i className="fa fa-bullseye fa-fw"></i>::SESSIONMENUITEM::</a>';
         sessionMenuItem += '</div>';
     });
