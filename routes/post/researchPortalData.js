@@ -127,14 +127,6 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 })
             });
 
-            // usersLikedData.push(                        {
-            //     dataLiked: [],
-            //     dataUnLiked: [],
-            //     dataInd: [],
-            //     label: "User" tamaringaId",
-            //     borderColor: "/"" + random_rgba() +"/"",
-            //     fill: false
-            // })
             // for each user's session and playlist, count liked, unliked and indifferent song rating
             UserDatadocs.forEach(user => {
                 portalData.userStatistics.maxSessionLength = 0;

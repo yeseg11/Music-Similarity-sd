@@ -24,6 +24,52 @@
                     cla: "Classical/Traditional"
                 };
 
+                Colors = {};
+                Colors.names = {
+                    black: "#000000",
+                    blue: "#0000ff",
+                    brown: "#a52a2a",
+                    cyan: "#00ffff",
+                    darkblue: "#00008b",
+                    darkcyan: "#008b8b",
+                    darkgrey: "#a9a9a9",
+                    darkgreen: "#006400",
+                    darkkhaki: "#bdb76b",
+                    darkmagenta: "#8b008b",
+                    darkolivegreen: "#556b2f",
+                    darkorange: "#ff8c00",
+                    darkorchid: "#9932cc",
+                    darkred: "#8b0000",
+                    darksalmon: "#e9967a",
+                    darkviolet: "#9400d3",
+                    fuchsia: "#ff00ff",
+                    gold: "#ffd700",
+                    green: "#008000",
+                    indigo: "#4b0082",
+                    khaki: "#f0e68c",
+                    lightgreen: "#90ee90",
+                    lime: "#00ff00",
+                    magenta: "#ff00ff",
+                    maroon: "#800000",
+                    navy: "#000080",
+                    olive: "#808000",
+                    orange: "#ffa500",
+                    pink: "#ffc0cb",
+                    purple: "#800080",
+                    violet: "#800080",
+                    red: "#ff0000",
+                    yellow: "#ffff00"
+                };
+
+                Colors.random = function() {
+                    var result;
+                    var count = 0;
+                    for (var prop in this.names)
+                        if (Math.random() < 1/++count)
+                            result = prop;
+                    return result;
+                };
+
                 $("#numberOfSongs").html(researchData.numberOfSongs.toString());
                 $("#numberOfRatedSongs").html(researchData.NumberOfRatedSongs.toString());
                 $("#numberOfPlaylists").html(researchData.numberOfPlaylists.toString());
@@ -80,6 +126,9 @@
                 let usersUnLikedData = [];
                 let usersIndiffData = [];
 
+                let usersLikedDataPl = [];
+                let usersUnLikedDataPl = [];
+                let usersIndiffDataPl = [];
                 let i = 0;
                 Object.values(researchData.userStatistics).forEach(user => {
                     i++;
@@ -87,22 +136,43 @@
                         usersLikedData.push({
                             data: user.sessions.liked,
                             label: "User " + i,
-                            borderColor: randomDarkRgbColor(),
+                            borderColor: random_rgba(),
                             fill: false
                         });
                         usersUnLikedData.push({
                             data: user.sessions.unliked,
                             label: "User " + i,
-                            borderColor: randomDarkRgbColor(),
+                            borderColor: Colors.random,
                             fill: false
                         });
 
                         usersIndiffData.push({
                             data: user.sessions.indifferent,
                             label: "User " + i,
-                            borderColor: randomDarkRgbColor(),
+                            borderColor: random_rgba(),
                             fill: false
                         });
+
+                        usersLikedDataPl.push({
+                            data: user.sessions.liked,
+                            label: "User " + i,
+                            borderColor: random_rgba(),
+                            fill: false
+                        });
+                        usersUnLikedDataPl.push({
+                            data: user.sessions.unliked,
+                            label: "User " + i,
+                            borderColor: random_rgba(),
+                            fill: false
+                        });
+
+                        usersIndiffDataPl.push({
+                            data: user.sessions.indifferent,
+                            label: "User " + i,
+                            borderColor: random_rgba(),
+                            fill: false
+                        });
+
                 }
                 })
 
@@ -124,10 +194,29 @@
                     datasets: usersIndiffData
                 };
 
+                let usersLikedGraphPl = {
+                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                    datasets: usersLikedDataPl
+                };
+
+                let usersUnlikedGraphPl = {
+                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                    datasets: usersUnLikedDataPl
+                };
+
+                let usersIndiffGraphPl = {
+                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                    datasets: usersIndiffDataPl
+                };
+
 
                 let btx = document.getElementById("myChart").getContext("2d");
                 let btx2 = document.getElementById("myChart2").getContext("2d");
                 let btx3 = document.getElementById("myChart3").getContext("2d");
+                let ctx = document.getElementById("myChart4").getContext("2d");
+                let ctx2 = document.getElementById("myChart5").getContext("2d");
+                let ctx3 = document.getElementById("myChart6").getContext("2d");
+                let dtx = document.getElementById("myChart7").getContext("2d");
 
                 new Chart(btx, {
                     type: 'line',
@@ -155,6 +244,39 @@
                     type: 'line',
                     data: usersIndiffGraph,
                     options: {
+                    title: {
+                        display: true,
+                        text: 'Indifferent Graph'
+                    }
+                    }
+                });
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: usersLikedGraphPl,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'liked Graph'
+                        }
+                    }
+                });
+
+                new Chart(ctx2, {
+                    type: 'line',
+                    data: usersUnlikedGraphPl,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'unliked Graph'
+                        }
+                    }
+                });
+
+                new Chart(ctx3, {
+                    type: 'line',
+                    data: usersIndiffGraphPl,
+                    options: {
                         title: {
                             display: true,
                             text: 'Indifferent Graph'
@@ -162,17 +284,22 @@
                     }
                 });
 
+                new Chart(dtx, {
+                    type: 'line',
+                    data: usersLikedGraph,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'liked Graph'
+                        }
+                    }
+                });
+                //console.log(researchData);
 
-
-
-                console.log(researchData);
-                // 2. NumberOfPlaylists = count the number of playlists
-                // 3. NumberOfLikedSongs = count the number of songs with score >= 4
-                // 4. DislikedSongs = count the number of songs with score <=3
-                // 5. mostRatedPlaylist = the playlist with most rated songs
-                // 6. for each user - get the disliked songs and the liked songs
-
-                //set html general research data
+                function random_rgba() {
+                    let o = Math.round, r = Math.random, s = 255;
+                    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+                }
 
                 function randomDarkRgbColor() {
                     const red = Math.floor(Math.random() * 256/2);
@@ -180,6 +307,7 @@
                     const blue = Math.floor(Math.random() * 256/2);
                     return "rgb(" + red + ", " + green + ", " + blue + ")";
                 }
+
 
 
             }).catch(function (err) {
@@ -196,14 +324,6 @@
                 })
             });
         }
-
-
-
-        $('#send').on("click", async function (e) {
-            initResearchData();
-            });
-
-
 
         let sessionMenuItem = '<div class="rsStyle-bar-block" id=\'sessionMenuItem\'>';
         sessionMenuItem += '<a href="#" className="rsStyle-bar-item rsStyle-button rsStyle-padding rsStyle-grad-menu"><i className="fa fa-bullseye fa-fw"></i>::SESSIONMENUITEM::</a>';
