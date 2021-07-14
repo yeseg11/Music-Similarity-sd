@@ -106,6 +106,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 lengthOfSession: researchDoc["0"].lengthOfSession,
                 mostRatedSongsNum: 0,
                 userStatistics: {},
+                playlistsStatistics: {},
                 mostRatedSong: "",
                 numberOfSongs: 0,
                 numberOfPlaylists: 0,
@@ -138,8 +139,6 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                             indifferent : [],
                             unliked: []
                         },
-                         playlists: {}
-
                     };
 
                     if(user.researchList[researchID-1].sessionList.length > portalData.userStatistics.maxSessionLength)
@@ -152,46 +151,60 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                         portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum] = 0;
 
                         session.songs.forEach(song => {
-                            if(!portalData.userStatistics[user.tamaringaId].playlists[song.playlistName]){
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName] = {
-                                    playlistName: song.playlistName,
-                                    liked: Array(sessionNum + 1).fill(0),
-                                    indifferent : Array(sessionNum + 1).fill(0),
-                                    unliked: Array(sessionNum + 1).fill(0)
-                                }
-                            }
-
-
                             if(song.score > 0 && song.score < 3) {
                                 portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum]++;
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].unliked[sessionNum]++;
                             }
 
                             if(song.score === 3) {
                                 portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum]++;
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].indifferent[sessionNum]++;
                             }
                             if(song.score > 3) {
                                 portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum]++;
-                                portalData.userStatistics[user.tamaringaId].playlists[song.playlistName].liked[sessionNum]++;
                             }
-
-                            Object.values(portalData.userStatistics[user.tamaringaId].playlists).forEach(playlist => {
-                                if(playlist.playlistName !== song.playlistName) {
-                                    if(!playlist.liked[sessionNum])
-                                        playlist.liked[sessionNum] = 0;
-                                    if(!playlist.unliked[sessionNum])
-                                        playlist.unliked[sessionNum] = 0;
-                                    if(!playlist.indifferent[sessionNum])
-                                        playlist.indifferent[sessionNum] = 0;
-                                }
-                            })
 
                         })
                         sessionNum++;
                     })
                 }
-            })
+            });
+
+            sessionNum = 0;
+
+
+            // statistics by playlists and genres
+            UserDatadocs.forEach(user => {
+                    user.researchList[researchID-1].sessionList.forEach(session => {
+                        if(!portalData.playlistsStatistics[session.sessionNumber])
+                            portalData.playlistsStatistics[session.sessionNumber] = {};
+
+                        session.songs.forEach(song => {
+                            if(!portalData.playlistsStatistics[session.sessionNumber][song.playlistName])
+                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName] = {
+                                };
+
+                            if(!portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId])
+                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId] = {
+                                    liked: [],
+                                    indifferent : [],
+                                    unliked: []
+                                };
+
+                            if(song.score > 0 && song.score < 3) {
+                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId].unliked++;
+                            }
+
+                            if(song.score === 3) {
+                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId].indifferent++;
+                            }
+                            if(song.score > 3) {
+                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId].liked++;
+                            }
+
+                        })
+                        sessionNum++;
+                    })
+
+            });
 
 
             const allUsersSongs = researchData.map(patient => {
