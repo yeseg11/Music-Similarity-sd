@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
 <title>Research Dashboard</title>
 <meta charset="UTF-8">`
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,80 +51,81 @@
   <div class="rsStyle-panel">
     <div class="rsStyle-row-padding" style="margin:0 -16px">
       <div class="rsStyle-twothird">
-        <h4>General research info</h4>
+        <h4 style="text-align: center; font-weight: bold ; color: #712415; font-size: 30px">General research info</h4>
         <div class="rsStyle-100">
-          <table class="rsStyle-table rsStyle-striped rsStyle-white">
-            <tr>
-              <td><i class="fa fa-user rsStyle-text-blue rsStyle-large"></i></td>
-              <td><b>Number of Research Songs:</b></td>
-              <td><i id="numberOfSongs">0</i></td>
+          <table class="styled-table">
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-user rsStyle-text-blue rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Number of Research Songs:</b></td>
+              <td class = ".styled-table td "><i id="numberOfSongs">0</i></td>
             </tr>
-            <tr>
-              <td><i class="fa fa-user rsStyle-text-blue rsStyle-large"></i></td>
-              <td><b>Number of Research Rated Songs:</b></td>
-              <td><i id="numberOfRatedSongs">0</i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-user rsStyle-text-blue rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Number of Research Rated Songs:</b></td>
+              <td class = ".styled-table td "><i id="numberOfRatedSongs">0</i></td>
             </tr>
-            <tr>
-              <td><i class="fa fa-bell rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Number of Playlists:</b></td>
-              <td><i id="numberOfPlaylists">0</i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-bell rsStyle-text-red rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Number of Playlists:</b></td>
+              <td class = ".styled-table td "><i id="numberOfPlaylists">0</i></td>
             </tr>
-            <tr>
-              <td><i class="fa fa-bell rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Number of Genres:</b></td>
-              <td><i id="numberOfGenres">0</i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-bell rsStyle-text-red rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Number of Genres:</b></td>
+              <td class = ".styled-table td "><i id="numberOfGenres">0</i></td>
             </tr>
-            <tr>
-              <td><i class="fa fa-users rsStyle-text-yellow rsStyle-large"></i></td>
-              <td><b>Most Rated Song:</b></td>
-              <td><i id="mostRatedSong"></i></td>
-            </tr>
-
-            <tr>
-              <td><i class="fa fa-bookmark rsStyle-text-blue rsStyle-large"></i></td>
-              <td><b>Lowest Rated Song:</b></td>
-              <td><i  id="lowestRatedSong"></i></td>
-            </tr>
-            <tr>
-              <td><i class="fa fa-comment rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Most Rated Playlist:</b></td>
-              <td><i id="mostRatedPlaylist"></i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-users rsStyle-text-yellow rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Most Rated Song:</b></td>
+              <td class = ".styled-table td "><i id="mostRatedSong"></i></td>
             </tr>
 
-            <tr>
-              <td><i class="fa fa-laptop rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Lowest Rated playlist:</b></td>
-              <td><i id="lowestRatedPlaylist"></i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-bookmark rsStyle-text-blue rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Lowest Rated Song:</b></td>
+              <td class = ".styled-table td "><i  id="lowestRatedSong"></i></td>
+            </tr>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-comment rsStyle-text-red rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Most Rated Playlist:</b></td>
+              <td class = ".styled-table td "><i id="mostRatedPlaylist"></i></td>
             </tr>
 
-            <tr>
-              <td><i class="fa fa-comment rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Most Rated Genre:</b></td>
-              <td><i id="mostRatedGenre"></i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-laptop rsStyle-text-red rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Lowest Rated playlist:</b></td>
+              <td class = ".styled-table td "><i id="lowestRatedPlaylist"></i></td>
             </tr>
 
-            <tr>
-              <td><i class="fa fa-laptop rsStyle-text-red rsStyle-large"></i></td>
-              <td><b>Lowest Rated Genre:</b></td>
-              <td><i id="lowestRatedGenre"></i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-comment rsStyle-text-red rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Most Rated Genre:</b></td>
+              <td class = ".styled-table td "><i id="mostRatedGenre"></i></td>
             </tr>
 
-            <tr>
-              <td><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
-              <td><b>Most Rated Language:</b></td>
-              <td><i id="mostRatedLang"></i></td>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-laptop rsStyle-text-red rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Lowest Rated Genre:</b></td>
+              <td class = ".styled-table td "><i id="lowestRatedGenre"></i></td>
             </tr>
-            <tr>
-              <td><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
-              <td><b>Lowest Rated Language:</b></td>
-              <td><i id="lowestRatedLang"></i></td>
+
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
+              <td class = ".styled-table td " ><b>Most Rated Language:</b></td>
+              <td class = ".styled-table td "><i id="mostRatedLang"></i></td>
+            </tr>
+            <tr class="styled-table thead tr">
+              <td class = ".styled-table td "><i class="fa fa-share-alt rsStyle-text-green rsStyle-large"></i></td>
+              <td class = ".styled-table td "><b>Lowest Rated Language:</b></td>
+              <td class = ".styled-table td "><i id="lowestRatedLang"></i></td>
             </tr>
           </table>
         </div>
       </div>
-	          <h4>Number of rated songs per Language</h4>
-      <div class=".rsStyle-right" style="margin-top:10px">
-        <canvas id="pie-chart" width="370" height="350" ></canvas>
+
+      <div class=".rsStyle-right" style="margin-top:10px;">
+        <h4 style="padding-top: 150px;padding-left: 150px;padding-right:150px; text-align: center; font-weight: bold ; color: #712415;font-size: 30px">Rated songs per Language</h4>
+        <canvas id="pie-chart" width="550" height="350" ></canvas>
       </div>
     </div>
   </div>
@@ -158,48 +163,29 @@
 
     <hr>
     <div class="rsStyle-container">
-      <h4><b>Top 5 Songs</b></h4>
-      <ul class="rsStyle-ul rsStyle-card-4 rsStyle-white">
-        <li class="rsStyle-padding-16">
-          <span class="rsStyle-xlarge" id="topFirst">1. Yehoram Gaon - hameleh nimrod </span><br>
-        </li>
-        <li class="rsStyle-padding-16">
+      <ul class="list-group">
+        <li class="list-group-item active" style="background-color: #712415; border-color: #aed248; font-weight: bold;font-size: large">Top 5 Songs</li>
+        <li class="list-group-item">1. Yehoram Gaon - hameleh nimrod</li>
+        <li class="list-group-item">2. Edith Piaf - Mon Dieu</li>
+        <li class="list-group-item">3. T Bone Walker - I Can’t Stand Being Without You </li>
+        <li class="list-group-item">4. The True Believers - We're Wrong</li>
+        <li class="list-group-item">5. Fairuz - Jayebli Sala</li>
 
-          <span class="rsStyle-xlarge" id="topSecond">2. Edith Piaf - Mon Dieu</span><br>
-        </li>
-        <li class="rsStyle-padding-16">
-
-          <span class="rsStyle-xlarge" id="topThird">3. T Bone Walker - I Can’t Stand Being Without You</span><br>
-        </li>
-        <li class="rsStyle-padding-16">
-
-          <span class="rsStyle-xlarge" id="topFourth">4. The True Believers - We're Wrong</span><br>
-        </li>
-        <li class="rsStyle-padding-16">
-          <span class="rsStyle-xlarge" id="topFifth">5. Fairuz - Jayebli Sala</span><br>
-        </li>
       </ul>
     </div>
     <hr>
-    <div class="rsStyle-container">
-      <h4><b>Recent Comments</b></h4>
-      <div class="rsStyle-row">
-        <div class="rsStyle-col m2 text-center">
-        </div>
-        <div class="rsStyle-col m10 rsStyle-container">
-          <h4>Avner, Session 2, Patient 3   <span class="rsStyle-opacity rsStyle-medium">July 29, 2021, 9:12 PM</span></h4>
-          <p>great reaction to most of the songs</p><br>
-        </div>
-      </div>
-      <div class="rsStyle-row">
-        <div class="rsStyle-col m2 text-center">
-        </div>
-        <div class="rsStyle-col m10 rsStyle-container">
-          <h4>Roth, Session 4, Patient 12   <span class="rsStyle-opacity rsStyle-medium">July 28, 2021, 10:15 PM</span></h4>
-          <p>The patient shows no willingness to participate</p><br>
-        </div>
-      </div>
+
+  <div class="card" >
+    <h5 class="card-header" style="color:white; background-color: #712415; border-color: #aed248; font-weight: bold;font-size: large">Recent Comments</h5>
+    <div class="card-body">
+      <h5 class="card-title">Avner, Session 2, Patient 3 <span class="rsStyle-opacity rsStyle-medium">July 29, 2021, 9:12 PM</span></h5>
+      <p class="card-text">great reaction to most of the songs</p>
     </div>
+    <div class="card-body">
+      <h5 class="card-title">Roth, Session 4, Patient 12 <span class="rsStyle-opacity rsStyle-medium">July 28, 2021, 10:15 PM</span></h5>
+      <p class="card-text">The patient shows no willingness to participate</p>
+    </div>
+  </div>
     <br>
     <!-- Footer -->
   <footer class="rsStyle-container rsStyle-padding-16 rsStyle-light-grey">
@@ -210,7 +196,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="vendor/chart.js/chart.min.js"></script>
 <script src="routes/getResearchPortal.js"></script>
-<script src="js/rsDashCode.js"></script>
 
 </body>
 </html>
