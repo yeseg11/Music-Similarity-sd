@@ -142,7 +142,7 @@
                         usersUnLikedData.push({
                             data: user.sessions.unliked,
                             label: "User " + i,
-                            borderColor: Colors.random,
+                            borderColor: random_rgba(),
                             fill: false
                         });
 
