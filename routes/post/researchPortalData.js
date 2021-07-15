@@ -106,7 +106,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 lengthOfSession: researchDoc["0"].lengthOfSession,
                 mostRatedSongsNum: 0,
                 userStatistics: {},
-                playlistsStatistics: {},
+                langGenreStatistics: {},
                 mostRatedSong: "",
                 numberOfSongs: 0,
                 numberOfPlaylists: 0,
@@ -114,6 +114,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 genreData: {length: 0},
                 playlistsData: {length: 0},
                 NumberOfRatedSongs: 0,
+                playlistsAVG: {},
                 pieLables: [],
                 pieData: [],
             };
@@ -169,37 +170,58 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             });
 
             sessionNum = 0;
-
-
-            // statistics by playlists and genres
             UserDatadocs.forEach(user => {
+                    sessionNum = 0;
                     user.researchList[researchID-1].sessionList.forEach(session => {
-                        if(!portalData.playlistsStatistics[session.sessionNumber])
-                            portalData.playlistsStatistics[session.sessionNumber] = {};
-
                         session.songs.forEach(song => {
-                            if(!portalData.playlistsStatistics[session.sessionNumber][song.playlistName])
-                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName] = {
-                                };
+                            if(song && (sessionNum <= portalData.userStatistics.maxSessionLength)){
+                                let isGenre = false;
+                                    if (song.playlistName && (song.playlistName.localeCompare("cla") === 0
+                                        || song.playlistName.localeCompare("yid") === 0
+                                        || song.playlistName.localeCompare("lad") === 0
+                                        || song.playlistName.localeCompare("pra") === 0
+                                        || song.playlistName.localeCompare("mid") === 0)) {
+                                        isGenre = true;
+                                }
 
-                            if(!portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId])
-                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId] = {
-                                    liked: [],
-                                    indifferent : [],
-                                    unliked: []
-                                };
+                                if(isGenre && !portalData.langGenreStatistics[song.playlistName]) {
+                                    portalData.langGenreStatistics[song.playlistName] = {
+                                        liked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        indifferent: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        unliked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        languageStr: playlistsKeys[song.playlistName]
+                                    }
+                                }
 
-                            if(song.score > 0 && song.score < 3) {
-                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId].unliked++;
+                                if(!isGenre && !portalData.langGenreStatistics[song.language]) {
+                                    portalData.langGenreStatistics[song.language] = {
+                                        liked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        indifferent: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        unliked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        languageStr: playlistsKeys[song.language]
+                                    }
+                                }
+
+                                if (song.score > 0 && song.score < 3) {
+                                    if (isGenre)
+                                        portalData.langGenreStatistics[song.playlistName].unliked[sessionNum]++;
+                                    else
+                                        portalData.langGenreStatistics[song.language].unliked[sessionNum]++;
+                                }
+
+                                if (song.score === 3) {
+                                    if (isGenre)
+                                        portalData.langGenreStatistics[song.playlistName].indifferent[sessionNum]++;
+                                    else
+                                        portalData.langGenreStatistics[song.language].indifferent[sessionNum]++;
+                                }
+                                if (song.score > 3) {
+                                    if (isGenre)
+                                        portalData.langGenreStatistics[song.playlistName].liked[sessionNum]++;
+                                    else
+                                        portalData.langGenreStatistics[song.language].liked[sessionNum]++;
+                                }
                             }
-
-                            if(song.score === 3) {
-                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId].indifferent++;
-                            }
-                            if(song.score > 3) {
-                                portalData.playlistsStatistics[session.sessionNumber][song.playlistName][user.tamaringaId].liked++;
-                            }
-
                         })
                         sessionNum++;
                     })
@@ -342,6 +364,24 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             //portalData.mostRatedSong = await getRecord(portalData.momostRatedSongs[0][0]);
             portalData.mostRatedSongs = await getRecord(songsforStrings);
             portalData.researcherName = await getResearcher(portalData.researcherId);
+
+            portalData.playlistsAVG = {
+                playlistNames: [],
+                AVG: [],
+            }
+            portalData.playlistsData.forEach(playlist =>{
+                if(playlist["0"] !== "length" && playlist["1"].average && playlist["1"].average) {
+                    portalData.playlistsAVG.playlistNames.push(playlist["0"]);
+                    portalData.playlistsAVG.AVG.push(playlist["1"].average);
+                }
+            });
+
+            portalData.genreData.forEach(playlist =>{
+                if(playlist["0"] !== "length" && playlist["1"].average && playlist["1"].average) {
+                    portalData.playlistsAVG.playlistNames.push(playlist["1"].languageStr);
+                    portalData.playlistsAVG.AVG.push(playlist["1"].average);
+                }
+            });
 
             res.status(200).json({err: false, items: portalData});
         });
