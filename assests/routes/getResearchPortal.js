@@ -1,8 +1,43 @@
 (function ($) {
-    $(document).ready(function () {
-        //let researchId = $('#researchId').val;
-        researchId = 1;
-        researchId = 1;
+    let researchId = 1;
+    $(document).ready(async function () {
+        function getResearchersByGroup() {
+            return new Promise(function (resolve, reject) {
+                var researchersList = [];
+                var ResearchGroupId = localStorage["ResearchGroupId"];
+                // console.log("ResearchGroupId",ResearchGroupId);
+                $.get('/allresearches/'+ResearchGroupId.toString(), function (data) {
+                    if (!data || !data.items || !data.items.length) return reject(Error("ERROR IN FIND LIST"));
+                    console.log("data",data);
+                    researchersList = data.items
+                    resolve(researchersList);
+                })
+            });
+        }
+
+
+
+
+
+        let researchesArr = [];
+        researchesArr = await getResearchersByGroup();
+        Object.values(researchesArr).forEach(research => {
+            let menuItem = '<button onclick="displayResearch(' + research.researchId + ')" type = \'button\' class="btn btn-outline-info"';
+            menuItem += '<i i class="fa fa-arrow-left m-l-7" aria-hidden="true"';
+            menuItem += ' id="';
+            menuItem += research.researchName;
+            menuItem += '">' + research.researchName + '<';
+            menuItem += '/i>';
+            menuItem += '</button><br>';
+
+            menuItem += '<br>';
+
+            $("#researchMenu").append(menuItem);
+        })
+
+
+
+        initResearchData();
 
         function initResearchData() {
             getResearchData().then(function (researchData) {
@@ -286,7 +321,7 @@
             });
         }
 
-        initResearchData();
+
 
         function getResearchData() {
             return new Promise(function (resolve, reject) {
@@ -304,3 +339,10 @@
     });
 
 })(jQuery);
+
+function displayResearch(newResearchId){
+    researchId = newResearchId;
+    initResearchData();
+}
+
+
