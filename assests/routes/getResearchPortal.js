@@ -1,95 +1,26 @@
-
-
 (function ($) {
     $(document).ready(function () {
         //let researchId = $('#researchId').val;
         researchId = 1;
         researchId = 1;
+
         function initResearchData() {
             getResearchData().then(function (researchData) {
-                const playlistsKeys = {
-                    arame: "ArabicME",
-                    arana: "ArabicNA",
-                    heb: "Hebrew",
-                    fra: "French",
-                    spa: "Spanish",
-                    rus: "Russian",
-                    eng: "English",
-                    Eng: "English",
-                    yid: "Yiddish",
-                    lad: "Ladino",
-                    ara: "Arabic",
-                    pra: "Prayer Songs (Piyutim)",
-                    mid: "Middle Eastern music",
-                    cla: "Classical/Traditional"
-                };
-
-                Colors = {};
-                Colors.names = {
-                    black: "#000000",
-                    blue: "#0000ff",
-                    brown: "#a52a2a",
-                    cyan: "#00ffff",
-                    darkblue: "#00008b",
-                    darkcyan: "#008b8b",
-                    darkgrey: "#a9a9a9",
-                    darkgreen: "#006400",
-                    darkkhaki: "#bdb76b",
-                    darkmagenta: "#8b008b",
-                    darkolivegreen: "#556b2f",
-                    darkorange: "#ff8c00",
-                    darkorchid: "#9932cc",
-                    darkred: "#8b0000",
-                    darksalmon: "#e9967a",
-                    darkviolet: "#9400d3",
-                    fuchsia: "#ff00ff",
-                    gold: "#ffd700",
-                    green: "#008000",
-                    indigo: "#4b0082",
-                    khaki: "#f0e68c",
-                    lightgreen: "#90ee90",
-                    lime: "#00ff00",
-                    magenta: "#ff00ff",
-                    maroon: "#800000",
-                    navy: "#000080",
-                    olive: "#808000",
-                    orange: "#ffa500",
-                    pink: "#ffc0cb",
-                    purple: "#800080",
-                    violet: "#800080",
-                    red: "#ff0000",
-                    yellow: "#ffff00"
-                };
-
-                Colors.random = function() {
-                    var result;
-                    var count = 0;
-                    for (var prop in this.names)
-                        if (Math.random() < 1/++count)
-                            result = prop;
-                    return result;
-                };
-
                 $("#numberOfSongs").html(researchData.numberOfSongs.toString());
                 $("#numberOfRatedSongs").html(researchData.NumberOfRatedSongs.toString());
                 $("#numberOfPlaylists").html(researchData.numberOfPlaylists.toString());
                 $("#numberOfGenres").html(researchData.numberOfGenres.toString());
                 $("#mostRatedSong").html(researchData.mostRatedSongs[0]);
-                $("#lowestRatedSong").html(researchData.mostRatedSongs[researchData.mostRatedSongs.length-1]);
+                $("#lowestRatedSong").html(researchData.mostRatedSongs[researchData.mostRatedSongs.length - 1]);
                 $("#researchName").html(researchData.researchName);
-
-                $("#researcher").html(researchData.researcherName + "<br>" +"ID: " + researchData.researcherId);
+                $("#researcher").html(researchData.researcherName + "<br>" + "ID: " + researchData.researcherId);
                 $("#researchHeader").html(researchData.researchName);
                 $("#mostRatedPlaylist").html(researchData.playlistsData[1][0]);
-                $("#lowestRatedPlaylist").html(researchData.playlistsData[researchData.playlistsData.length-1][0]);
-
+                $("#lowestRatedPlaylist").html(researchData.playlistsData[researchData.playlistsData.length - 1][0]);
                 $("#mostRatedGenre").html(researchData.genreData[1][1].languageStr);
-                $("#lowestRatedGenre").html(researchData.genreData[researchData.genreData.length-1][1].languageStr);
-
+                $("#lowestRatedGenre").html(researchData.genreData[researchData.genreData.length - 1][1].languageStr);
                 $("#mostRatedLang").html(researchData.languageData[1][1].languageStr);
-                $("#lowestRatedLang").html(researchData.languageData[researchData.languageData.length-1][1].languageStr);
-
-
+                $("#lowestRatedLang").html(researchData.languageData[researchData.languageData.length - 1][1].languageStr);
 
                 //Top 5 songs
                 $("#topFirst").html("1. " + researchData.mostRatedSongs[0]);
@@ -98,9 +29,17 @@
                 $("#topFourth").html("4. " + researchData.mostRatedSongs[3]);
                 $("#topFifth").html("5. " + researchData.mostRatedSongs[4]);
 
+                //get graphs document elements
+                const pieChart = document.getElementById("pie-chart").getContext("2d");
+                const btx = document.getElementById("myChart").getContext("2d");
+                const btx2 = document.getElementById("myChart2").getContext("2d");
+                const btx3 = document.getElementById("myChart3").getContext("2d");
+                const ctx = document.getElementById("myChart4").getContext("2d");
+                const ctx2 = document.getElementById("myChart5").getContext("2d");
+                const ctx3 = document.getElementById("myChart6").getContext("2d");
+                const dtx = document.getElementById("myChart7").getContext("2d");
 
-                let pieChart = document.getElementById("pie-chart").getContext("2d");
-
+                //pie chart config
                 new Chart(pieChart, {
                     type: 'pie',
                     data: {
@@ -108,12 +47,12 @@
                         datasets: [{
                             label: "Languages",
                             display: true,
-                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850", "#4ab5b6", "#158a7d"],
+                            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850", "#4ab5b6", "#158a7d"],
                             data: researchData.pieData
                         }]
                     },
                     options: {
-                        responsive:false,
+                        responsive: false,
                         title: {
                             display: true,
                             text: 'songs'
@@ -122,6 +61,8 @@
                     }
                 });
 
+
+                //user graph config
                 let usersLikedData = [];
                 let usersUnLikedData = [];
                 let usersIndiffData = [];
@@ -130,101 +71,117 @@
                 let usersUnLikedDataPl = [];
                 let usersIndiffDataPl = [];
                 let i = 0;
+
+                //create datasets for users graphs
                 Object.values(researchData.userStatistics).forEach(user => {
                     i++;
                     if (user.sessions) {
+                        let randomColor = random_rgba();
                         usersLikedData.push({
                             data: user.sessions.liked,
                             label: "User " + i,
-                            borderColor: random_rgba(),
-                            fill: false
+                            backgroundColor: randomColor,
+                            borderColor: randomColor
                         });
                         usersUnLikedData.push({
                             data: user.sessions.unliked,
                             label: "User " + i,
-                            borderColor: random_rgba(),
-                            fill: false
+                            backgroundColor: randomColor,
+                            borderColor: randomColor
                         });
 
                         usersIndiffData.push({
                             data: user.sessions.indifferent,
                             label: "User " + i,
-                            borderColor: random_rgba(),
-                            fill: false
+                            backgroundColor: randomColor,
+                            borderColor:randomColor
                         });
-
-                        usersLikedDataPl.push({
-                            data: user.sessions.liked,
-                            label: "User " + i,
-                            borderColor: random_rgba(),
-                            fill: false
-                        });
-                        usersUnLikedDataPl.push({
-                            data: user.sessions.unliked,
-                            label: "User " + i,
-                            borderColor: random_rgba(),
-                            fill: false
-                        });
-
-                        usersIndiffDataPl.push({
-                            data: user.sessions.indifferent,
-                            label: "User " + i,
-                            borderColor: random_rgba(),
-                            fill: false
-                        });
-
-                }
+                    }
                 })
 
+                //create dataset for languages and genre graphs
+                let stackNum = 0;
+                Object.values(researchData.langGenreStatistics).forEach(playlist => {
+                    stackNum++;
+                    usersLikedDataPl.push({
+                        data: playlist.liked,
+                        label: playlist.languageStr,
+                        backgroundColor: random_rgba(),
+                        fill: false,
+                        stack: 'Stack ' + stackNum
+                    });
+                    usersUnLikedDataPl.push({
+                        data: playlist.unliked,
+                        label: playlist.languageStr,
+                        backgroundColor: random_rgba(),
+                        fill: false,
+                        stack: 'Stack ' + stackNum
+                    });
 
+                    usersIndiffDataPl.push({
+                        data: playlist.indifferent,
+                        label: playlist.languageStr,
+                        backgroundColor: random_rgba(),
+                        fill: false,
+                        stack: 'Stack ' + stackNum
+                    });
+                })
 
+                //create dataset for avg playlist graph
+                const avgDataset = [{
+                    data: researchData.playlistsAVG.AVG,
+                    label: "Playlists and genres",
+                    backgroundColor: "DarkCyan",
+                    fill: true,
+                }];
 
-                let usersLikedGraph = {
-                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
-                    datasets: usersLikedData
+                //define graphs datasets and labels
+                const sessionLable = Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1));
+                const usersLikedGraph = {
+                    labels: sessionLable,
+                    datasets: usersLikedData,
                 };
 
-                let usersUnlikedGraph = {
-                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                const usersUnlikedGraph = {
+                    labels: sessionLable,
                     datasets: usersUnLikedData
                 };
 
-                let usersIndiffGraph = {
-                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                const usersIndiffGraph = {
+                    labels: sessionLable,
                     datasets: usersIndiffData
                 };
 
-                let usersLikedGraphPl = {
-                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
-                    datasets: usersLikedDataPl
+                const usersLikedGraphPl = {
+                    labels: sessionLable,
+                    datasets: usersLikedDataPl,
+
                 };
 
-                let usersUnlikedGraphPl = {
-                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                const usersUnlikedGraphPl = {
+                    labels: sessionLable,
                     datasets: usersUnLikedDataPl
                 };
 
-                let usersIndiffGraphPl = {
-                    labels: Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1)),
+                const usersIndiffGraphPl = {
+                    labels: sessionLable,
                     datasets: usersIndiffDataPl
                 };
 
+                const avgPlaylistGraph = {
+                    labels: researchData.playlistsAVG.playlistNames,
+                    datasets: avgDataset
+                };
 
-                let btx = document.getElementById("myChart").getContext("2d");
-                let btx2 = document.getElementById("myChart2").getContext("2d");
-                let btx3 = document.getElementById("myChart3").getContext("2d");
-                let ctx = document.getElementById("myChart4").getContext("2d");
-                let ctx2 = document.getElementById("myChart5").getContext("2d");
-                let ctx3 = document.getElementById("myChart6").getContext("2d");
-                let dtx = document.getElementById("myChart7").getContext("2d");
-
+                //create graphs
                 new Chart(btx, {
                     type: 'line',
                     data: usersLikedGraph,
                     options: {
-                        title: {
-                            display: true,
-                            text: 'liked Graph'
+                        plugins: {
+                            tooltips: {
+                                enabled: false
+                            }
                         }
                     }
                 });
@@ -232,82 +189,95 @@
                 new Chart(btx2, {
                     type: 'line',
                     data: usersUnlikedGraph,
-                    options: {
-                        title: {
-                            display: true,
-                            text: 'unliked Graph'
-                        }
-                    }
+                    options: {}
                 });
 
                 new Chart(btx3, {
                     type: 'line',
                     data: usersIndiffGraph,
-                    options: {
-                    title: {
-                        display: true,
-                        text: 'Indifferent Graph'
-                    }
-                    }
+                    options: {}
                 });
 
                 new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     data: usersLikedGraphPl,
                     options: {
-                        title: {
-                            display: true,
-                            text: 'liked Graph'
+                        responsive: true,
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            }
                         }
                     }
                 });
 
                 new Chart(ctx2, {
-                    type: 'line',
+                    type: 'bar',
                     data: usersUnlikedGraphPl,
                     options: {
-                        title: {
-                            display: true,
-                            text: 'unliked Graph'
+                        responsive: true,
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            }
                         }
                     }
                 });
 
                 new Chart(ctx3, {
-                    type: 'line',
+                    type: 'bar',
                     data: usersIndiffGraphPl,
                     options: {
-                        title: {
-                            display: true,
-                            text: 'Indifferent Graph'
+                        responsive: true,
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            }
                         }
                     }
                 });
+
 
                 new Chart(dtx, {
-                    type: 'line',
-                    data: usersLikedGraph,
+                    type: 'bar',
+                    data: avgPlaylistGraph,
                     options: {
-                        title: {
-                            display: true,
-                            text: 'liked Graph'
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltips: {
+                                enabled: false
+                            }
                         }
                     }
                 });
-                //console.log(researchData);
 
+                //for creating random colors
                 function random_rgba() {
-                    let o = Math.round, r = Math.random, s = 255;
-                    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+                    let x = Math.floor(Math.random() * 256);
+                    let y = 100+ Math.floor(Math.random() * 256);
+                    let z = 50+ Math.floor(Math.random() * 256);
+                    return "rgb(" + x + "," + y + "," + z + ")";
                 }
-
-                function randomDarkRgbColor() {
-                    const red = Math.floor(Math.random() * 256/2);
-                    const green = Math.floor(Math.random() * 256/2);
-                    const blue = Math.floor(Math.random() * 256/2);
-                    return "rgb(" + red + ", " + green + ", " + blue + ")";
-                }
-
 
 
             }).catch(function (err) {
@@ -315,15 +285,18 @@
                 return err;
             });
         }
+
         initResearchData();
+
         function getResearchData() {
             return new Promise(function (resolve, reject) {
-                $.post('researchPortalData/'+ researchId, function (data) {
+                $.post('researchPortalData/' + researchId, function (data) {
                     if (!data || !data.items) return reject(Error("ERROR IN FIND LIST"));
                     resolve(data.items);
                 })
             });
         }
+
 
         let sessionMenuItem = '<div class="rsStyle-bar-block" id=\'sessionMenuItem\'>';
         sessionMenuItem += '<a href="#" className="rsStyle-bar-item rsStyle-button rsStyle-padding rsStyle-grad-menu"><i className="fa fa-bullseye fa-fw"></i>::SESSIONMENUITEM::</a>';
@@ -331,19 +304,3 @@
     });
 
 })(jQuery);
-
-
-// add async supoprt for ajax calls
-function ajaxAwait(resourceUrl, method, playlistData){
-    return  new Promise(function (resolve, reject) {
-        $[method](resourceUrl ,{ playlistData,
-        }).done(function (data) {
-            if (data.err){
-                reject(data);
-            }
-            else {
-                resolve(data);
-            }
-        });
-    });
-}
