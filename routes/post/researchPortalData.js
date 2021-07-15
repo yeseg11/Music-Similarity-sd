@@ -132,6 +132,10 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             // for each user's session and playlist, count liked, unliked and indifferent song rating
             UserDatadocs.forEach(user => {
                 portalData.userStatistics.maxSessionLength = 0;
+                if(!user.researchList)
+                    return;
+
+                const researchIndex = user.researchList.map(function(research) { return research.researchId; }).indexOf(portalData.researchId);
 
                 if(!portalData.userStatistics[user.tamaringaId]){
                     portalData.userStatistics[user.tamaringaId] = {
@@ -142,11 +146,14 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                         },
                     };
 
-                    if(user.researchList[researchID-1].sessionList.length > portalData.userStatistics.maxSessionLength)
-                         portalData.userStatistics.maxSessionLength = user.researchList[researchID-1].sessionList.length;
+                    if(!user.researchList[researchIndex])
+                        return;
+
+                    if(user.researchList[researchIndex].sessionList.length > portalData.userStatistics.maxSessionLength)
+                         portalData.userStatistics.maxSessionLength = user.researchList[researchIndex].sessionList.length;
 
                     let sessionNum = 0;
-                    user.researchList[researchID-1].sessionList.forEach(session => {
+                    user.researchList[researchIndex].sessionList.forEach(session => {
                         portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum] = 0;
                         portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum] = 0;
                         portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum] = 0;
@@ -171,8 +178,9 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
             sessionNum = 0;
             UserDatadocs.forEach(user => {
-                    sessionNum = 0;
-                    user.researchList[researchID-1].sessionList.forEach(session => {
+                const researchIndex = user.researchList.map(function(research) { return research.researchId; }).indexOf(portalData.researchId);
+                sessionNum = 0;
+                    user.researchList[researchIndex].sessionList.forEach(session => {
                         session.songs.forEach(song => {
                             if(song && (sessionNum <= portalData.userStatistics.maxSessionLength)){
                                 let isGenre = false;

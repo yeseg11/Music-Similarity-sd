@@ -1015,12 +1015,12 @@ text-align: center;
   border-color: #000 !important;
 }
 
-.rsStyle-grad-red,
+.rsStyle-grad-DarkCyan,
 .rsStyle-hover-border-black:hover {
-  background: -webkit-linear-gradient(left, #712415, #712415, #878183);
-  background: -o-linear-gradient(left, #712415, #878183, #712415, #878183);
-  background: -moz-linear-gradient(left, #712415, #878183, #712415, #878183);
-  background: linear-gradient(left, #712415, #878183, #712415, #878183);
+  background: -webkit-linear-gradient(left, DarkCyan, DarkCyan, #878183);
+  background: -o-linear-gradient(left, DarkCyan, #878183, DarkCyan, #878183);
+  background: -moz-linear-gradient(left, DarkCyan, #878183, DarkCyan, #878183);
+  background: linear-gradient(left, DarkCyan, #878183, DarkCyan, #878183);
 }
 
 .rsStyle-grad-menu,
