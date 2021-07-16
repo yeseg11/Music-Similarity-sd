@@ -23,7 +23,7 @@ function getRecord(songs){
                     songs.forEach(function(key) {
                         let found = false;
                         songsObject = songsObject.filter(function(songObj) {
-                            if(!found && songObj.mbId == key) {
+                            if(!found && songObj.mbId === key) {
 
                                 sortedNames.push(songObj.artistName + " - " + songObj.title + " (" + songObj.year + ")");
                                 found = true;
@@ -106,6 +106,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 lengthOfSession: researchDoc["0"].lengthOfSession,
                 mostRatedSongsNum: 0,
                 userStatistics: {},
+                maxSessionLength: 0,
                 langGenreStatistics: {},
                 mostRatedSong: "",
                 numberOfSongs: 0,
@@ -131,7 +132,6 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
             // for each user's session and playlist, count liked, unliked and indifferent song rating
             UserDatadocs.forEach(user => {
-                portalData.userStatistics.maxSessionLength = 0;
                 if(!user.researchList)
                     return;
 
@@ -149,8 +149,8 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                     if(!user.researchList[researchIndex])
                         return;
 
-                    if(user.researchList[researchIndex].sessionList.length > portalData.userStatistics.maxSessionLength)
-                         portalData.userStatistics.maxSessionLength = user.researchList[researchIndex].sessionList.length;
+                    if(user.researchList[researchIndex].sessionList.length > portalData.maxSessionLength)
+                         portalData.maxSessionLength = user.researchList[researchIndex].sessionList.length;
 
                     let sessionNum = 0;
                     user.researchList[researchIndex].sessionList.forEach(session => {
@@ -182,7 +182,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 sessionNum = 0;
                     user.researchList[researchIndex].sessionList.forEach(session => {
                         session.songs.forEach(song => {
-                            if(song && (sessionNum <= portalData.userStatistics.maxSessionLength)){
+                            if(song && (sessionNum <= portalData.maxSessionLength)){
                                 let isGenre = false;
                                     if (song.playlistName && (song.playlistName.localeCompare("cla") === 0
                                         || song.playlistName.localeCompare("yid") === 0
@@ -194,18 +194,18 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
                                 if(isGenre && !portalData.langGenreStatistics[song.playlistName]) {
                                     portalData.langGenreStatistics[song.playlistName] = {
-                                        liked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
-                                        indifferent: new Array(portalData.userStatistics.maxSessionLength).fill(0),
-                                        unliked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        liked: new Array(portalData.maxSessionLength).fill(0),
+                                        indifferent: new Array(portalData.maxSessionLength).fill(0),
+                                        unliked: new Array(portalData.maxSessionLength).fill(0),
                                         languageStr: playlistsKeys[song.playlistName]
                                     }
                                 }
 
                                 if(!isGenre && !portalData.langGenreStatistics[song.language]) {
                                     portalData.langGenreStatistics[song.language] = {
-                                        liked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
-                                        indifferent: new Array(portalData.userStatistics.maxSessionLength).fill(0),
-                                        unliked: new Array(portalData.userStatistics.maxSessionLength).fill(0),
+                                        liked: new Array(portalData.maxSessionLength).fill(0),
+                                        indifferent: new Array(portalData.maxSessionLength).fill(0),
+                                        unliked: new Array(portalData.maxSessionLength).fill(0),
                                         languageStr: playlistsKeys[song.language]
                                     }
                                 }
@@ -281,13 +281,17 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
             Object.values(songStatistics).forEach(value => {
                 let isGenre = false;
-                if(value.playlistName.localeCompare("cla") === 0
+                if(!value.playlistName) {
+                    return;
+                }
+                if (value.playlistName.localeCompare("cla") === 0
                     || value.playlistName.localeCompare("yid") === 0
                     || value.playlistName.localeCompare("lad") === 0
                     || value.playlistName.localeCompare("pra") === 0
-                    || value.playlistName.localeCompare("mid") === 0){
+                    || value.playlistName.localeCompare("mid") === 0) {
                     isGenre = true;
                 }
+
 
                 if(!portalData.genreData[value.playlistName] && isGenre){
                     portalData.genreData[value.playlistName] = {

@@ -28,15 +28,7 @@ let playlistAVGGraph;
         })
 
 
-
         await initResearchData();
-
-
-
-
-
-
-
 
         let sessionMenuItem = '<div class="rsStyle-bar-block" id=\'sessionMenuItem\'>';
         sessionMenuItem += '<a href="#" className="rsStyle-bar-item rsStyle-button rsStyle-padding rsStyle-grad-menu"><i className="fa fa-bullseye fa-fw"></i>::SESSIONMENUITEM::</a>';
@@ -50,7 +42,7 @@ let playlistAVGGraph;
 function initResearchData() {
     getResearchData().then(function (researchData) {
         $("#numberOfSongs").html(researchData.numberOfSongs.toString());
-        $("#numberOfRatedSongs").html(researchData.NumberOfRatedSongs.toString());
+        $("#numberOfRatedSongs").html((researchData.NumberOfRatedSongs-1).toString());
         $("#numberOfPlaylists").html(researchData.numberOfPlaylists.toString());
         $("#numberOfGenres").html(researchData.numberOfGenres.toString());
         $("#mostRatedSong").html(researchData.mostRatedSongs[0]);
@@ -120,25 +112,26 @@ function initResearchData() {
             i++;
             if (user.sessions) {
                 let randomColor = random_rgba();
-                usersLikedData.push({
-                    data: user.sessions.liked,
-                    label: "User " + i,
-                    backgroundColor: randomColor,
-                    borderColor: randomColor
-                });
-                usersUnLikedData.push({
-                    data: user.sessions.unliked,
-                    label: "User " + i,
-                    backgroundColor: randomColor,
-                    borderColor: randomColor
-                });
+                    usersLikedData.push({
+                        data: user.sessions.liked,
+                        label: "User " + i,
+                        backgroundColor: randomColor,
+                        borderColor: randomColor
+                    });
 
-                usersIndiffData.push({
-                    data: user.sessions.indifferent,
-                    label: "User " + i,
-                    backgroundColor: randomColor,
-                    borderColor:randomColor
-                });
+                    usersUnLikedData.push({
+                        data: user.sessions.unliked,
+                        label: "User " + i,
+                        backgroundColor: randomColor,
+                        borderColor: randomColor
+                    });
+
+                    usersIndiffData.push({
+                        data: user.sessions.indifferent,
+                        label: "User " + i,
+                        backgroundColor: randomColor,
+                        borderColor: randomColor
+                    });
             }
         })
 
@@ -179,7 +172,7 @@ function initResearchData() {
         }];
 
         //define graphs datasets and labels
-        const sessionLable = Array.from({length: researchData.userStatistics.maxSessionLength}, (_, i) => "session: " + (i + 1));
+        const sessionLable = Array.from({length: researchData.maxSessionLength}, (_, i) => "session: " + (i + 1));
         const usersLikedGraph = {
             labels: sessionLable,
             datasets: usersLikedData,
@@ -355,16 +348,24 @@ function getResearchersByGroup() {
     });
 }
 
-function displayResearch(newResearchId){
+async function displayResearch(newResearchId){
     researchId = newResearchId;
-    pie.destroy();
-    likedGraph.destroy();
-    dislikedGraph.destroy();
-    indiffGraph.destroy();
-    likedGraphPl.destroy();
-    dislikedGraphPl.destroy();
-    indiffGraphPl.destroy();
-    playlistAVGGraph.destroy();
+    if(pie)
+        await pie.destroy();
+    if(likedGraph)
+        await likedGraph.destroy();
+    if(dislikedGraph)
+        await dislikedGraph.destroy();
+    if(indiffGraph)
+        await indiffGraph.destroy();
+    if(likedGraphPl)
+        await likedGraphPl.destroy();
+    if(dislikedGraphPl)
+        await dislikedGraphPl.destroy();
+    if(indiffGraphPl)
+        await indiffGraphPl.destroy();
+    if(playlistAVGGraph)
+        await playlistAVGGraph.destroy();
     initResearchData();
 }
 
