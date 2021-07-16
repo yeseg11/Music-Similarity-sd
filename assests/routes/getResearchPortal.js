@@ -12,6 +12,7 @@ let playlistAVGGraph;
 
     $(document).ready(async function () {
         let researchesArr = [];
+
         researchesArr = await getResearchersByGroup();
         Object.values(researchesArr).forEach(research => {
             let menuItem = '<button onclick="displayResearch(' + research.researchId + ')" type = \'button\' class="btn btn-outline-info"';
@@ -63,6 +64,55 @@ function initResearchData() {
         $("#topThird").html("3. " + researchData.mostRatedSongs[2]);
         $("#topFourth").html("4. " + researchData.mostRatedSongs[3]);
         $("#topFifth").html("5. " + researchData.mostRatedSongs[4]);
+        $("#guideComment").html("");
+
+        //display guide comments
+        Object.values(researchData.sessionComments).forEach(user => {
+            let sessionNum = 1;
+            Object.values(user).forEach(session => {
+                let startCommentExist = false;
+                let endCommentExist = false;
+                let songsCommentsExist = false;
+
+                if(session.guideCommentStart !== "empty" && typeof session.guideCommentStart !== "undefined"){
+                    startCommentExist = true;
+                }
+
+                if(session.guideCommentEnd !== "empty" && typeof session.guideCommentEnd !== "undefined"){
+                    endCommentExist = true;
+                }
+                if(session.songsCommentsArr.length > 0){
+                    songsCommentsExist = true;
+                }
+
+                    if(endCommentExist || startCommentExist || songsCommentsExist) { //if they are any comments, display the user title
+                    let header = '<div className="card-body">';
+                    header += '<h4 style="font-weight: bold; test-align: center; color: #712415;font-size: 30px">User: ' + session.userId + ', Session: ' + sessionNum + '</h4>';
+                    header += '<h5><b>General Session comments: </b></h5><ul></ul>';
+                    $("#guideComment").append(header);
+                }
+                if(startCommentExist){ //add session start comment if exist
+                    let startComment = '<i><b><ul><li>Comment on start: </li></b></i>' + session.guideCommentStart + '</div>';
+                    $("#guideComment").append(startComment);
+                }
+
+                if(endCommentExist){//add session end comment if exist
+                    let endComment =  '<i><b><ul><li>Comment on end: </li></b></i>' + session.guideCommentEnd + ' </div>';
+                    $("#guideComment").append(endComment);
+                }
+
+                if(songsCommentsExist) { //add song comments if they exist
+                    let SongComments = '<h5><b>Song comments: </b></h5><ul></ul>';
+                    for (let j = 0; j < session.songsCommentsNames.length; j++) {
+                        SongComments += '<li><i><b>Name: </b></i>' + session.songsCommentsNames[j] + '  <i><b><ul><li>comment: </b></i>' + session.songsCommentsArr[j] + '</li></ul></li>';
+                    }
+                    SongComments += '</ul>';
+                    $("#guideComment").append(SongComments);
+                }
+                sessionNum++;
+            })
+        })
+
 
         //get graphs document elements
         const pieChart = document.getElementById("pie-chart").getContext("2d");

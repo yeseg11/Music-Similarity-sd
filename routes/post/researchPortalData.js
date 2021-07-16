@@ -111,6 +111,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                 mostRatedSong: "",
                 numberOfSongs: 0,
                 numberOfPlaylists: 0,
+                sessionComments: {},
                 languageData: {length: 0},
                 genreData: {length: 0},
                 playlistsData: {length: 0},
@@ -134,7 +135,6 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             UserDatadocs.forEach(user => {
                 if(!user.researchList)
                     return;
-
                 const researchIndex = user.researchList.map(function(research) { return research.researchId; }).indexOf(portalData.researchId);
 
                 if(!portalData.userStatistics[user.tamaringaId]){
@@ -154,11 +154,64 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
 
                     let sessionNum = 0;
                     user.researchList[researchIndex].sessionList.forEach(session => {
+                        if(session.guideCommentStart || session.guideCommentEnd) {
+                            if(!portalData.sessionComments[user.tamaringaId]){
+                                portalData.sessionComments[user.tamaringaId] = {};
+                            }
+
+                            if(!portalData.sessionComments[user.tamaringaId][sessionNum]){
+                                portalData.sessionComments[user.tamaringaId][sessionNum] = {
+                                    userId: user.tamaringaId,
+                                    guideCommentStart: "empty",
+                                    guideCommentEnd: "empty",
+                                    songsCommentsNames: [],
+                                    songsCommentsArr: []
+                                }
+                                if(session.guideCommentStart){
+                                    portalData.sessionComments[user.tamaringaId][sessionNum].guideCommentStart = session.guideCommentStart;
+                                }
+                                if(session.guideCommentStart){
+                                    portalData.sessionComments[user.tamaringaId][sessionNum].guideCommentEnd = session.guideCommentEnd;
+                                }
+                            }
+                        }
+
                         portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum] = 0;
                         portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum] = 0;
                         portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum] = 0;
 
-                        session.songs.forEach(song => {
+                        session.songs.forEach(async song => {
+
+                            let songCount = 1;
+                            if(song.guideComment) {
+                                if(!portalData.sessionComments[user.tamaringaId]){
+                                    portalData.sessionComments[user.tamaringaId] = {};
+                                }
+
+                                if(!portalData.sessionComments[user.tamaringaId][sessionNum]) {
+                                    portalData.sessionComments[user.tamaringaId][sessionNum] = {
+                                        userId: user.tamaringaId,
+                                        guideCommentStart: "empty",
+                                        guideCommentEnd: "empty",
+                                        songsCommentsNames: [],
+                                        songsCommentsArr: []
+                                    };
+                                }
+
+
+                                if(!portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsNames){
+                                    portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsNames = [];
+                                }
+
+                                if(!portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsArr){
+                                    portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsArr = [];
+                                }
+
+
+                                portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsNames.push(song.mbId);
+                                portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsArr.push(song.guideComment);
+                            }
+
                             if(song.score > 0 && song.score < 3) {
                                 portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum]++;
                             }
@@ -170,6 +223,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                                 portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum]++;
                             }
 
+                            songCount++;
                         })
                         sessionNum++;
                     })
