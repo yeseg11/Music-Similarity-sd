@@ -152,7 +152,7 @@
 
                 html += commentEnd.replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString());
 
-                $('#title').html(data.items[0].entrance + " :מספר מפגש" +  "  !" + data.items[0].data.firstName.toString()  + " " + data.items[0].data.lastName +" שלום");
+                $('#title').html((data.items[0].entrance +1) + " :מספר מפגש" +  "  !" + data.items[0].data.firstName.toString()  + " " + data.items[0].data.lastName +" שלום");
                 window.scrollBy(0, 500);
                 musicWrapper.html(html);});
         });
