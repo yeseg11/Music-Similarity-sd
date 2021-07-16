@@ -152,7 +152,14 @@
 
                 html += commentEnd.replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString());
 
-                $('#title').html((data.items[0].entrance +1) + " :מספר מפגש" +  "  !" + data.items[0].data.firstName.toString()  + " " + data.items[0].data.lastName +" שלום");
+                let today = new Date();
+                const dd = String(today.getDate()).padStart(2, '0');
+                const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                const yyyy = today.getFullYear();
+
+                today = dd + '/' + mm + '/' + yyyy;
+
+                $('#title').html(today + " ," + (data.items[0].entrance +1) + " :מפגש" +  "  !" + data.items[0].data.firstName.toString()  + " " + data.items[0].data.lastName +" שלום");
                 window.scrollBy(0, 500);
                 musicWrapper.html(html);});
         });
