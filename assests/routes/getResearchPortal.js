@@ -42,7 +42,7 @@ let playlistAVGGraph;
 function initResearchData() {
     getResearchData().then(function (researchData) {
         $("#numberOfSongs").html(researchData.numberOfSongs.toString());
-        $("#numberOfRatedSongs").html((researchData.NumberOfRatedSongs-1).toString());
+        $("#numberOfRatedSongs").html((researchData.NumberOfRatedSongs).toString());
         $("#numberOfPlaylists").html(researchData.numberOfPlaylists.toString());
         $("#numberOfGenres").html(researchData.numberOfGenres.toString());
         $("#mostRatedSong").html(researchData.mostRatedSongs[0]);
