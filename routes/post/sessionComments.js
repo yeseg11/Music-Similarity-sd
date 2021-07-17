@@ -15,35 +15,38 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
         const currentSessionIndex = user.researchList[0].sessionList.length -1;
         let currentSession = user.researchList[0].sessionList[parseInt(currentSessionIndex)];
 
-        if(stringType === 'start') {
-            console.log("post start");
-            currentSession.guideCommentStart = commentString;
-            let update = {};
+        if(stringType === 'start' || stringType === 'end')
+        {
+            if (stringType === 'start') {
+                console.log("post start");
+                currentSession.guideCommentStart = commentString;
+                let update = {};
 
-            const options = {"upsert": true};
-            update['$set'] = {
-                'researchList.0.sessionList': user.researchList[0].sessionList
+                const options = {"upsert": true};
+                update['$set'] = {
+                    'researchList.0.sessionList': user.researchList[0].sessionList
+                }
+
+
+                UserData.findOneAndUpdate({_id: user._id}, update, options).exec((err, result) => {
+                    if (err) return next(err);
+                })
             }
 
+            if (stringType === 'end') {
+                currentSession.guideCommentEnd = commentString;
+                let update = {};
 
-            UserData.findOneAndUpdate({_id:  user._id}, update, options).exec((err, result)=>{
-                if(err) return next(err);
-            })
-        }
+                const options = {"upsert": true};
+                update['$set'] = {
+                    'researchList.0.sessionList': user.researchList[0].sessionList
+                }
 
-        if(stringType === 'end') {
-            currentSession.guideCommentEnd = commentString;
-            let update = {};
 
-            const options = {"upsert": true};
-            update['$set'] = {
-                'researchList.0.sessionList': user.researchList[0].sessionList
+                UserData.findOneAndUpdate({_id: user._id}, update, options).exec((err, result) => {
+                    if (err) return next(err);
+                })
             }
-
-
-            UserData.findOneAndUpdate({_id:  user._id}, update, options).exec((err, result)=>{
-                if(err) return next(err);
-            })
         }
 
         else{
