@@ -87,7 +87,7 @@ function initResearchData() {
 
                     if(endCommentExist || startCommentExist || songsCommentsExist) { //if they are any comments, display the user title
                     let header = '<div className="card-body">';
-                    header += '<h4 style="font-weight: bold; test-align: center; color: #712415;font-size: 30px">User: ' + session.userId + ', Session: ' + sessionNum + '</h4>';
+                    header += '<h4 style="font-weight: bold; test-align: center; color: #712415;font-size: 30px">User: ' + session.userId + ', Session: ' + session.sessionNumber + '</h4>';
                     header += '<h5><b>General Session comments: </b></h5><ul></ul>';
                     $("#guideComment").append(header);
                 }
@@ -163,7 +163,8 @@ function initResearchData() {
             if (user.sessions) {
                 let randomColor = random_rgba();
                     usersLikedData.push({
-                        data: user.sessions.liked,
+                        data2: user.sessions.ratingCounter,
+                        data: user.sessions.ratingCounter,
                         label: "User " + i,
                         backgroundColor: randomColor,
                         borderColor: randomColor
@@ -258,19 +259,39 @@ function initResearchData() {
             labels: researchData.playlistsAVG.playlistNames,
             datasets: avgDataset
         };
-
+        let count = 0;
         //create graphs
         likedGraph = new Chart(btx, {
             type: 'line',
             data: usersLikedGraph,
             options: {
-                plugins: {
-                    tooltips: {
-                        enabled: false
-                    }
-                }
+                // plugins: {
+                //     tooltip: {
+                //         callbacks: {
+                //             label: function(context) {
+                //                 var label = context.dataset.label || '';
+                //                 if (label) {
+                //                     label += ': ';
+                //                 }
+                //
+                //                 if (context.parsed.y !== null) {
+                //                     let indx = context.dataIndex;
+                //                     label += context.parsed.y + " liked out of: " + context.dataset.data2[indx];
+                //
+                //
+                //                     //label += context.parsed.y + " liked out of: " +  " counter: "  + ;
+                //                     count++;
+                //                 }
+                //                 return label;
+                //             }
+                //         }
+                //     }
+                //
+                // }
             }
         });
+
+
 
         dislikedGraph = new Chart(btx2, {
             type: 'line',
@@ -398,6 +419,24 @@ function getResearchersByGroup() {
     });
 }
 
+
+function getRecord(mbId){
+    return new Promise(function(resolve,reject) {
+        Records.find({mbId: mbId})
+            .exec(function (err, docs) {
+                if(err || !docs.length)
+                    reject(new Error('Error: No record available!'));
+                else{
+                    let record = docs["0"]._doc
+                    delete record.lyrics;
+                    delete record.genre;
+                    delete record.youtube;
+                    delete record.mbRaw;
+                    resolve(record);
+                }
+            })
+    })
+}
 async function displayResearch(newResearchId){
     researchId = newResearchId;
     if(pie)
