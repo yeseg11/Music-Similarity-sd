@@ -103,34 +103,11 @@
                 if(!user.playlists || !user.playlists.length) return alert("No playlist was defined for this user!");
 
                 var html = '';
-
-                let playlistFinal = [];
-                let itemsExist = true;
-
-                while(itemsExist) {
-                    for (let i = 0; i < user.playlists.length; i++) {
-                        const songIndex = Math.floor(Math.random() * user.playlists[i][0].records.length);
-                        if(typeof user.playlists[i][0].records[songIndex].playlistName === "undefined") {
-                            user.playlists[i][0].records[songIndex].playlistName = user.playlists[i][0].name;
-                        }
-
-                        playlistFinal.push(user.playlists[i][0].records[songIndex]);
-                        user.playlists[i][0].records.splice(songIndex, 1);
-
-                        if (!user.playlists[i][0].records.length) {
-                            user.playlists.splice(i, 1);
-                        }
-
-                    }
-                    if (!user.playlists.length) {
-                        itemsExist = false;
-                    }
-                }
-
                 html += commentStart.replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
 
-                for(let r = 0; r < playlistFinal.length; r++){
-                    const record = playlistFinal[r];
+                user.playlists.forEach(playlist => {
+                    playlist[0].records.forEach(plRecord => {
+                    const record = plRecord;
                     const mbid = record.mbId ? record.mbId : '';
                     const cleanMbid = mbid.replace(/([\/,"+'!?_])/g, "\\$1");
                     const videoId = (record.youtube && record.youtube.videoId) ? record.youtube.videoId : '';
@@ -148,7 +125,8 @@
                     html = html
                         .replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString())
                         .replace(new RegExp('::data::', 'g'), mbid);
-                }
+                    })
+                });
 
                 html += commentEnd.replace(new RegExp('::userid::', 'g'), user.tamaringaId.toString());
 

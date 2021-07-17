@@ -2,6 +2,7 @@ let UserData = require('../../models/userData.js');
 let Researchers = require('../../models/researchers.js');
 let Research = require('../../models/research.js');
 let Playlists = require('../../models/playlist.js');
+let Records = require('../../models/records.js')
 
 function getRecord(songs){
     return new Promise(function(resolve,reject) {
@@ -38,6 +39,22 @@ function getRecord(songs){
             })
     })
 }
+
+function getSingleRecord(mbId){
+    return new Promise(function(resolve,reject) {
+        Records.find({mbId: mbId})
+            .exec(function (err, docs) {
+                if(err || !docs.length)
+                    resolve(mbId);
+                else{
+                    let record = docs["0"]._doc
+                    resolve(record.artistName + " - " + record.title + " (" + record.year + ")");
+                }
+            })
+    })
+}
+
+
 
 function sortArrays(array){
     array = Object.entries(array).sort( (a,b) => {
@@ -142,7 +159,8 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                         sessions: {
                             liked: [],
                             indifferent : [],
-                            unliked: []
+                            unliked: [],
+                            ratingCounter: []
                         },
                     };
 
@@ -165,7 +183,8 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                                     guideCommentStart: "empty",
                                     guideCommentEnd: "empty",
                                     songsCommentsNames: [],
-                                    songsCommentsArr: []
+                                    songsCommentsArr: [],
+                                    sessionNumber: sessionNum+1
                                 }
                                 if(session.guideCommentStart){
                                     portalData.sessionComments[user.tamaringaId][sessionNum].guideCommentStart = session.guideCommentStart;
@@ -179,6 +198,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                         portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum] = 0;
                         portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum] = 0;
                         portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum] = 0;
+                        portalData.userStatistics[user.tamaringaId].sessions.ratingCounter[sessionNum] = 0;
 
                         session.songs.forEach(async song => {
 
@@ -194,10 +214,10 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                                         guideCommentStart: "empty",
                                         guideCommentEnd: "empty",
                                         songsCommentsNames: [],
-                                        songsCommentsArr: []
+                                        songsCommentsArr: [],
+                                        sessionNumber: sessionNum+1
                                     };
                                 }
-
 
                                 if(!portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsNames){
                                     portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsNames = [];
@@ -207,19 +227,22 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
                                     portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsArr = [];
                                 }
 
-
+                                
                                 portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsNames.push(song.mbId);
                                 portalData.sessionComments[user.tamaringaId][sessionNum].songsCommentsArr.push(song.guideComment);
                             }
 
                             if(song.score > 0 && song.score < 3) {
+                                portalData.userStatistics[user.tamaringaId].sessions.ratingCounter[sessionNum]++;
                                 portalData.userStatistics[user.tamaringaId].sessions.unliked[sessionNum]++;
                             }
 
                             if(song.score === 3) {
+                                portalData.userStatistics[user.tamaringaId].sessions.ratingCounter[sessionNum]++;
                                 portalData.userStatistics[user.tamaringaId].sessions.indifferent[sessionNum]++;
                             }
                             if(song.score > 3) {
+                                portalData.userStatistics[user.tamaringaId].sessions.ratingCounter[sessionNum]++;
                                 portalData.userStatistics[user.tamaringaId].sessions.liked[sessionNum]++;
                             }
 
@@ -424,7 +447,7 @@ module.exports = async function (req, res, next) {    //call to getUserData.js ,
             portalData.playlistsData = sortArrays(portalData.playlistsData);
             portalData.genreData = sortArrays(portalData.genreData);
 
-            var songsforStrings = mostRatedSongs.slice(0, 5).flat().filter(e => typeof e === 'string');
+            let songsforStrings = mostRatedSongs.slice(0, 5).flat().filter(e => typeof e === 'string');
             songsforStrings.push(leastRatedSong);
 
             //portalData.mostRatedSong = await getRecord(portalData.momostRatedSongs[0][0]);

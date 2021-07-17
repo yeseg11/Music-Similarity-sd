@@ -203,8 +203,8 @@ async function createSession(mapPlaylistData, userData) {
 					const playlistName = x._doc.name;
 					const currentGlobal = globalSongs.filter(song => song.playlist === playlistName).map(name => name.mbId);
 
-					//combine liked songs with global liked songs and randomize
-					const likedAndGlobal = mbidLiked.concat(currentGlobal.filter((item) => mbidLiked.indexOf(item) < 0)).sort(() => Math.random() - 0.5);
+					//combine liked songs with global liked songs and
+					const likedAndGlobal = mbidLiked.concat(currentGlobal.filter((item) => mbidLiked.indexOf(item) < 0));
 
 					//pushing the liked and global songs up to the song limit
 					records = records.filter(function(element) {
@@ -225,15 +225,20 @@ async function createSession(mapPlaylistData, userData) {
 						if(result.length >= songLimit)
 							break;
 
-						let record = x._doc.records[i]; //Math.floor(Math.random() * x._doc.records.length)
+						let randomIndex = Math.floor(Math.random() * x._doc.records.length);
+						let record = x._doc.records[randomIndex];
 						record._doc.playlistName = x.name;
 						record._doc.score = 0;
 						let flatResult = result.flat();
+						if(mbidUnLiked.includes(record._doc.mbId)){
+							continue;
+						}
 
 						//filter duplicate songs
 						const checkDup = flatResult.filter(resultRec => record._doc.mbId === resultRec._doc.mbId)
 
 						//check if record is a low rated song
+
 						const removeUnliked = mbidUnLiked.indexOf(record._doc.mbId);
 
 						if(checkDup.length === 0 && removeUnliked === -1)

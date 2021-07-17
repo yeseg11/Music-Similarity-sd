@@ -71,19 +71,19 @@
 
 
         // FOR GENERAL SESSION RATING AT THE END TOF THE SESSION
-        let footer = '<div class="container-section-space">';
-        footer += '<div class="container-section">';
-        footer += '<div align="center" style="background:lightgray; font-size: 150%; text-align: center;" class="wrap-contact100-form-btn">';
-        footer += '<span style=" text-align: center" class="class=label-input100"><b>General Session Rating</b></br></span>';
-        footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySadGen">😟</button>';
-        footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="SadGen">🙁</button>';
-        footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="like" id ="IndifferentGen">😐</button>';
-        footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happyGen">🙂</button>';
-        footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😀</button>';
-        footer += '</div>';
-        footer += '</br>';
+        //let footer = '<div class="container-section-space">';
+        // footer += '<div class="container-section">';
+        // footer += '<div align="center" style="background:lightgray; font-size: 150%; text-align: center;" class="wrap-contact100-form-btn">';
+        // footer += '<span style=" text-align: center" class="class=label-input100"><b>General Session Rating</b></br></span>';
+        // footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="verySad" id ="verySadGen">😟</button>';
+        // footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="Sad" id ="SadGen">🙁</button>';
+        // footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="like" id ="IndifferentGen">😐</button>';
+        // footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="happy" id ="happyGen">🙂</button>';
+        // footer += '<button style="font-size: 135%; text-align: center;" class="buttonDes" type="button" onclick="" name="Joyful" id ="JoyfulGen">😀</button>';
+        // footer += '</div>';
+        // footer += '</br>';
 
-        footer += '<div class="wrap-input100 validate-input">';
+        let footer = '<div class="wrap-input100 validate-input">';
         footer += '<textarea id=\'endString\' class="input100" style="text-align:right" name=\'sessionComment\' cols="40" rows="2" placeholder="מדריך\\מדריכה, אנא מלאו מצב בסוף המפגש">value</textarea>'
         footer += '</div>';
         footer += '<div class="container-contact100-form-btn">';
@@ -169,8 +169,8 @@
             try{
                 return await $.get('/mb/track/record/' + currentMbId, function (data, status) {
                     //if (!data || !data.items || !data.items.length) throw TypeError("ERROR IN FIND LIST");
-                    console.log("data func2 is: " + JSON.stringify(data.items));
-                    console.log("status is: " + status);
+                    //console.log("data func2 is: " + JSON.stringify(data.items));
+                    //console.log("status is: " + status);
                 });
             }
             catch(error){
@@ -205,7 +205,7 @@ function postComment(id, type) {
     }
 
     else{
-        comment += document.getElementById(type).value;
+        comment += document.getElementById(type.replace(/([\/,"+'!?_])/g, "\\$1")).value;
     }
     //alert("comment is: " + comment + " type: " + type);
     let req =  $.post('sessionComments/'+id, {type, comment});
