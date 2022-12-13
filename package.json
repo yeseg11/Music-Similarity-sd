@@ -20,7 +20,7 @@
     "compute-cosine-similarity": "^1.0.0",
     "crypto-js": "^4.0.0",
     "debug": "^3.2.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "font-awesome": "^4.7.0",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.6",
